@@ -1,4 +1,4 @@
-<h1><span>Basic</span> Single Page Application</h1>
+<h1>Basic Single Page Application</h1>
 <h2>StayFit</h2>
 <h4>Technologies used:</h4>
 <ul>
