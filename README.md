@@ -10,8 +10,9 @@ Basic <strong>Single Page Application</strong>
 </ul>
 <h4>Other:</h4>
 <ul>
-  <li>RxJS</li>
-  <li>SCSS</li>
-  <li>AutoMapper</li>
-  <li>Nebular - <span>customizable Angular UI library</span></li>
+  <li>RxJS - <span>library for reactive programming using Observables for asynchronous and call-back based code.</span></li>
+  <li>SCSS - CSS preprocessor</li>
+  <li>AutoMapper - objects mapping library.</li>
+  <li>Nebular - <span>customizable Angular UI library.</span></li>
+</ul>
   
