@@ -13,5 +13,5 @@ Basic <strong>Single Page Application</strong>
   <li>RxJS</li>
   <li>SCSS</li>
   <li>AutoMapper</li>
-  <li>Nebular</li><span>customizable Angular UI library</span>
+  <li>Nebular - <span>customizable Angular UI library</span></li>
   
