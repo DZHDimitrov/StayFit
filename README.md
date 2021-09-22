@@ -11,7 +11,7 @@
 <ul>
   <li>HTML5</li>
   <li>SCSS - CSS preprocessor</li>
-  <li>RxJS - <span>library for reactive programming using Observables for asynchronous and call-back based code.</span></li>
+  <li>RxJS - <span>reactive programming library using Observables for asynchronous and call-back based code.</span></li>
   <li>AutoMapper - objects mapping library.</li>
   <li>Nebular - <span>customizable Angular UI library.</span></li>
 </ul>
