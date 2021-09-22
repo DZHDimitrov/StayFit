@@ -1,4 +1,4 @@
-StayFit - Basic web application (SPA) with:
+StayFit <strong>Single Page Application</strong> - Basic web application with:
 <ul>
   <li>MS SQL</li>
   <li>ASP.NET Core</li>
