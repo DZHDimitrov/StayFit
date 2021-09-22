@@ -1,4 +1,4 @@
-<strong>Single Page Application</strong> - Basic web application - StayFit
+<strong>Single Page Application</strong> - Basic web application - <h2>StayFit</h2>
 <h4>Technologies used:</h4>
 <ul>
   <li>MS SQL</li>
