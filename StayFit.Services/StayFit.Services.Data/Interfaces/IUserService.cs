@@ -1,4 +1,5 @@
 ﻿using StayFit.Data.Models;
+using StayFit.Services.DataTransferObjects;
 using StayFit.Shared.Account;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,10 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 {
     public interface IUserService
     {
-        ApplicationUser Authenticate(UserLoginRequestModel model);
+        Task<UserLoginResponseModel> Login(UserLoginRequestModel model);
+        Task<string> Register(UserRegisterRequestModel model);
         IEnumerable<ApplicationUser> GetAll();
-        ApplicationUser GetById(int id);
+        UserDtoModel GetById(string id);
         //void Register(RegisterRequest model);
         //void Update(int id, UpdateRequest model);
         //void Delete(int id);

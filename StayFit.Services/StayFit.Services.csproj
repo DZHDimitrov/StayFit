@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StayFit.Data\StayFit.Data.csproj" />
     <ProjectReference Include="..\StayFit.Shared\StayFit.Shared.csproj" />
   </ItemGroup>

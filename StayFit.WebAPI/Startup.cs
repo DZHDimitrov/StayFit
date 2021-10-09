@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StayFit.Data;
 using StayFit.Data.Models;
+using StayFit.Services.MappingConfiguration;
 using StayFit.Services.StayFit.Services.Data;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.WebAPI.CurrentModels;
@@ -26,6 +28,7 @@ namespace StayFit.WebAPI
 {
     public class Startup
     {
+        readonly string allowSpecificOrigins = "_myAllowSpecificOrigins";
         private readonly IConfiguration configuration;
         public Startup(IConfiguration configuration)
         {
@@ -37,8 +40,20 @@ namespace StayFit.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(allowSpecificOrigins,
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                });
+            });
+
             services.AddDbContext<AppDbContext>(
        options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+
             services.AddDefaultIdentity<ApplicationUser>(x =>
             {
                 x.Password.RequireDigit = false;
@@ -74,7 +89,19 @@ namespace StayFit.WebAPI
                 };
             });
 
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new StayFitProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddMvc();
+
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IArticleService, ArticleService>();
+            services.AddTransient<INutritionService, NutritionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,10 +116,10 @@ namespace StayFit.WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
+            };
 
+            app.UseCors(allowSpecificOrigins);
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthentication();
@@ -102,6 +129,11 @@ namespace StayFit.WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(name: "asd",template: "asd", defaults: new {controller = "asd",action = "" } )
+            //});
         }
     }
 }

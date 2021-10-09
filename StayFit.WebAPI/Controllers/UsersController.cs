@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -23,15 +21,14 @@ namespace StayFit.WebAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly AppDbContext context;
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
         private readonly JWTSettings _jwtSettings;
 
-        public UsersController(AppDbContext context, IOptions<JWTSettings> jwtSettings,UserManager<ApplicationUser> userManager,IUserService userService)
+        public UsersController(
+            AppDbContext context,
+            IOptions<JWTSettings> jwtSettings,
+            IUserService userService)
         {
-            this.context = context;
-            this.userManager = userManager;
             this.userService = userService;
             this._jwtSettings = jwtSettings.Value;
         }
@@ -40,38 +37,41 @@ namespace StayFit.WebAPI.Controllers
         [Route("/api/users/login")]
         public async Task<ActionResult<UserLoginResponseModel>> Login([FromBody] UserLoginRequestModel login)
         {
-            var user = this.userService.Authenticate(login);
-            if (!await this.userManager.CheckPasswordAsync(user, login.Password))
+            try
             {
-                return NotFound();
+                var user = await this.userService.Login(login);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(this._jwtSettings.SecretKey);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(
+                        new Claim[] 
+                        { 
+                            new Claim(ClaimTypes.Name, user.Email),
+                            new Claim(ClaimTypes.NameIdentifier,user.Id) }),
+                    Expires = DateTime.UtcNow.AddMinutes(30),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                user.access_token = tokenHandler.WriteToken(token);
+                return user;
             }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(this._jwtSettings.SecretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            catch (ArgumentException ae)
             {
-                Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, user.Email) }),
-                Expires = DateTime.UtcNow.AddMinutes(30),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var response = new UserLoginResponseModel();
-            response.access_token = tokenHandler.WriteToken(token);
-            return response;
+                return this.StatusCode(401);
+            }     
         }
 
         [HttpPost]
         [Route("/api/users/register")]
-        public async Task<ActionResult<UserRegisterResponseModel>> Register([FromBody] UserRegisterRequestModel register)
+        public async Task<ActionResult<UserRegisterResponseModel>> Register([FromBody] UserRegisterRequestModel registerModel)
         {
-            var user = new ApplicationUser { UserName = register.Username, Email = register.Email };
-            var userCreation = await this.userManager.CreateAsync(user, register.Password);
-            if (!userCreation.Succeeded)
+            var createUserId = await this.userService.Register(registerModel);
+            if (createUserId == null)
             {
-                return this.BadRequest(userCreation.Errors);
+                return this.BadRequest();
             }
-            var resultUser = await this.userManager.FindByEmailAsync(register.Email);
-            return new UserRegisterResponseModel { Id = resultUser.Id };
+            return new UserRegisterResponseModel { Id = createUserId };
         }
         private ApiResponse<T> GetIdentityApiErrors<T>(IdentityResult identityResult)
         {

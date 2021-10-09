@@ -1,0 +1,14 @@
+.knowledge-wrapper {
+    display:flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+.main-content {
+    width: 50.5%;
+}
+app-new-articles {
+    width: 100%;
+}
+app-instruments {
+    width: 100%;
+}

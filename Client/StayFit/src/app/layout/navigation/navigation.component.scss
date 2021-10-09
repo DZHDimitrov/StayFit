@@ -1,0 +1,39 @@
+.navigation-box {
+    width: 100%;
+    position: relative;
+    list-style-type: none;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    li {
+        width: 15%;
+        min-width: 14rem;
+        font-size: 18px;
+        height: 75px;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        text-align: center;
+    }
+    li:hover {
+        background-color: #F6F6F9;
+        cursor: pointer;
+    }
+    .menu {
+        max-height: 3rem;
+        //margin-left: auto;
+        nb-card {
+            width: 13rem;
+        }
+    }
+    .test {
+        margin:0;
+        right:0;
+        display:flex;
+        width:16rem;
+        justify-content: end;
+    }
+}
+.test1 {
+    justify-content: space-around;
+}

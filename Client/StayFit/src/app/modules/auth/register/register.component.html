@@ -1,0 +1,18 @@
+<div class="c-register-page-container">
+    <form class="c-register-form-box" (ngSubmit)="this.registerHandler($event)" [formGroup]="this.userRegisterForm">
+        <h4 class="hello-message">Регистрация</h4>
+        <div class="names">
+            <input class="register-input-name" type="text" id="firstName" placeholder="Име" formControlName="firstName">
+            <input class="register-input-name" type="text" id="password" placeholder="Фамилия" formControlName="lastName">
+        </div>
+        <input class="register-input" type="text" id="email" placeholder="Потребителско име" formControlName="username">
+        <input class="register-input" type="email" id="email" placeholder="Имейл" formControlName="email">
+        <input class="register-input" type="password" id="password" placeholder="Парола" formControlName = "password">
+        <input class="register-input" type="password" id="confirmPassword" placeholder="Потвърждение на паролата" formControlName="confirmpassword">
+        <nb-radio-group formControlName="gender">
+            <nb-radio value="male">Мъж</nb-radio>
+            <nb-radio value="female">Жена</nb-radio>
+        </nb-radio-group>
+        <button class="register-button">Регистрирай ме</button>
+    </form>
+</div>

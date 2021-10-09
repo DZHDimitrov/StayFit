@@ -1,0 +1,94 @@
+<nb-card size="large" class="mx-auto">
+  <nb-card-header class="mb-4">
+    <h2 class="text-center">Добавяне на нова храна</h2>
+  </nb-card-header>
+  <form *ngIf="!isLoading" [formGroup]="newFoodForm" (ngSubmit)="onSubmit()">
+    <div class="d-flex flex-column align-items-center">
+      <nb-select
+        class="food-category mb-4"
+        name="foodCategory"
+        placeholder="категория"
+        size="medium"
+        shape="semi-round"
+        formControlName="foodCategoryId"
+        (selectedChange)="updateFoodTypes($event)"
+      >
+        <nb-option disabled value="0">Избери категория</nb-option>
+        <nb-option
+          *ngFor="let foodCategory of foodCategories"
+          [value]="foodCategory.id"
+          >{{ foodCategory.name }}</nb-option
+        >
+      </nb-select>
+      <nb-select
+        *ngIf="this.foodTypes.length > 0"
+        class="food-type mb-4"
+        name="foodType"
+        placeholder="тип храна"
+        size="medium"
+        shape="semi-round"
+        formControlName="foodTypeId"
+        (selectedChange)="foodTypeIsSelected = true"
+      >
+        <nb-option disabled value="0">Избери</nb-option>
+        <nb-option
+          *ngFor="let foodType of this.foodTypes"
+          [value]="foodType.id"
+          >{{ foodType.name }}</nb-option
+        >
+      </nb-select>
+      <ng-container *ngIf="foodTypeIsSelected">
+        <input
+          class="mb-4"
+          shape="semi-round"
+          nbInput
+          placeholder="Начин на приготвяне"
+          formControlName="description"
+        />
+        <input
+          class="mb-4"
+          type="number"
+          shape="semi-round"
+          nbInput
+          placeholder="Калории"
+          formControlName="calories"
+        />
+        <input
+          class="mb-4"
+          shape="semi-round"
+          nbInput
+          placeholder="Добави снимка"
+          formControlName="imageUrl"
+        />
+      </ng-container>
+    </div>
+    <ng-container *ngIf="this.nutrients.length > 0 && foodTypeIsSelected">
+      <section class="nutrient-wrapper" *ngFor="let nutrient of this.nutrients">
+        <h5 class="mb-2">{{ nutrient.name }}</h5>
+        <div class="nutrient-content" [formGroupName]="nutrient.name">
+          <div
+            class="nutrient"
+            *ngFor="let nutrientType of nutrient.nutrientTypes"
+          >
+            <p class="text-center m-2 fst-italic">
+              {{ nutrientType | nutrientFormatter }}
+            </p>
+            <input
+              shape="semi-round"
+              nbInput
+              fieldSize="small"
+              type="number"
+              [formControlName]="nutrientType"
+            />
+          </div>
+        </div>
+      </section>
+      <nb-card-footer class="d-flex justify-content-center mt-5">
+        <button type="submit" status="success" size="small" nbButton>
+          Изпращане
+        </button>
+      </nb-card-footer>
+    </ng-container>
+  </form>
+  <h3 *ngIf="isLoading">Храната се записва в базата ...</h3>
+</nb-card>

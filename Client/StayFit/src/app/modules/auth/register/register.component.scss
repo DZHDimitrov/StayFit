@@ -1,0 +1,75 @@
+@mixin input {
+    border: none;
+    height: 37px;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    border: 2px solid #DCDDE6;
+    background-color: #F5F6F8;
+    outline: none;
+}
+
+.c-register-page-container {
+    display:flex;
+    align-items: center;
+    h4 {
+        text-align: center;
+        font-size: 35px;
+    }
+
+    .c-register-form-box {
+        background: white;
+        height: 600px;
+        width: 520px;
+        margin: 0 auto;
+        display: flex;
+        flex-flow: column wrap;
+        border-radius: 8px;
+        margin-top: 7rem;
+        box-shadow: 2px 2px 14px 2px rgba(0,0,0,0.45);
+        -webkit-box-shadow: 2px 2px 14px 2px rgba(0,0,0,0.45);
+        -moz-box-shadow: 2px 2px 14px 2px rgba(0,0,0,0.45);
+
+        .names {
+            width: 90%;
+            display: flex;
+            align-self: center;
+            justify-content: space-between;
+
+            .register-input-name {
+                width: 47.5%;
+                @include input();
+            }
+        }
+        .register-input { 
+            width: 90%;
+            align-self: center;
+            @include input();
+        }
+        nb-radio {
+            margin-left: 1.8rem;
+        }
+        .gender {
+            h5 {
+                margin: 0;
+                font-weight: lighter;
+                font-size: 18px;
+            }
+        }
+
+        .register-button {
+            width: 91.5%;
+            height: 35px;
+            border-radius: 5px;
+            background: #C1E099;
+            border: none;
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            align-self: center;
+        }
+        .register-button:hover {
+            background-color: #A2D167;
+            cursor: pointer;
+        }
+    }
+}

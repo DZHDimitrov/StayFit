@@ -1,0 +1,9 @@
+<app-knowledge-navigation [heading]="heading"></app-knowledge-navigation>
+<div class="articles-wrapper">
+    <div class="single-article" *ngFor="let article of this.articles">
+        <img src="{{article.imageUrl}}" alt="">
+        <div class="title-wrapper" routerLink="{{article.id}}">
+            <h6>{{article.title}}</h6>
+        </div>
+    </div>
+</div>

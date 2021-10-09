@@ -1,0 +1,31 @@
+.articles-wrapper {
+    margin-top: 2rem !important;
+    display:flex;
+    flex-flow: row wrap;
+    width: 65%;
+    margin:0 auto;
+    justify-content: space-around;
+    .single-article {
+        margin-bottom: 2rem;
+        width: 25rem;
+        height:18rem;
+        overflow: auto;
+        border-radius: 8px;
+        display:flex;
+        flex-flow: column;
+
+        .title-wrapper {
+            height: 5.2rem;
+            background: white;
+            border-radius: 8px;
+        }
+        img {
+            width: 25rem;
+            height: 12rem;
+        }
+        h6 {
+            margin:0;
+            word-wrap: break-word;
+        }
+    }
+}

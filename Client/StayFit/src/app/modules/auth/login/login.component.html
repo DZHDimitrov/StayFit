@@ -1,0 +1,15 @@
+<div class="c-login-page-container">
+    <form class="c-login-form-box" (ngSubmit)="loginHandler()" [formGroup]="userLoginForm">
+        <h4 class="hello-message">Здравей!</h4>
+        <input class="login-input" type="text" id="username" placeholder="Потребителско име" required formControlName="username">
+        <input class="login-input" type="password" id="password" placeholder="Парола" required formControlName="password" >
+        <button class="login-button">Влез</button>
+    </form>
+</div>  
+<ul>
+</ul>
+
+<!--Templates-->
+<ng-template #noItems>
+<span>No items</span>
+</ng-template>

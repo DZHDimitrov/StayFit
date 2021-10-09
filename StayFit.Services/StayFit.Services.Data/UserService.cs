@@ -1,5 +1,7 @@
-﻿using StayFit.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using StayFit.Data;
 using StayFit.Data.Models;
+using StayFit.Services.DataTransferObjects;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.Shared.Account;
 using System;
@@ -13,17 +15,51 @@ namespace StayFit.Services.StayFit.Services.Data
     public class UserService : IUserService
     {
         private AppDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UserService(
-            AppDbContext context)
+            AppDbContext context,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
-        public ApplicationUser Authenticate(UserLoginRequestModel model)
+        public async Task<UserLoginResponseModel> Login(UserLoginRequestModel model)
         {
             var user = this._context.Users.FirstOrDefault(x=> x.UserName == model.Username);
-            return user;
+            ;
+            if (!await this.userManager.CheckPasswordAsync(user, model.Password))
+            {
+                throw new ArgumentException("Password is not correct");
+            }
+            var response = new UserLoginResponseModel
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                Gender = user.Gender,
+            };
+            return response;
+        }
+
+        public async Task<string> Register(UserRegisterRequestModel register)
+        {
+            var user = new ApplicationUser 
+            {
+                UserName = register.Username,
+                Email = register.Email, 
+                Gender = register.Gender,
+                CreatedOn = DateTime.UtcNow,
+                IsDeleted = false,
+            };
+            var userCreation = await this.userManager.CreateAsync(user, register.Password);
+            if (!userCreation.Succeeded)
+            {
+                return null;
+            }
+            var resultUser = await this.userManager.FindByEmailAsync(register.Email);
+            return resultUser.Id;
         }
 
         public IEnumerable<ApplicationUser> GetAll()
@@ -31,9 +67,17 @@ namespace StayFit.Services.StayFit.Services.Data
             throw new NotImplementedException();
         }
 
-        public ApplicationUser GetById(int id)
+        public UserDtoModel GetById(string id)
         {
-            throw new NotImplementedException();
+            var user = this._context.Users.FirstOrDefault(x => x.UserName == id);
+            var dto = new UserDtoModel
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                Gender = user.Gender,
+            };
+            return dto;
         }
     }
 }
