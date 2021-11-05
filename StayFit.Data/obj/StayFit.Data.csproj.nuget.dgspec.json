@@ -63,6 +63,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[5.0.9, )"
+            },
+            "NickBuhro.Translit": {
+              "target": "Package",
+              "version": "[1.4.5, )"
             }
           },
           "imports": [

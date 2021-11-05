@@ -16,7 +16,7 @@ export class NutritionsService {
   }
 
   getFoodTypesByCategory(categoryId: number): Observable<IFoodType[]> {
-    return this.http.requestCall(`/administration/new-food/${categoryId}`,ApiMethod.GET);
+    return this.http.requestCall(`/admin/new-food/${categoryId}`,ApiMethod.GET);
   }
 
   getFoodNutrients(): Observable<INutrient[]> {
@@ -38,6 +38,6 @@ export class NutritionsService {
       sterols: data.Sterols,
       vitamins: data.Vitamins,
     }
-    return this.http.requestCall('/nutritions',ApiMethod.POST,JSON.stringify(b));
+    return this.http.requestCall('/admin/new-food',ApiMethod.POST,b);
   }
 }

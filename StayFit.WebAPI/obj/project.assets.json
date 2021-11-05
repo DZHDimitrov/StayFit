@@ -1166,6 +1166,18 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
         }
       },
+      "NickBuhro.Translit/1.4.5": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/NickBuhro.Translit.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NickBuhro.Translit.dll": {}
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -2923,7 +2935,8 @@
         "dependencies": {
           "Microsoft.AspNet.Identity.EntityFramework": "2.2.3",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "5.0.9",
-          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.9"
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.9",
+          "NickBuhro.Translit": "1.4.5"
         },
         "compile": {
           "bin/placeholder/StayFit.Data.dll": {}
@@ -2932,12 +2945,29 @@
           "bin/placeholder/StayFit.Data.dll": {}
         }
       },
-      "StayFit.Services/1.0.0": {
+      "StayFit.Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
           "AutoMapper": "10.1.1",
+          "NickBuhro.Translit": "1.4.5",
           "StayFit.Data": "1.0.0",
+          "StayFit.Shared": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/StayFit.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/StayFit.Infrastructure.dll": {}
+        }
+      },
+      "StayFit.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "NickBuhro.Translit": "1.4.5",
+          "StayFit.Data": "1.0.0",
+          "StayFit.Infrastructure": "1.0.0",
           "StayFit.Shared": "1.0.0"
         },
         "compile": {
@@ -2950,6 +2980,9 @@
       "StayFit.Shared/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "NickBuhro.Translit": "1.4.5"
+        },
         "compile": {
           "bin/placeholder/StayFit.Shared.dll": {}
         },
@@ -4897,6 +4930,27 @@
         "lib/netstandard1.3/Newtonsoft.Json.Bson.xml",
         "newtonsoft.json.bson.1.0.1.nupkg.sha512",
         "newtonsoft.json.bson.nuspec"
+      ]
+    },
+    "NickBuhro.Translit/1.4.5": {
+      "sha512": "C4Hy1hXOvmisfjsHdFIFCqrqT4y8wrn7UUHATDVNGQhDMg2StIVHr7SJ17yE6z1TjYjZnv1iYeoahzwN3FdtYg==",
+      "type": "package",
+      "path": "nickbuhro.translit/1.4.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net20/NickBuhro.Translit.dll",
+        "lib/net20/NickBuhro.Translit.xml",
+        "lib/net35/NickBuhro.Translit.dll",
+        "lib/net35/NickBuhro.Translit.xml",
+        "lib/net40/NickBuhro.Translit.dll",
+        "lib/net40/NickBuhro.Translit.xml",
+        "lib/net45/NickBuhro.Translit.dll",
+        "lib/net45/NickBuhro.Translit.xml",
+        "lib/netstandard1.3/NickBuhro.Translit.dll",
+        "lib/netstandard1.3/NickBuhro.Translit.xml",
+        "nickbuhro.translit.1.4.5.nupkg.sha512",
+        "nickbuhro.translit.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -9496,6 +9550,11 @@
       "path": "../StayFit.Data/StayFit.Data.csproj",
       "msbuildProject": "../StayFit.Data/StayFit.Data.csproj"
     },
+    "StayFit.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../StayFit.Infrastructure/StayFit.Infrastructure.csproj",
+      "msbuildProject": "../StayFit.Infrastructure/StayFit.Infrastructure.csproj"
+    },
     "StayFit.Services/1.0.0": {
       "type": "project",
       "path": "../StayFit.Services/StayFit.Services.csproj",
@@ -9517,6 +9576,7 @@
       "Microsoft.AspNetCore.Identity.UI >= 5.0.9",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.9",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2",
+      "NickBuhro.Translit >= 1.4.5",
       "StayFit.Services >= 1.0.0",
       "StayFit.Shared >= 1.0.0",
       "Swashbuckle.AspNetCore >= 5.6.3"
@@ -9599,6 +9659,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[5.0.2, )"
+          },
+          "NickBuhro.Translit": {
+            "target": "Package",
+            "version": "[1.4.5, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

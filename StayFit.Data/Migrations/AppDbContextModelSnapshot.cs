@@ -257,18 +257,12 @@ namespace StayFit.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Article", b =>
+            modelBuilder.Entity("StayFit.Data.Models.BodyPart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ArticleCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -285,100 +279,15 @@ namespace StayFit.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArticleCategoryId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Articles");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.ArticleCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("ArticleCategory");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.CarbohydrateType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("SearchName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarbohydrateTypes");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.FatType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FatTypes");
+                    b.ToTable("BodyParts");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.Food", b =>
@@ -403,7 +312,7 @@ namespace StayFit.Data.Migrations
                     b.Property<int>("FoodCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FoodTypeId")
+                    b.Property<int>("FoodNameId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -419,7 +328,7 @@ namespace StayFit.Data.Migrations
 
                     b.HasIndex("FoodCategoryId");
 
-                    b.HasIndex("FoodTypeId");
+                    b.HasIndex("FoodNameId");
 
                     b.ToTable("Foods");
                 });
@@ -454,37 +363,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("FoodCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FoodType");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.MineralType", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodName", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -508,18 +387,15 @@ namespace StayFit.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MineralTypes");
+                    b.ToTable("FoodNames");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -533,17 +409,91 @@ namespace StayFit.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("NutritionCategories");
+                    b.ToTable("BaseNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionContent", b =>
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodBaseNutrient", b =>
+                {
+                    b.Property<int>("FoodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BaseNutrientId")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Quantity")
+                        .HasColumnType("float");
+
+                    b.HasKey("FoodId", "BaseNutrientId");
+
+                    b.HasIndex("BaseNutrientId");
+
+                    b.ToTable("FoodBaseNutrients");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodSubNutrient", b =>
+                {
+                    b.Property<int>("FoodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubNutrientId")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Quantity")
+                        .HasColumnType("float");
+
+                    b.HasKey("FoodId", "SubNutrientId");
+
+                    b.HasIndex("SubNutrientId");
+
+                    b.ToTable("FoodSubNutrients");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseNutrientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseNutrientId");
+
+                    b.ToTable("SubNutrients");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Reading", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BodyPartId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -563,20 +513,30 @@ namespace StayFit.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("NutritionCategoryId")
+                    b.Property<int>("ReadingMainCategoryId")
                         .HasColumnType("int");
+
+                    b.Property<int?>("ReadingSubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SearchTitle")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NutritionCategoryId");
+                    b.HasIndex("BodyPartId");
 
-                    b.ToTable("NutritionPlans");
+                    b.HasIndex("ReadingMainCategoryId");
+
+                    b.HasIndex("ReadingSubCategoryId");
+
+                    b.ToTable("Readings");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.AminoAcidsType", b =>
+            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -598,86 +558,15 @@ namespace StayFit.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("AminoAcidsTypes");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodAminoAcids", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AminoAcidsTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
+                    b.Property<string>("SearchName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AminoAcidsTypeId");
-
-                    b.HasIndex("FoodId");
-
-                    b.ToTable("FoodAminoAcids");
+                    b.ToTable("ReadingMainCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodCarbohydrates", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CarbohydrateTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarbohydrateTypeId");
-
-                    b.HasIndex("FoodId");
-
-                    b.ToTable("FoodCarbohydrates");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodFats", b =>
+            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -690,224 +579,8 @@ namespace StayFit.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FatTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FatTypeId");
-
-                    b.HasIndex("FoodId");
-
-                    b.ToTable("FoodFats");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodMinerals", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("MineralTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FoodId");
-
-                    b.HasIndex("MineralTypeId");
-
-                    b.ToTable("FoodMinerals");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodMores", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MoreTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FoodId");
-
-                    b.HasIndex("MoreTypeId");
-
-                    b.ToTable("FoodMores");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodSterols", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.Property<int>("SterolTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FoodId");
-
-                    b.HasIndex("SterolTypeId");
-
-                    b.ToTable("FoodSterols");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodVitamins", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.Property<int>("VitaminTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FoodId");
-
-                    b.HasIndex("VitaminTypeId");
-
-                    b.ToTable("FoodVitamins");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.TypeCategories", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FoodTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("FoodTypeId");
-
-                    b.ToTable("TypeCategories");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.MoreType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -918,66 +591,20 @@ namespace StayFit.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("ReadingMainCategoryId")
+                        .HasColumnType("int");
 
-                    b.ToTable("MoreTypes");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.SterolType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("SearchName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("SterolTypes");
+                    b.HasIndex("ReadingMainCategoryId");
+
+                    b.ToTable("ReadingSubCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.VitaminType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("VitaminTypes");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.UserArticles", b =>
+            modelBuilder.Entity("StayFit.Data.Models.UserReading", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -987,9 +614,6 @@ namespace StayFit.Data.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ArticleId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -1002,13 +626,16 @@ namespace StayFit.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ReadingId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("ArticleId");
+                    b.HasIndex("ReadingId");
 
-                    b.ToTable("UserArticles");
+                    b.ToTable("UserReadings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1074,23 +701,6 @@ namespace StayFit.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Article", b =>
-                {
-                    b.HasOne("StayFit.Data.Models.ArticleCategory", "ArticleCategory")
-                        .WithMany()
-                        .HasForeignKey("ArticleCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StayFit.Data.Models.ApplicationUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("ArticleCategory");
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("StayFit.Data.Models.Food", b =>
                 {
                     b.HasOne("StayFit.Data.Models.FoodCategory", "FoodCategory")
@@ -1099,193 +709,113 @@ namespace StayFit.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.FoodType", "FoodType")
+                    b.HasOne("StayFit.Data.Models.FoodName", "FoodName")
                         .WithMany("Foods")
-                        .HasForeignKey("FoodTypeId")
+                        .HasForeignKey("FoodNameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FoodCategory");
 
-                    b.Navigation("FoodType");
+                    b.Navigation("FoodName");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionContent", b =>
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodBaseNutrient", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.NutritionCategory", "NutritionCategory")
-                        .WithMany("NutritionContents")
-                        .HasForeignKey("NutritionCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("NutritionCategory");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodAminoAcids", b =>
-                {
-                    b.HasOne("StayFit.Data.Models.NutritionModels.Nutrients.AminoAcidsType", "AminoAcids")
-                        .WithMany("FoodAminoAcids")
-                        .HasForeignKey("AminoAcidsTypeId")
+                    b.HasOne("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", "BaseNutrient")
+                        .WithMany("BaseNutrients")
+                        .HasForeignKey("BaseNutrientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StayFit.Data.Models.Food", "Food")
-                        .WithMany("FoodAminoAcids")
+                        .WithMany("FoodBaseNutrients")
                         .HasForeignKey("FoodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AminoAcids");
+                    b.Navigation("BaseNutrient");
 
                     b.Navigation("Food");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodCarbohydrates", b =>
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodSubNutrient", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.CarbohydrateType", "CarbohydrateType")
-                        .WithMany("FoodCarbohydrates")
-                        .HasForeignKey("CarbohydrateTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("StayFit.Data.Models.Food", "Food")
-                        .WithMany("FoodCarbohydrates")
+                        .WithMany("FoodSubNutrients")
                         .HasForeignKey("FoodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CarbohydrateType");
-
-                    b.Navigation("Food");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodFats", b =>
-                {
-                    b.HasOne("StayFit.Data.Models.FatType", "FatType")
-                        .WithMany("FoodFats")
-                        .HasForeignKey("FatTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StayFit.Data.Models.Food", "Food")
-                        .WithMany("FoodFats")
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FatType");
-
-                    b.Navigation("Food");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodMinerals", b =>
-                {
-                    b.HasOne("StayFit.Data.Models.Food", "Food")
-                        .WithMany("FoodMinerals")
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StayFit.Data.Models.MineralType", "MineralType")
-                        .WithMany("FoodMinerals")
-                        .HasForeignKey("MineralTypeId")
+                    b.HasOne("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", "SubNutrient")
+                        .WithMany("FoodSubNutrients")
+                        .HasForeignKey("SubNutrientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Food");
 
-                    b.Navigation("MineralType");
+                    b.Navigation("SubNutrient");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodMores", b =>
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.Food", "Food")
-                        .WithMany("FoodMores")
-                        .HasForeignKey("FoodId")
+                    b.HasOne("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", "BaseNutrient")
+                        .WithMany("SubNutrients")
+                        .HasForeignKey("BaseNutrientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.NutritionModels.Nutrients.MoreType", "MoreType")
-                        .WithMany("FoodMores")
-                        .HasForeignKey("MoreTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Food");
-
-                    b.Navigation("MoreType");
+                    b.Navigation("BaseNutrient");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodSterols", b =>
+            modelBuilder.Entity("StayFit.Data.Models.Reading", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.Food", "Food")
-                        .WithMany("FoodSterols")
-                        .HasForeignKey("FoodId")
+                    b.HasOne("StayFit.Data.Models.BodyPart", "BodyPart")
+                        .WithMany("Articles")
+                        .HasForeignKey("BodyPartId");
+
+                    b.HasOne("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", "ReadingMainCategory")
+                        .WithMany("Readings")
+                        .HasForeignKey("ReadingMainCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.NutritionModels.Nutrients.SterolType", "SterolType")
-                        .WithMany("FoodSterols")
-                        .HasForeignKey("SterolTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", "ReadingSubCategory")
+                        .WithMany("Readings")
+                        .HasForeignKey("ReadingSubCategoryId");
 
-                    b.Navigation("Food");
+                    b.Navigation("BodyPart");
 
-                    b.Navigation("SterolType");
+                    b.Navigation("ReadingMainCategory");
+
+                    b.Navigation("ReadingSubCategory");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.FoodVitamins", b =>
+            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.Food", "Food")
-                        .WithMany("FoodVitamins")
-                        .HasForeignKey("FoodId")
+                    b.HasOne("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", "ReadingMainCategory")
+                        .WithMany("ReadingSubCategories")
+                        .HasForeignKey("ReadingMainCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.NutritionModels.Nutrients.VitaminType", "VitaminType")
-                        .WithMany("FoodVitamins")
-                        .HasForeignKey("VitaminTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Food");
-
-                    b.Navigation("VitaminType");
+                    b.Navigation("ReadingMainCategory");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many.TypeCategories", b =>
-                {
-                    b.HasOne("StayFit.Data.Models.FoodCategory", "FoodCategory")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StayFit.Data.Models.FoodType", "FoodType")
-                        .WithMany()
-                        .HasForeignKey("FoodTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FoodCategory");
-
-                    b.Navigation("FoodType");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.UserArticles", b =>
+            modelBuilder.Entity("StayFit.Data.Models.UserReading", b =>
                 {
                     b.HasOne("StayFit.Data.Models.ApplicationUser", "User")
                         .WithMany("UserArticles")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("StayFit.Data.Models.Article", "Article")
-                        .WithMany("UserArticles")
-                        .HasForeignKey("ArticleId")
+                    b.HasOne("StayFit.Data.Models.Reading", "Reading")
+                        .WithMany("UserReadings")
+                        .HasForeignKey("ReadingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Article");
+                    b.Navigation("Reading");
 
                     b.Navigation("User");
                 });
@@ -1301,36 +831,16 @@ namespace StayFit.Data.Migrations
                     b.Navigation("UserArticles");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Article", b =>
+            modelBuilder.Entity("StayFit.Data.Models.BodyPart", b =>
                 {
-                    b.Navigation("UserArticles");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.CarbohydrateType", b =>
-                {
-                    b.Navigation("FoodCarbohydrates");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.FatType", b =>
-                {
-                    b.Navigation("FoodFats");
+                    b.Navigation("Articles");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.Food", b =>
                 {
-                    b.Navigation("FoodAminoAcids");
+                    b.Navigation("FoodBaseNutrients");
 
-                    b.Navigation("FoodCarbohydrates");
-
-                    b.Navigation("FoodFats");
-
-                    b.Navigation("FoodMinerals");
-
-                    b.Navigation("FoodMores");
-
-                    b.Navigation("FoodSterols");
-
-                    b.Navigation("FoodVitamins");
+                    b.Navigation("FoodSubNutrients");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodCategory", b =>
@@ -1338,39 +848,38 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Foods");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodType", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodName", b =>
                 {
                     b.Navigation("Foods");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.MineralType", b =>
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", b =>
                 {
-                    b.Navigation("FoodMinerals");
+                    b.Navigation("BaseNutrients");
+
+                    b.Navigation("SubNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", b =>
                 {
-                    b.Navigation("NutritionContents");
+                    b.Navigation("FoodSubNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.AminoAcidsType", b =>
+            modelBuilder.Entity("StayFit.Data.Models.Reading", b =>
                 {
-                    b.Navigation("FoodAminoAcids");
+                    b.Navigation("UserReadings");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.MoreType", b =>
+            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", b =>
                 {
-                    b.Navigation("FoodMores");
+                    b.Navigation("Readings");
+
+                    b.Navigation("ReadingSubCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.SterolType", b =>
+            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", b =>
                 {
-                    b.Navigation("FoodSterols");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Nutrients.VitaminType", b =>
-                {
-                    b.Navigation("FoodVitamins");
+                    b.Navigation("Readings");
                 });
 #pragma warning restore 612, 618
         }

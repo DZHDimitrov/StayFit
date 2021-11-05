@@ -1,9 +1,9 @@
-<div *ngIf="isLoadingArticles">
-    <nb-card size="giant" [nbSpinner]="isLoading" nbSpinnerStatus="danger">
+<!-- <div>
+    <nb-card size="giant" nbSpinnerStatus="danger">
         <nb-card-body></nb-card-body>
     </nb-card>
-</div>
-<div class="new-articles" *ngIf="!isLoadingArticles">
+</div> -->
+<div class="new-articles">
     <h5>Нови статии <nb-icon icon="arrow-ios-forward-outline"></nb-icon></h5>
     <div class="article-wrapper">
         <div class="simple-article" *ngFor="let recentArticle of this.recentArticles">

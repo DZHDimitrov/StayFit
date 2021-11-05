@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using StayFit.Data.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StayFit.Data.Models
+﻿namespace StayFit.Data.Models
 {
+    using Microsoft.AspNetCore.Identity;
+    using StayFit.Data.Common.Models;
+    using StayFit.Data.Models.ReadingModels;
+    using System;
+    using System.Collections.Generic;
+
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
         public ApplicationUser()
@@ -16,7 +14,7 @@ namespace StayFit.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
-            this.UserArticles = new HashSet<UserArticles>();
+            this.UserArticles = new HashSet<UserReading>();
         }
 
         // Audit info
@@ -35,7 +33,7 @@ namespace StayFit.Data.Models
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
-        public virtual ICollection<UserArticles> UserArticles { get; set; }
+        public virtual ICollection<UserReading> UserArticles { get; set; }
 
         public string Gender { get; set; }
     }

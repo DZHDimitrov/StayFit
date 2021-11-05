@@ -39,6 +39,12 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "NickBuhro.Translit": {
+              "target": "Package",
+              "version": "[1.4.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

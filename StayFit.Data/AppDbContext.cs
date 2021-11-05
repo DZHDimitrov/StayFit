@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using StayFit.Data.Models;
-using StayFit.Data.Models.NutritionModels.Nutrients;
-using StayFit.Data.Models.NutritionModels.Nutrients.Many_To_Many;
-
-namespace StayFit.Data
+﻿namespace StayFit.Data
 {
-   public class AppDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>
+
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+    using StayFit.Data.Models;
+    using StayFit.Data.Models.FoodModels;
+    using StayFit.Data.Models;
+    using StayFit.Data.Models.ReadingModels;
+    using StayFit.Data.Models.FoodModels.Nutrients;
+
+    public class AppDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>
     {
         public AppDbContext()
         {}
@@ -15,50 +18,41 @@ namespace StayFit.Data
            : base(options)
         {}
 
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<Reading> Readings { get; set; }
 
-        public DbSet<NutritionCategory> NutritionCategories { get; set; }
+        public DbSet<ReadingMainCategory> ReadingMainCategories { get; set; }
 
-        public DbSet<NutritionContent> NutritionPlans { get; set; }
+        public DbSet<ReadingSubCategory> ReadingSubCategories { get; set; }
 
         public DbSet<Food> Foods { get; set; }
 
-        public DbSet<VitaminType> VitaminTypes { get; set; }
+        public DbSet<BaseNutrient> BaseNutrients { get; set; }
 
-        public DbSet<FoodVitamins> FoodVitamins { get; set; }
+        public DbSet<SubNutrient> SubNutrients { get; set; }
 
-        public DbSet<CarbohydrateType> CarbohydrateTypes { get; set; }
-
-        public DbSet<FoodCarbohydrates> FoodCarbohydrates { get; set; }
-
-        public DbSet<MineralType> MineralTypes { get; set; }
-
-        public DbSet<FoodMinerals> FoodMinerals { get; set; }
-
-        public DbSet<MoreType> MoreTypes { get; set; }
-
-        public DbSet<FoodMores> FoodMores { get; set; }
-
-        public DbSet<SterolType> SterolTypes { get; set; }
-
-        public DbSet<FoodSterols> FoodSterols { get; set; }
-
-        public DbSet<AminoAcidsType> AminoAcidsTypes { get; set; }
-
-        public DbSet<FoodAminoAcids> FoodAminoAcids { get; set; }
+        public DbSet<FoodSubNutrient> FoodSubNutrients { get; set; }
 
         public DbSet<FoodCategory> FoodCategories { get; set; }
 
-        public DbSet<FoodFats> FoodFats { get; set; }
+        public DbSet<FoodBaseNutrient> FoodBaseNutrients { get; set; }
 
-        public DbSet<TypeCategories> TypeCategories { get; set; }
+        public DbSet<UserReading> UserReadings { get; set; }
 
-        public DbSet<FatType> FatTypes { get; set; }
+        public DbSet<FoodName> FoodNames { get; set; }
 
+        public DbSet<BodyPart> BodyParts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=StayFit;Trusted_Connection=True;MultipleActiveResultSets=true");
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<FoodBaseNutrient>().HasKey(c => new { c.FoodId, c.BaseNutrientId });
+            builder.Entity<FoodSubNutrient>().HasKey(c => new { c.FoodId, c.SubNutrientId });
         }
     }
     

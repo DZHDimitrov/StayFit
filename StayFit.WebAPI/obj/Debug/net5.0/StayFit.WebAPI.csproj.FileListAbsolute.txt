@@ -160,3 +160,6 @@ C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Sys
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\AutoMapper.dll
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Infrastructure.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Infrastructure.pdb
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\NickBuhro.Translit.dll

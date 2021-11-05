@@ -16,13 +16,16 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private AppDbContext _context;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
 
         public UserService(
             AppDbContext context,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager)
         {
             _context = context;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<UserLoginResponseModel> Login(UserLoginRequestModel model)
@@ -33,6 +36,7 @@ namespace StayFit.Services.StayFit.Services.Data
             {
                 throw new ArgumentException("Password is not correct");
             }
+            var userRole = this._context.Roles.FirstOrDefault(role => role.Id == this._context.UserRoles.FirstOrDefault(x => x.UserId == user.Id).RoleId);
             var response = new UserLoginResponseModel
             {
                 Id = user.Id,
@@ -58,7 +62,19 @@ namespace StayFit.Services.StayFit.Services.Data
             {
                 return null;
             }
-            var resultUser = await this.userManager.FindByEmailAsync(register.Email);
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+                await roleManager.CreateAsync(new ApplicationRole("Admin"));
+            }
+            if (!await roleManager.RoleExistsAsync("User"))
+            {
+                await roleManager.CreateAsync(new ApplicationRole("User"));
+            }
+            if (await roleManager.RoleExistsAsync("Admin"))
+            {
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
+            var resultUser = await this.userManager.FindByNameAsync(register.Username);
             return resultUser.Id;
         }
 

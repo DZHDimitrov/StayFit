@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using StayFit.Data.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StayFit.Data.Models
+﻿namespace StayFit.Data.Models
 {
+    using Microsoft.AspNetCore.Identity;
+    using StayFit.Data.Common.Models;
+    using System;
+
     public class ApplicationRole : IdentityRole,IAuditInfo,IDeletableEntity
     {
         public ApplicationRole()

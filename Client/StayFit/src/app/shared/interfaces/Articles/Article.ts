@@ -1,6 +1,6 @@
 export interface IRecentArticle {
     id:number,
-    content: string;
+    content?: string;
     title: string;
     imageUrl: string;
 }

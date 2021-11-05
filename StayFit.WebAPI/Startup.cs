@@ -1,31 +1,28 @@
 using AutoMapper;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using StayFit.Data;
 using StayFit.Data.Models;
-using StayFit.Services.MappingConfiguration;
+using StayFit.Infrastructure;
 using StayFit.Services.StayFit.Services.Data;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.WebAPI.CurrentModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace StayFit.WebAPI
 {
+    class Role : IdentityRole<int>
+    {
+
+    }
+
     public class Startup
     {
         readonly string allowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -51,8 +48,7 @@ namespace StayFit.WebAPI
                 });
             });
 
-            services.AddDbContext<AppDbContext>(
-       options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+            
 
             services.AddDefaultIdentity<ApplicationUser>(x =>
             {
@@ -61,7 +57,12 @@ namespace StayFit.WebAPI
                 x.Password.RequireUppercase = false;
                 x.Password.RequireNonAlphanumeric = false;
                 x.Password.RequiredLength = 5;
-            }).AddRoles<ApplicationRole>().AddEntityFrameworkStores<AppDbContext>();
+            })
+                .AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
+            services.AddDbContext<AppDbContext>(
+       options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+
 
             services.AddControllers();
 
@@ -91,7 +92,7 @@ namespace StayFit.WebAPI
 
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new StayFitProfile());
+                mc.AddProfile(new MappingProfile());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
@@ -100,8 +101,10 @@ namespace StayFit.WebAPI
             services.AddMvc();
 
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IArticleService, ArticleService>();
-            services.AddTransient<INutritionService, NutritionService>();
+            services.AddTransient<IReadingService, ReadingService>();
+            //services.AddTransient<INutritionService, NutritionService>();
+            //services.AddTransient<ITrainingService, TrainingService>();
+            services.AddTransient<IFoodService, FoodService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -118,6 +121,8 @@ namespace StayFit.WebAPI
                 app.UseDeveloperExceptionPage();
             };
 
+            
+
             app.UseCors(allowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseRouting();
@@ -127,6 +132,10 @@ namespace StayFit.WebAPI
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapControllerRoute(
+                //    name: "MyArea",
+                //    pattern: "{area:exists}/api/{controller}"
+                //    );
                 endpoints.MapControllers();
             });
 

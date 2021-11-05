@@ -38,8 +38,8 @@ export class CreateNewFoodComponent implements OnInit {
       .getFoodCategories()
       .subscribe((foodCategories) => (this.foodCategories = foodCategories));
 
-    this.nutritionsService.getFoodNutrients().subscribe((x) => {
-      this.nutrients = x;
+    this.nutritionsService.getFoodNutrients().subscribe((nutrients) => {
+      this.nutrients = nutrients;
       console.log(this.nutrients)
     });
 
@@ -51,6 +51,7 @@ export class CreateNewFoodComponent implements OnInit {
       )
       .subscribe((foodTypes) => {
         this.foodTypes = foodTypes;
+        this.isLoading = false;
       });
     this.newFoodForm = this.fb.group({
       foodCategoryId: [''],

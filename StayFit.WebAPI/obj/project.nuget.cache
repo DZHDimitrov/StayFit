@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5qzejbMxu1RFKWrtBlmV4b3+Itu44y9/0AZ/aVaAYpB7ewVAbF4hmvBTjOe0y2xSsLW4ehdnFUCTUbh2Rs9SXA==",
+  "dgSpecHash": "lg4zASgDU1bwdevdrZT0p4S33UN/tXhbEy+NMaD6VFWpOw9N8krCsQQem6Qv7TlsinjYCMfc7JBl0WhP6Tn+Xw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.WebAPI\\StayFit.WebAPI.csproj",
   "expectedPackageFiles": [
@@ -76,6 +76,7 @@
     "C:\\Users\\Daniel\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\newtonsoft.json.bson\\1.0.1\\newtonsoft.json.bson.1.0.1.nupkg.sha512",
+    "C:\\Users\\Daniel\\.nuget\\packages\\nickbuhro.translit\\1.4.5\\nickbuhro.translit.1.4.5.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
