@@ -7591,11 +7591,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Services\\StayFit.Services.csproj",
+      "projectUniqueName": "G:\\Stay-fit web app\\StayFit\\StayFit.Services\\StayFit.Services.csproj",
       "projectName": "StayFit.Services",
-      "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Services\\StayFit.Services.csproj",
+      "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Services\\StayFit.Services.csproj",
       "packagesPath": "C:\\Users\\Daniel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Services\\obj\\",
+      "outputPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Services\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Daniel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -7612,14 +7612,14 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Data\\StayFit.Data.csproj": {
-              "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Data\\StayFit.Data.csproj"
+            "G:\\Stay-fit web app\\StayFit\\StayFit.Data\\StayFit.Data.csproj": {
+              "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Data\\StayFit.Data.csproj"
             },
-            "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Infrastructure\\StayFit.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Infrastructure\\StayFit.Infrastructure.csproj"
+            "G:\\Stay-fit web app\\StayFit\\StayFit.Infrastructure\\StayFit.Infrastructure.csproj": {
+              "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Infrastructure\\StayFit.Infrastructure.csproj"
             },
-            "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Shared\\StayFit.Shared.csproj": {
-              "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Shared\\StayFit.Shared.csproj"
+            "G:\\Stay-fit web app\\StayFit\\StayFit.Shared\\StayFit.Shared.csproj": {
+              "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Shared\\StayFit.Shared.csproj"
             }
           }
         }

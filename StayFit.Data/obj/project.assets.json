@@ -7586,11 +7586,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Data\\StayFit.Data.csproj",
+      "projectUniqueName": "G:\\Stay-fit web app\\StayFit\\StayFit.Data\\StayFit.Data.csproj",
       "projectName": "StayFit.Data",
-      "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Data\\StayFit.Data.csproj",
+      "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Data\\StayFit.Data.csproj",
       "packagesPath": "C:\\Users\\Daniel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Data\\obj\\",
+      "outputPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Daniel\\AppData\\Roaming\\NuGet\\NuGet.Config",

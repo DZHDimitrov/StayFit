@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pfKwBP73msLEdxAqyJkYnflguLSQCjjemEvqSYYtXa+jU99LY4SVVPmA86ytULpy6pXpcPEi3fIvkeCh20toiw==",
+  "dgSpecHash": "dqOmFl9C5zoc+XYJMHrJ/4af7HdV2KXewmkaBRh/Eyb0WY1aTKE83arg1aJk+WX8z7s+elWTI027jIfN8TAM1g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Data\\StayFit.Data.csproj",
+  "projectFilePath": "G:\\Stay-fit web app\\StayFit\\StayFit.Data\\StayFit.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Daniel\\.nuget\\packages\\entityframework\\6.1.0\\entityframework.6.1.0.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
