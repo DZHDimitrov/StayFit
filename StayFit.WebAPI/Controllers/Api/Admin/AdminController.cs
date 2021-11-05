@@ -32,7 +32,7 @@ namespace StayFit.WebAPI.Controllers
         {
             //this.foodService.CreateNewFood(model);
             //return Ok("Created!");
-            return Ok();
+            return Ok("Created!");
         }
     }
 }

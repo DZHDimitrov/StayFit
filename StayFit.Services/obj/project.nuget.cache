@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5t/8DcNLgJ45Qfspif9GpmsTdeSWyjCa3SLkX35t/M7W5AY1gmkKkbl0J0mCDEDHNYWp4zsCFlIabKWiNfbBpw==",
+  "dgSpecHash": "TW7TGdLG9lGOEhG2H0O9YNIpXuZu8FkNiAW+fkhSX4TIP3auKde80eD5h1tm3AlOh/IHf4Jxapn9sXqUJE0Lug==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Services\\StayFit.Services.csproj",
+  "projectFilePath": "G:\\Stay-fit web app\\StayFit\\StayFit.Services\\StayFit.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Daniel\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\entityframework\\6.1.0\\entityframework.6.1.0.nupkg.sha512",

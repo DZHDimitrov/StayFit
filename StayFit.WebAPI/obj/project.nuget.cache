@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lg4zASgDU1bwdevdrZT0p4S33UN/tXhbEy+NMaD6VFWpOw9N8krCsQQem6Qv7TlsinjYCMfc7JBl0WhP6Tn+Xw==",
+  "dgSpecHash": "hhbs0PJXZXCDGPFwLPJKuVxAaigmpVUb6oGLm1AZ5tbz1U2kYQIxjfaEs1ATHZ6VKDzg91nS1Fluq/u7omA5MA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.WebAPI\\StayFit.WebAPI.csproj",
+  "projectFilePath": "G:\\Stay-fit web app\\StayFit\\StayFit.WebAPI\\StayFit.WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Daniel\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",

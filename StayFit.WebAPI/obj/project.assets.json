@@ -9588,11 +9588,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.WebAPI\\StayFit.WebAPI.csproj",
+      "projectUniqueName": "G:\\Stay-fit web app\\StayFit\\StayFit.WebAPI\\StayFit.WebAPI.csproj",
       "projectName": "StayFit.WebAPI",
-      "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.WebAPI\\StayFit.WebAPI.csproj",
+      "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.WebAPI\\StayFit.WebAPI.csproj",
       "packagesPath": "C:\\Users\\Daniel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.WebAPI\\obj\\",
+      "outputPath": "G:\\Stay-fit web app\\StayFit\\StayFit.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Daniel\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -9609,11 +9609,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Services\\StayFit.Services.csproj": {
-              "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Services\\StayFit.Services.csproj"
+            "G:\\Stay-fit web app\\StayFit\\StayFit.Services\\StayFit.Services.csproj": {
+              "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Services\\StayFit.Services.csproj"
             },
-            "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Shared\\StayFit.Shared.csproj": {
-              "projectPath": "C:\\Users\\Daniel\\source\\repos\\StayFit-web app\\StayFit.Shared\\StayFit.Shared.csproj"
+            "G:\\Stay-fit web app\\StayFit\\StayFit.Shared\\StayFit.Shared.csproj": {
+              "projectPath": "G:\\Stay-fit web app\\StayFit\\StayFit.Shared\\StayFit.Shared.csproj"
             }
           }
         }
