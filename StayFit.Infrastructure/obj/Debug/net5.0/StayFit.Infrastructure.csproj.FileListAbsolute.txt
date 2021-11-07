@@ -15,3 +15,5 @@ C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Infrastructure\obj\Debug\ne
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Infrastructure\obj\Debug\net5.0\StayFit.Infrastructure.dll
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Infrastructure\obj\Debug\net5.0\ref\StayFit.Infrastructure.dll
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Infrastructure\obj\Debug\net5.0\StayFit.Infrastructure.pdb
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Infrastructure\bin\Debug\net5.0\StayFit.Common.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Infrastructure\bin\Debug\net5.0\StayFit.Common.pdb

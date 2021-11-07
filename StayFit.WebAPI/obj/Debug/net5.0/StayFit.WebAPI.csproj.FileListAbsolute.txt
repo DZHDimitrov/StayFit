@@ -163,3 +163,5 @@ C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Aut
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Infrastructure.dll
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Infrastructure.pdb
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\NickBuhro.Translit.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Common.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Common.pdb

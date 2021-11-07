@@ -1,0 +1,12 @@
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\bin\Debug\net5.0\StayFit.Common.deps.json
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\bin\Debug\net5.0\StayFit.Common.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\bin\Debug\net5.0\ref\StayFit.Common.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\bin\Debug\net5.0\StayFit.Common.pdb
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\StayFit.Common.csprojAssemblyReference.cache
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\StayFit.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\StayFit.Common.AssemblyInfoInputs.cache
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\StayFit.Common.AssemblyInfo.cs
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\StayFit.Common.csproj.CoreCompileInputs.cache
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\StayFit.Common.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\ref\StayFit.Common.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.Common\obj\Debug\net5.0\StayFit.Common.pdb

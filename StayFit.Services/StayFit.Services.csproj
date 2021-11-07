@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StayFit.Common\StayFit.Common.csproj" />
     <ProjectReference Include="..\StayFit.Data\StayFit.Data.csproj" />
     <ProjectReference Include="..\StayFit.Infrastructure\StayFit.Infrastructure.csproj" />
     <ProjectReference Include="..\StayFit.Shared\StayFit.Shared.csproj" />

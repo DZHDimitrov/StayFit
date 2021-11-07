@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using StayFit.Data;
 using StayFit.Data.Models;
 using StayFit.Infrastructure;
+using StayFit.Infrastructure.Extensions;
 using StayFit.Services.StayFit.Services.Data;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.WebAPI.CurrentModels;
@@ -102,8 +103,7 @@ namespace StayFit.WebAPI
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IReadingService, ReadingService>();
-            //services.AddTransient<INutritionService, NutritionService>();
-            //services.AddTransient<ITrainingService, TrainingService>();
+            services.AddTransient<IPostService, PostService>();
             services.AddTransient<IFoodService, FoodService>();
         }
 
@@ -121,6 +121,7 @@ namespace StayFit.WebAPI
                 app.UseDeveloperExceptionPage();
             };
 
+            app.ConfigureCustomExceptionMiddleware();
             
 
             app.UseCors(allowSpecificOrigins);

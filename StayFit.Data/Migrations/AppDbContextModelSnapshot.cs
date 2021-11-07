@@ -290,7 +290,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("BodyParts");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Food", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -333,7 +333,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("Foods");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -363,7 +363,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("FoodCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodName", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodName", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -390,7 +390,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("FoodNames");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.BaseNutrient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -417,7 +417,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("BaseNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodBaseNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.FoodBaseNutrient", b =>
                 {
                     b.Property<int>("FoodId")
                         .HasColumnType("int");
@@ -435,7 +435,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("FoodBaseNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodSubNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.FoodSubNutrient", b =>
                 {
                     b.Property<int>("FoodId")
                         .HasColumnType("int");
@@ -453,7 +453,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("FoodSubNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.SubNutrient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -485,7 +485,162 @@ namespace StayFit.Data.Migrations
                     b.ToTable("SubNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Reading", b =>
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Comment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("Comments", "Forum");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostSubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("PostSubCategoryId");
+
+                    b.ToTable("Posts", "Forum");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.PostMainCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PostMainCategories", "Forum");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.PostSubCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostMainCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostMainCategoryId");
+
+                    b.ToTable("PostSubCategories", "Forum");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.UserVote", b =>
+                {
+                    b.Property<string>("VoteId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("VoteId", "ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("UserLikes", "Forum");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Vote", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CommentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLike")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("Likes", "Forum");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.Reading", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -536,7 +691,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("Readings");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingMainCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -566,7 +721,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("ReadingMainCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingSubCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -604,7 +759,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("ReadingSubCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.UserReading", b =>
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.UserReading", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -701,15 +856,15 @@ namespace StayFit.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Food", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.FoodCategory", "FoodCategory")
+                    b.HasOne("StayFit.Data.Models.FoodModels.FoodCategory", "FoodCategory")
                         .WithMany("Foods")
                         .HasForeignKey("FoodCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.FoodName", "FoodName")
+                    b.HasOne("StayFit.Data.Models.FoodModels.FoodName", "FoodName")
                         .WithMany("Foods")
                         .HasForeignKey("FoodNameId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -720,15 +875,15 @@ namespace StayFit.Data.Migrations
                     b.Navigation("FoodName");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodBaseNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.FoodBaseNutrient", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", "BaseNutrient")
+                    b.HasOne("StayFit.Data.Models.FoodModels.Nutrients.BaseNutrient", "BaseNutrient")
                         .WithMany("BaseNutrients")
                         .HasForeignKey("BaseNutrientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.Food", "Food")
+                    b.HasOne("StayFit.Data.Models.FoodModels.Food", "Food")
                         .WithMany("FoodBaseNutrients")
                         .HasForeignKey("FoodId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -739,15 +894,15 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Food");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.FoodSubNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.FoodSubNutrient", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.Food", "Food")
+                    b.HasOne("StayFit.Data.Models.FoodModels.Food", "Food")
                         .WithMany("FoodSubNutrients")
                         .HasForeignKey("FoodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", "SubNutrient")
+                    b.HasOne("StayFit.Data.Models.FoodModels.Nutrients.SubNutrient", "SubNutrient")
                         .WithMany("FoodSubNutrients")
                         .HasForeignKey("SubNutrientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -758,9 +913,9 @@ namespace StayFit.Data.Migrations
                     b.Navigation("SubNutrient");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.SubNutrient", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", "BaseNutrient")
+                    b.HasOne("StayFit.Data.Models.FoodModels.Nutrients.BaseNutrient", "BaseNutrient")
                         .WithMany("SubNutrients")
                         .HasForeignKey("BaseNutrientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -769,19 +924,92 @@ namespace StayFit.Data.Migrations
                     b.Navigation("BaseNutrient");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Reading", b =>
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Comment", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Comments")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("StayFit.Data.Models.Forum.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Post", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Posts")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("StayFit.Data.Models.Forum.PostSubCategory", "PostSubCategory")
+                        .WithMany("Posts")
+                        .HasForeignKey("PostSubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("PostSubCategory");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.PostSubCategory", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.Forum.PostMainCategory", "PostMainCategory")
+                        .WithMany("PostSubCategories")
+                        .HasForeignKey("PostMainCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostMainCategory");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.UserVote", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("UserLikes")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StayFit.Data.Models.Forum.Vote", "Vote")
+                        .WithMany("UserVotes")
+                        .HasForeignKey("VoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Vote");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Vote", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.Forum.Comment", "Comment")
+                        .WithMany("Votes")
+                        .HasForeignKey("CommentId");
+
+                    b.Navigation("Comment");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.Reading", b =>
                 {
                     b.HasOne("StayFit.Data.Models.BodyPart", "BodyPart")
                         .WithMany("Articles")
                         .HasForeignKey("BodyPartId");
 
-                    b.HasOne("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", "ReadingMainCategory")
+                    b.HasOne("StayFit.Data.Models.ReadingModels.ReadingMainCategory", "ReadingMainCategory")
                         .WithMany("Readings")
                         .HasForeignKey("ReadingMainCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", "ReadingSubCategory")
+                    b.HasOne("StayFit.Data.Models.ReadingModels.ReadingSubCategory", "ReadingSubCategory")
                         .WithMany("Readings")
                         .HasForeignKey("ReadingSubCategoryId");
 
@@ -792,9 +1020,9 @@ namespace StayFit.Data.Migrations
                     b.Navigation("ReadingSubCategory");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingSubCategory", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", "ReadingMainCategory")
+                    b.HasOne("StayFit.Data.Models.ReadingModels.ReadingMainCategory", "ReadingMainCategory")
                         .WithMany("ReadingSubCategories")
                         .HasForeignKey("ReadingMainCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -803,13 +1031,13 @@ namespace StayFit.Data.Migrations
                     b.Navigation("ReadingMainCategory");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.UserReading", b =>
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.UserReading", b =>
                 {
                     b.HasOne("StayFit.Data.Models.ApplicationUser", "User")
-                        .WithMany("UserArticles")
+                        .WithMany("UserReadings")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("StayFit.Data.Models.Reading", "Reading")
+                    b.HasOne("StayFit.Data.Models.ReadingModels.Reading", "Reading")
                         .WithMany("UserReadings")
                         .HasForeignKey("ReadingId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -824,11 +1052,17 @@ namespace StayFit.Data.Migrations
                 {
                     b.Navigation("Claims");
 
+                    b.Navigation("Comments");
+
                     b.Navigation("Logins");
+
+                    b.Navigation("Posts");
 
                     b.Navigation("Roles");
 
-                    b.Navigation("UserArticles");
+                    b.Navigation("UserLikes");
+
+                    b.Navigation("UserReadings");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.BodyPart", b =>
@@ -836,48 +1070,73 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Food", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
                 {
                     b.Navigation("FoodBaseNutrients");
 
                     b.Navigation("FoodSubNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodCategory", b =>
                 {
                     b.Navigation("Foods");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodName", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodName", b =>
                 {
                     b.Navigation("Foods");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.BaseNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.BaseNutrient", b =>
                 {
                     b.Navigation("BaseNutrients");
 
                     b.Navigation("SubNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.NutritionModels.Redo_Nutrients.SubNutrient", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.SubNutrient", b =>
                 {
                     b.Navigation("FoodSubNutrients");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Reading", b =>
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Comment", b =>
+                {
+                    b.Navigation("Votes");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Post", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.PostMainCategory", b =>
+                {
+                    b.Navigation("PostSubCategories");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.PostSubCategory", b =>
+                {
+                    b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.Forum.Vote", b =>
+                {
+                    b.Navigation("UserVotes");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.Reading", b =>
                 {
                     b.Navigation("UserReadings");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingMainCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingMainCategory", b =>
                 {
                     b.Navigation("Readings");
 
                     b.Navigation("ReadingSubCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.RedoDbStructure.ReadingSubCategory", b =>
+            modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingSubCategory", b =>
                 {
                     b.Navigation("Readings");
                 });
