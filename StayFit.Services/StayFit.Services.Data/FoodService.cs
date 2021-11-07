@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using StayFit.Data;
-using StayFit.Data.Models;
 using StayFit.Data.Models.FoodModels;
 using StayFit.Data.Models.FoodModels.Nutrients;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
@@ -11,6 +11,7 @@ using StayFit.Shared.Nutritions.NutrientModels.RedoFoods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StayFit.Services.StayFit.Services.Data
 {
@@ -25,16 +26,20 @@ namespace StayFit.Services.StayFit.Services.Data
             this.mapper = mapper;
         }
 
-        public IEnumerable<FoodCategoryModel> GetFoodCategories()
+        public async Task<IEnumerable<FoodCategoryModel>> LoadFoodCategories()
         {
-            return this.dbContext.FoodCategories.ProjectTo<FoodCategoryModel>(this.mapper.ConfigurationProvider).ToList();
+            return await this.dbContext
+                .FoodCategories
+                .ProjectTo<FoodCategoryModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
-        public IEnumerable<SingleFoodCategoryModel> GetAllFoodByCategory(int id)
+        public async Task<IEnumerable<SingleFoodCategoryModel>> LoadFoodByCategory(int id)
         {
-            return this.dbContext.Foods
+            return await this.dbContext.Foods
                 .Where(x => x.FoodCategoryId == id)
-                .Select(food => new SingleFoodCategoryModel { Id = food.Id, Name = food.FoodName.Name, Description = food.Description }).ToList();
+                .ProjectTo<SingleFoodCategoryModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public FoodModel GetSingleFood(int categoryId, int foodId)
@@ -63,9 +68,9 @@ namespace StayFit.Services.StayFit.Services.Data
                 .FirstOrDefault();
         }
 
-        public IEnumerable<NutrientModel> GetNutrients()
+        public async Task<IEnumerable<NutrientModel>> LoadNutrients()
         {
-            return this.dbContext.FoodBaseNutrients
+            return await this.dbContext.FoodBaseNutrients
                 .Select(nutrient => new NutrientModel
                 {
                     BaseNutrientName = nutrient.BaseNutrient.Name,
@@ -75,7 +80,8 @@ namespace StayFit.Services.StayFit.Services.Data
                         {
                             Name = foodSn.SubNutrient.Name,
                         }).ToList(),
-                }).ToList();
+                })
+                .ToListAsync();
         }
 
         public void CreateNewFood(CreateFoodModel model)
@@ -98,13 +104,26 @@ namespace StayFit.Services.StayFit.Services.Data
                     .FirstOrDefault(x => x.Name == fnb.BaseNutrientName);
                 foreach (var sn in fnb.SubNutrients)
                 {
-                    SubNutrient subNutrient = this.dbContext.SubNutrients
+                    SubNutrient subNutrient = this.dbContext
+                        .SubNutrients
                         .Where(x => x.BaseNutrient.Name == fnb.BaseNutrientName)
                         .FirstOrDefault(x => x.Name == sn.Name);
-                    FoodSubNutrient fsn = new FoodSubNutrient { Food = food, Quantity = sn.Quantity, SubNutrient = subNutrient };
+                    FoodSubNutrient fsn = new FoodSubNutrient 
+                    {
+                        Food = food, 
+                        Quantity = sn.Quantity,
+                        SubNutrient = subNutrient 
+                    };
                     this.dbContext.FoodSubNutrients.Add(fsn);
                 }
-                FoodBaseNutrient fbn = new FoodBaseNutrient { Food = food, Quantity = fnb.Quantity, BaseNutrient = baseNutrient };
+
+                FoodBaseNutrient fbn = new FoodBaseNutrient 
+                { 
+                    Food = food,
+                    Quantity = fnb.Quantity,
+                    BaseNutrient = baseNutrient 
+                };
+
                 this.dbContext.FoodBaseNutrients.Add(fbn);
             }
             this.dbContext.SaveChanges();

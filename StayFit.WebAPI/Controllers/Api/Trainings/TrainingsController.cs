@@ -52,7 +52,7 @@
         }
 
         [HttpPost]
-        public IActionResult CreateTraining([FromBody] CreateReading model)
+        public IActionResult CreateTraining(CreateReading model)
         {
             this.readingService.CreateReading(model);
             return Ok();

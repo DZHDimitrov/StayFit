@@ -1,19 +1,16 @@
 ﻿using StayFit.Shared.Nutritions;
 using StayFit.Shared.Nutritions.Food;
 using StayFit.Shared.Nutritions.NutrientModels.RedoFoods;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StayFit.Services.StayFit.Services.Data.Interfaces
 {
     public interface IFoodService
     {
-        public IEnumerable<FoodCategoryModel> GetFoodCategories();
+        public Task<IEnumerable<FoodCategoryModel>> LoadFoodCategories();
 
-        public IEnumerable<SingleFoodCategoryModel> GetAllFoodByCategory(int id);
+        public Task<IEnumerable<SingleFoodCategoryModel>> LoadFoodByCategory(int id);
 
         public FoodModel GetSingleFood(int foodCategory, int foodId);
 
@@ -21,6 +18,6 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         //public IEnumerable<SingleFoodTypeModel> GetFoodTypesByCategory(int categoryId);
 
-        public IEnumerable<NutrientModel> GetNutrients();
+        public Task<IEnumerable<NutrientModel>> LoadNutrients();
     }
 }

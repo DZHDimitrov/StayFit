@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StayFit.Shared.Forum
+﻿namespace StayFit.Shared.Forum
 {
+
+    using System.Collections.Generic;
+
     public class PostMainCategoryModel
     {
-        public string MainCategory { get; set; }
+        public string Name { get; set; }
 
-        public IEnumerable<PostSubCategoryModel> SubCategories { get; set; }
+        public IEnumerable<PostSubCategoryModel> PostSubCategories { get; set; }
     }
 }

@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace StayFit.Data.Models.Forum
+﻿namespace StayFit.Data.Models.Forum
 {
+
+    using System.ComponentModel.DataAnnotations.Schema;
+
     [Table("UserLikes", Schema = "Forum")]
     public class UserVote
     {

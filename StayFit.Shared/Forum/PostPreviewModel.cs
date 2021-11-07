@@ -8,6 +8,6 @@
 
         public string LastCommentUsername { get; set; }
 
-        public double TimePassed { get; set; }
+        public double? TimePassed { get; set; }
     }
 }

@@ -13,11 +13,13 @@
 
         private readonly Dictionary<string, int> StatusMessages = new Dictionary<string, int>()
         {
-            [string.Format(GlobalConstants.SAME_VOTE_TYPE_ERROR_MSG, "liked")] = GlobalConstants.BAD_REQUEST,
-            [string.Format(GlobalConstants.SAME_VOTE_TYPE_ERROR_MSG, "disliked")] = GlobalConstants.BAD_REQUEST,
-            [GlobalConstants.SELF_COMMENT_VOTE_ERROR_MSG] = GlobalConstants.BAD_REQUEST,
-            [GlobalConstants.ITERNAL_SERVER_ERROR_MSG] = GlobalConstants.INTERNAL_SERVER_ERROR,
-            [GlobalConstants.NONEXISTANT_VOTE_ERROR_MSG] = GlobalConstants.BAD_REQUEST,
+            [string.Format(GlobalConstants.SAME_VOTE_TYPE_ERROR_MSG, "liked")] = StatusNums.BAD_REQUEST,
+            [string.Format(GlobalConstants.SAME_VOTE_TYPE_ERROR_MSG, "disliked")] = StatusNums.BAD_REQUEST,
+            [GlobalConstants.SELF_COMMENT_VOTE_ERROR_MSG] = StatusNums.BAD_REQUEST,
+            [GlobalConstants.ITERNAL_SERVER_ERROR_MSG] = StatusNums.INTERNAL_SERVER_ERROR,
+            [GlobalConstants.NONEXISTANT_VOTE_ERROR_MSG] = StatusNums.BAD_REQUEST,
+            [GlobalConstants.NOT_LOGGED_IN_ERROR_MSG] = StatusNums.Unauthorized,
+            [string.Format(GlobalConstants.UNABLE_TO_EDIT,"post")] = StatusNums.Forbidden
         };
 
         public ExceptionMiddleware(RequestDelegate next)
@@ -40,7 +42,7 @@
         private Task HandleExceptionAsync(HttpContext httpContext,string message)
         {
             httpContext.Response.ContentType = "application/json";
-            httpContext.Response.StatusCode = StatusMessages[message];
+            httpContext.Response.StatusCode = StatusMessages.ContainsKey(message) ? StatusMessages[message] : 500;
             return httpContext.Response.WriteAsync(new ErrorModel
             {
                 StatusCode = httpContext.Response.StatusCode,

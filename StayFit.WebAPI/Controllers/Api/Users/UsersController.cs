@@ -46,7 +46,8 @@ namespace StayFit.WebAPI.Controllers
                         new Claim[] 
                         { 
                             new Claim(ClaimTypes.Name, user.Email),
-                            new Claim(ClaimTypes.NameIdentifier,user.Id) }),
+                            new Claim(ClaimTypes.NameIdentifier,user.Id)
+                        }),
                     Expires = DateTime.UtcNow.AddMinutes(30),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };

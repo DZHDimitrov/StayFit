@@ -1,6 +1,5 @@
 ﻿namespace StayFit.Shared.Forum
 {
-    using System;
     using System.Collections.Generic;
 
     public class PostModel

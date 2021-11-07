@@ -1,6 +1,4 @@
-﻿
-
-namespace StayFit.WebAPI.Controllers.Api.Nutrition
+﻿namespace StayFit.WebAPI.Controllers.Api.Nutrition
 {
     using Microsoft.AspNetCore.Mvc;
     using StayFit.Services.StayFit.Services.Data.Interfaces;
@@ -8,6 +6,7 @@ namespace StayFit.WebAPI.Controllers.Api.Nutrition
     using StayFit.Shared.Nutritions.Food;
     using StayFit.Shared.Nutritions.NutrientModels.RedoFoods;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -21,9 +20,9 @@ namespace StayFit.WebAPI.Controllers.Api.Nutrition
         }
 
         [HttpGet]
-        public IEnumerable<FoodCategoryModel> LoadCategories()
+        public async Task<IEnumerable<FoodCategoryModel>> LoadCategories()
         {
-            return this.foodService.GetFoodCategories();
+            return await this.foodService.LoadFoodCategories();
         }
 
         [HttpPost]
@@ -35,9 +34,9 @@ namespace StayFit.WebAPI.Controllers.Api.Nutrition
 
         [HttpGet]
         [Route("{categoryId}")]
-        public IEnumerable<SingleFoodCategoryModel> LoadFoodByCategoryId(int categoryId)
+        public async Task<IEnumerable<SingleFoodCategoryModel>> LoadFoodByCategoryId(int categoryId)
         {
-            return this.foodService.GetAllFoodByCategory(categoryId);
+            return await this.foodService.LoadFoodByCategory(categoryId);
         }
 
         [HttpGet]
@@ -49,9 +48,9 @@ namespace StayFit.WebAPI.Controllers.Api.Nutrition
 
         [HttpGet]
         [Route("nutrients")]
-        public IEnumerable<NutrientModel> LoadNutrients()
+        public async Task<IEnumerable<NutrientModel>> LoadNutrients()
         {
-            return this.foodService.GetNutrients();
+            return await this.foodService.LoadNutrients();
         }
     }
 }

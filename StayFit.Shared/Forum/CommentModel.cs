@@ -1,6 +1,5 @@
 ﻿namespace StayFit.Shared.Forum
 {
-    using System;
     public class CommentModel
     {
         public string Id { get; set; }
