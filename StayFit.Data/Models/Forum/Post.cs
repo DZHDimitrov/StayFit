@@ -1,7 +1,9 @@
 ﻿namespace StayFit.Data.Models.Forum
 {
     using StayFit.Data.Common.Models;
+
     using System.Collections.Generic;
+
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Posts", Schema = "Forum")]

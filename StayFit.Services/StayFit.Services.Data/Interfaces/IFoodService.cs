@@ -1,23 +1,21 @@
-﻿using StayFit.Shared.Nutritions;
-using StayFit.Shared.Nutritions.Food;
-using StayFit.Shared.Nutritions.NutrientModels.RedoFoods;
-using System.Collections.Generic;
+﻿using StayFit.Shared.Nutritions.Food.PostModels;
+using StayFit.Shared.Nutritions.Food.Responses;
 using System.Threading.Tasks;
 
 namespace StayFit.Services.StayFit.Services.Data.Interfaces
 {
     public interface IFoodService
     {
-        public Task<IEnumerable<FoodCategoryModel>> LoadFoodCategories();
+        public Task<LoadFoodCategoriesResponse> LoadFoodCategories();
 
-        public Task<IEnumerable<SingleFoodCategoryModel>> LoadFoodByCategory(int id);
+        public Task<LoadCategoryFoodsResponse> LoadFoodByCategory(int id);
 
-        public FoodModel GetSingleFood(int foodCategory, int foodId);
+        public Task<LoadFoodResponse> GetSingleFood(int foodCategory, int foodId);
 
-        public void CreateNewFood(CreateFoodModel model);
+        public Task<AddFoodResponse> CreateNewFood(CreateFoodModel model);
 
         //public IEnumerable<SingleFoodTypeModel> GetFoodTypesByCategory(int categoryId);
 
-        public Task<IEnumerable<NutrientModel>> LoadNutrients();
+        public Task<LoadNutrientsResponse> LoadNutrients();
     }
 }

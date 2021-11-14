@@ -4,7 +4,9 @@
     {
         public string Title { get; set; }
 
-        public string Username { get; set; }
+        public string Author { get; set; }
+
+        //public string AuthorImageURL { get; set; }
 
         public string LastCommentUsername { get; set; }
 

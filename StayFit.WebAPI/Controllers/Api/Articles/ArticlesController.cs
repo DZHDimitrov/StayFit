@@ -1,18 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using StayFit.Data.Models;
-using StayFit.Services.StayFit.Services.Data.Interfaces;
-using StayFit.Shared;
-using StayFit.Shared.SharedModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-
-namespace StayFit.WebAPI.Controllers
+﻿namespace StayFit.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+
+    using StayFit.Infrastructure.Extensions;
+    using StayFit.Services.StayFit.Services.Data.Interfaces;
+
+    using StayFit.Shared;
+    using StayFit.Shared.SharedModels.Responses;
+
+    using System.Threading.Tasks;
+
     [Route("api/[controller]")]
     [ApiController]
     public class ArticlesController : ControllerBase
@@ -26,31 +23,34 @@ namespace StayFit.WebAPI.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ReadingModel> LoadArticles()
+        public async Task<ApiResponse<ReadingResponse>> LoadArticles()
         {
-            return this.readingService.GetReadingsByMainCategory("articles");
+            var response = await this.readingService.LoadReadingsByMainCategory("articles");
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("latest")]
-        public IEnumerable<ReadingModel> LoadLatestArticles()
+        public async Task<ApiResponse<ReadingResponse>> LoadLatestArticles()
         {
-            return this.readingService.GetLatestReadings("articles");
+            var response =await this.readingService.LoadLatestReadings("articles");
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{searchName}")]
-        public ReadingModel LoadSingleArticle(string searchName)
+        public async Task<ApiResponse<ReadingResponse>> LoadSingleArticle(string searchName)
         {
-            return this.readingService.GetReadingBySearchName(null,searchName);
+            var response =  await this.readingService.LoadReadingBySearchName(null,searchName);
+            return response.ToApiResponse();
         }
 
         [HttpPost]
-        public IActionResult CreateNewArticle([FromBody] CreateReading model)
+        public async Task<ApiResponse<AddReadingResponse>> CreateNewArticle(AddReadingRequest model)
         {
             //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            this.readingService.CreateReading(model);
-            return Ok();
+            var response = await this.readingService.CreateReading(model);
+            return response.ToApiResponse();
         }
 
         [HttpPut]

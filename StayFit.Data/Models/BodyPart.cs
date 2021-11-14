@@ -2,6 +2,7 @@
 {
     using StayFit.Data.Common.Models;
     using StayFit.Data.Models.ReadingModels;
+
     using System.Collections.Generic;
 
     public class BodyPart : BaseDeletableModel<int>

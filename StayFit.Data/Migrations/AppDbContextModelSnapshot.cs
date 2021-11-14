@@ -595,24 +595,27 @@ namespace StayFit.Data.Migrations
                     b.ToTable("PostSubCategories", "Forum");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Forum.UserVote", b =>
+            modelBuilder.Entity("StayFit.Data.Models.Forum.UsersChosenComments", b =>
                 {
-                    b.Property<string>("VoteId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("VoteId", "ApplicationUserId");
+                    b.Property<string>("CommentId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("ApplicationUserId", "CommentId");
 
-                    b.ToTable("UserLikes", "Forum");
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("UsersChosenComments", "Forum");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.Forum.Vote", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CommentId")
@@ -635,9 +638,11 @@ namespace StayFit.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("CommentId");
 
-                    b.ToTable("Likes", "Forum");
+                    b.ToTable("Votes", "Forum");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.Reading", b =>
@@ -969,30 +974,36 @@ namespace StayFit.Data.Migrations
                     b.Navigation("PostMainCategory");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.Forum.UserVote", b =>
+            modelBuilder.Entity("StayFit.Data.Models.Forum.UsersChosenComments", b =>
                 {
                     b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("UserLikes")
+                        .WithMany("ChosedComments")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.Forum.Vote", "Vote")
-                        .WithMany("UserVotes")
-                        .HasForeignKey("VoteId")
+                    b.HasOne("StayFit.Data.Models.Forum.Comment", "Comment")
+                        .WithMany("UsersChosed")
+                        .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("Vote");
+                    b.Navigation("Comment");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.Forum.Vote", b =>
                 {
+                    b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Votes")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("StayFit.Data.Models.Forum.Comment", "Comment")
                         .WithMany("Votes")
                         .HasForeignKey("CommentId");
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Comment");
                 });
@@ -1050,6 +1061,8 @@ namespace StayFit.Data.Migrations
 
             modelBuilder.Entity("StayFit.Data.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("ChosedComments");
+
                     b.Navigation("Claims");
 
                     b.Navigation("Comments");
@@ -1060,9 +1073,9 @@ namespace StayFit.Data.Migrations
 
                     b.Navigation("Roles");
 
-                    b.Navigation("UserLikes");
-
                     b.Navigation("UserReadings");
+
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.BodyPart", b =>
@@ -1101,6 +1114,8 @@ namespace StayFit.Data.Migrations
 
             modelBuilder.Entity("StayFit.Data.Models.Forum.Comment", b =>
                 {
+                    b.Navigation("UsersChosed");
+
                     b.Navigation("Votes");
                 });
 
@@ -1117,11 +1132,6 @@ namespace StayFit.Data.Migrations
             modelBuilder.Entity("StayFit.Data.Models.Forum.PostSubCategory", b =>
                 {
                     b.Navigation("Posts");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.Forum.Vote", b =>
-                {
-                    b.Navigation("UserVotes");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.Reading", b =>

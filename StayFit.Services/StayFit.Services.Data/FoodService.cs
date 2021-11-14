@@ -7,7 +7,8 @@ using StayFit.Data.Models.FoodModels.Nutrients;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.Shared.Nutritions;
 using StayFit.Shared.Nutritions.Food;
-using StayFit.Shared.Nutritions.NutrientModels.RedoFoods;
+using StayFit.Shared.Nutritions.Food.PostModels;
+using StayFit.Shared.Nutritions.Food.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,25 +27,35 @@ namespace StayFit.Services.StayFit.Services.Data
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<FoodCategoryModel>> LoadFoodCategories()
+        public async Task<LoadFoodCategoriesResponse> LoadFoodCategories()
         {
-            return await this.dbContext
+            var categories =  await this.dbContext
                 .FoodCategories
                 .ProjectTo<FoodCategoryModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            return new LoadFoodCategoriesResponse
+            {
+                FoodCategories = categories,
+            };
         }
 
-        public async Task<IEnumerable<SingleFoodCategoryModel>> LoadFoodByCategory(int id)
+        public async Task<LoadCategoryFoodsResponse> LoadFoodByCategory(int id)
         {
-            return await this.dbContext.Foods
+            var foods = await this.dbContext.Foods
                 .Where(x => x.FoodCategoryId == id)
-                .ProjectTo<SingleFoodCategoryModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<CategoryFoodModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            return new LoadCategoryFoodsResponse
+            {
+                CategoryFoods = foods,
+            };
         }
 
-        public FoodModel GetSingleFood(int categoryId, int foodId)
+        public async Task<LoadFoodResponse> GetSingleFood(int categoryId, int foodId)
         {
-            return this.dbContext.Foods
+            var food = await this.dbContext.Foods
                 .Where(food => food.Id == foodId)
                 .Select(food => new FoodModel
                 {
@@ -65,12 +76,17 @@ namespace StayFit.Services.StayFit.Services.Data
                         }).ToList(),
                     }).ToList()
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
+
+            return new LoadFoodResponse
+            {
+                Food = food
+            };
         }
 
-        public async Task<IEnumerable<NutrientModel>> LoadNutrients()
+        public async Task<LoadNutrientsResponse> LoadNutrients()
         {
-            return await this.dbContext.FoodBaseNutrients
+            var nutrients =  await this.dbContext.FoodBaseNutrients
                 .Select(nutrient => new NutrientModel
                 {
                     BaseNutrientName = nutrient.BaseNutrient.Name,
@@ -82,39 +98,44 @@ namespace StayFit.Services.StayFit.Services.Data
                         }).ToList(),
                 })
                 .ToListAsync();
+
+            return new LoadNutrientsResponse
+            {
+                Nutrients = nutrients,
+            };
         }
 
-        public void CreateNewFood(CreateFoodModel model)
+        public async Task<AddFoodResponse> CreateNewFood(CreateFoodModel model)
         {
             var food = new Food
             {
-                FoodName = this.dbContext.FoodNames.Where(x => x.Id == model.FoodNameId).FirstOrDefault(),
+                FoodName = await this.dbContext.FoodNames.Where(x => x.Id == model.FoodNameId).FirstOrDefaultAsync(),
                 Description = model.Description,
                 ImageUrl = model.ImageUrl,
                 Calories = model.Calories,
                 CreatedOn = DateTime.UtcNow,
                 ModifiedOn = DateTime.UtcNow,
-                FoodCategory = this.dbContext.FoodCategories.Where(x => x.Id == model.FoodCategoryId).FirstOrDefault(),
+                FoodCategory = await this.dbContext.FoodCategories.Where(x => x.Id == model.FoodCategoryId).FirstOrDefaultAsync(),
                 IsDeleted = false,
             };
 
             foreach (var fnb in model.FoodNutrientModels)
             {
-                BaseNutrient baseNutrient = this.dbContext.BaseNutrients
-                    .FirstOrDefault(x => x.Name == fnb.BaseNutrientName);
+                BaseNutrient baseNutrient = await this.dbContext.BaseNutrients
+                    .FirstOrDefaultAsync(x => x.Name == fnb.BaseNutrientName);
                 foreach (var sn in fnb.SubNutrients)
                 {
-                    SubNutrient subNutrient = this.dbContext
+                    SubNutrient subNutrient = await this.dbContext
                         .SubNutrients
                         .Where(x => x.BaseNutrient.Name == fnb.BaseNutrientName)
-                        .FirstOrDefault(x => x.Name == sn.Name);
+                        .FirstOrDefaultAsync(x => x.Name == sn.Name);
                     FoodSubNutrient fsn = new FoodSubNutrient 
                     {
                         Food = food, 
                         Quantity = sn.Quantity,
                         SubNutrient = subNutrient 
                     };
-                    this.dbContext.FoodSubNutrients.Add(fsn);
+                    await this.dbContext.FoodSubNutrients.AddAsync(fsn);
                 }
 
                 FoodBaseNutrient fbn = new FoodBaseNutrient 
@@ -124,9 +145,15 @@ namespace StayFit.Services.StayFit.Services.Data
                     BaseNutrient = baseNutrient 
                 };
 
-                this.dbContext.FoodBaseNutrients.Add(fbn);
+                await this.dbContext.FoodBaseNutrients.AddAsync(fbn);
             }
-            this.dbContext.SaveChanges();
+            await this.dbContext.Foods.AddAsync(food);
+            await this.dbContext.SaveChangesAsync();
+            return new AddFoodResponse
+            {
+                Id = food.Id,
+                FoodName = food.FoodName.Name,
+            };
         }
 
         //public IEnumerable<SingleFoodTypeModel> GetFoodTypesByCategory(int categoryId)

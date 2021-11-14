@@ -1,7 +1,9 @@
 ﻿namespace StayFit.Data.Models
 {
     using Microsoft.AspNetCore.Identity;
+
     using StayFit.Data.Common.Models;
+
     using System;
 
     public class ApplicationRole : IdentityRole,IAuditInfo,IDeletableEntity

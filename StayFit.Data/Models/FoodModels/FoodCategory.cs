@@ -1,6 +1,7 @@
 ﻿namespace StayFit.Data.Models.FoodModels
 {
     using StayFit.Data.Common.Models;
+
     using System.Collections.Generic;
 
     public class FoodCategory : BaseDeletableModel<int>

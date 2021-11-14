@@ -1,11 +1,15 @@
 ﻿namespace StayFit.WebAPI.Controllers.Api.Nutrition
 {
     using Microsoft.AspNetCore.Mvc;
+
+    using StayFit.Infrastructure.Extensions;
+
     using StayFit.Services.StayFit.Services.Data.Interfaces;
-    using StayFit.Shared.Nutritions;
-    using StayFit.Shared.Nutritions.Food;
-    using StayFit.Shared.Nutritions.NutrientModels.RedoFoods;
-    using System.Collections.Generic;
+
+    using StayFit.Shared;
+    using StayFit.Shared.Nutritions.Food.PostModels;
+    using StayFit.Shared.Nutritions.Food.Responses;
+
     using System.Threading.Tasks;
 
     [Route("api/[controller]")]
@@ -20,37 +24,41 @@
         }
 
         [HttpGet]
-        public async Task<IEnumerable<FoodCategoryModel>> LoadCategories()
+        public async Task<ApiResponse<LoadFoodCategoriesResponse>> LoadCategories()
         {
-            return await this.foodService.LoadFoodCategories();
+            var response =  await this.foodService.LoadFoodCategories();
+            return response.ToApiResponse();
         }
 
         [HttpPost]
-        public IActionResult CreateFood(CreateFoodModel model)
+        public async Task<ApiResponse<AddFoodResponse>> CreateFood(CreateFoodModel model)
         {
-            this.foodService.CreateNewFood(model);
-            return Ok("Created!");
+            var response = await this.foodService.CreateNewFood(model);
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{categoryId}")]
-        public async Task<IEnumerable<SingleFoodCategoryModel>> LoadFoodByCategoryId(int categoryId)
+        public async Task<ApiResponse<LoadCategoryFoodsResponse>> LoadFoodByCategoryId(int categoryId)
         {
-            return await this.foodService.LoadFoodByCategory(categoryId);
+            var response =  await this.foodService.LoadFoodByCategory(categoryId);
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{categoryId}/{foodId}")]
-        public ActionResult<FoodModel> LoadFood(int categoryId, int foodId)
+        public async Task<ApiResponse<LoadFoodResponse>> LoadFood(int categoryId, int foodId)
         {
-            return this.foodService.GetSingleFood(categoryId, foodId);
+            var response = await this.foodService.GetSingleFood(categoryId, foodId);
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("nutrients")]
-        public async Task<IEnumerable<NutrientModel>> LoadNutrients()
+        public async Task<ApiResponse<LoadNutrientsResponse>> LoadNutrients()
         {
-            return await this.foodService.LoadNutrients();
+            var response = await this.foodService.LoadNutrients();
+            return response.ToApiResponse();
         }
     }
 }

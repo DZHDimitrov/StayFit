@@ -3,6 +3,7 @@
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+
     using StayFit.Data.Models;
     using StayFit.Data.Models.FoodModels;
     using StayFit.Data.Models.FoodModels.Nutrients;
@@ -52,7 +53,7 @@
 
         public DbSet<Vote> Votes { get; set; }
 
-        public DbSet<UserVote> UserVotes { get; set; }
+        public DbSet<UsersChosenComments> UserChosenComments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -64,7 +65,7 @@
 
             builder.Entity<FoodBaseNutrient>().HasKey(c => new { c.FoodId, c.BaseNutrientId });
             builder.Entity<FoodSubNutrient>().HasKey(c => new { c.FoodId, c.SubNutrientId });
-            builder.Entity<UserVote>().HasKey(ul => new { ul.VoteId, ul.ApplicationUserId });
+            builder.Entity<UsersChosenComments>().HasKey(c => new { c.ApplicationUserId, c.CommentId });
 
             base.OnModelCreating(builder);
         }

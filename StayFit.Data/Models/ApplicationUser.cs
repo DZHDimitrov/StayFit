@@ -1,9 +1,11 @@
 ﻿namespace StayFit.Data.Models
 {
     using Microsoft.AspNetCore.Identity;
+
     using StayFit.Data.Common.Models;
     using StayFit.Data.Models.Forum;
     using StayFit.Data.Models.ReadingModels;
+
     using System;
     using System.Collections.Generic;
 
@@ -18,7 +20,8 @@
             this.UserReadings = new HashSet<UserReading>();
             this.Comments = new HashSet<Comment>();
             this.Posts = new HashSet<Post>();
-            this.UserLikes = new HashSet<UserVote>();
+            this.Votes = new HashSet<Vote>();
+            this.ChosedComments = new HashSet<UsersChosenComments>();
         }
 
         // Audit info
@@ -45,7 +48,8 @@
 
         public ICollection<Comment> Comments { get; set; }
 
-        public ICollection<UserVote> UserLikes { get; set; } 
+        public ICollection<Vote> Votes { get; set; } 
 
+        public ICollection<UsersChosenComments> ChosedComments { get; set; }
     }
 }

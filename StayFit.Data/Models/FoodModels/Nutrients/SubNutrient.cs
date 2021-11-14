@@ -1,7 +1,9 @@
 ﻿namespace StayFit.Data.Models.FoodModels.Nutrients
 {
     using StayFit.Data.Common.Models;
+
     using System.Collections.Generic;
+
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class SubNutrient : BaseDeletableModel<int>

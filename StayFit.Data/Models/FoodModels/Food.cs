@@ -2,7 +2,9 @@
 {
     using StayFit.Data.Common.Models;
     using StayFit.Data.Models.FoodModels.Nutrients;
+
     using System.Collections.Generic;
+
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class Food : BaseDeletableModel<int>

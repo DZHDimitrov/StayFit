@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using StayFit.Services.StayFit.Services.Data.Interfaces;
-using StayFit.Shared.Nutritions;
-using StayFit.Shared.Nutritions.Food;
-using StayFit.Shared.Nutritions.NutrientModels.RedoFoods;
-using System.Collections.Generic;
-
-namespace StayFit.WebAPI.Controllers
+﻿namespace StayFit.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+
+    using StayFit.Services.StayFit.Services.Data.Interfaces;
+
+    using StayFit.Shared.Nutritions.Food;
+    using StayFit.Shared.Nutritions.Food.PostModels;
+
+    using System.Collections.Generic;
+
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -19,7 +21,7 @@ namespace StayFit.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/api/admin/new-food/{categoryId}")]
+        [Route("new-food/{categoryId}")]
         public IEnumerable<FoodNameModel> GetFoodTypesByCategory(int categoryId)
         {
             //return this.foodService.GetFoodTypesByCategory(categoryId);

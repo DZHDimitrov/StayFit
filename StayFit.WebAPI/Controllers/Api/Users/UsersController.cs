@@ -1,77 +1,51 @@
-﻿
-
-namespace StayFit.WebAPI.Controllers
+﻿namespace StayFit.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Options;
-    using Microsoft.IdentityModel.Tokens;
-    using StayFit.Data;
-    using StayFit.Services.StayFit.Services.Data.Interfaces;
+
+    using StayFit.Data.Models;
+    using StayFit.Infrastructure.Extensions;
+    using StayFit.Shared;
     using StayFit.Shared.Account;
-    using StayFit.WebAPI.CurrentModels;
-    using System;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Security.Claims;
-    using System.Text;
+
+    using System.Linq;
     using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService userService;
-        private readonly JWTSettings _jwtSettings;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public UsersController(
-            AppDbContext context,
-            IOptions<JWTSettings> jwtSettings,
-            IUserService userService)
+        public UsersController(UserManager<ApplicationUser> userManager)
         {
-            this.userService = userService;
-            this._jwtSettings = jwtSettings.Value;
+            this.userManager = userManager;
         }
 
         [HttpPost]
-        [Route("/api/users/login")]
-        public async Task<ActionResult<UserLoginResponseModel>> Login([FromBody] UserLoginRequestModel login)
+        [Route("register")]
+        public async Task<ApiResponse<UserRegisterResponse>> Register(UserRegisterRequest model)
         {
-            try
+            if (model == null || !this.ModelState.IsValid)
             {
-                var user = await this.userService.Login(login);
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(this._jwtSettings.SecretKey);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(
-                        new Claim[] 
-                        { 
-                            new Claim(ClaimTypes.Name, user.Email),
-                            new Claim(ClaimTypes.NameIdentifier,user.Id)
-                        }),
-                    Expires = DateTime.UtcNow.AddMinutes(30),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                user.access_token = tokenHandler.WriteToken(token);
-                
-                return user;
+                return new ApiResponse<UserRegisterResponse>(new ApiError("Model", "Empty or null model."));
             }
-            catch (ArgumentException ae)
+
+            var user = new ApplicationUser { Email = model.Email, UserName = model.Username,Gender = model.Gender };
+
+            var result = await this.userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
             {
-                return this.StatusCode(401);
-            }     
+                return this.GetIdentityApiErrors<UserRegisterResponse>(result);
+            }
+
+            return new UserRegisterResponse { Id = user.Id }.ToApiResponse();
         }
 
-        [HttpPost]
-        [Route("/api/users/register")]
-        public async Task<ActionResult<UserRegisterResponseModel>> Register([FromBody] UserRegisterRequestModel registerModel)
+        private ApiResponse<T> GetIdentityApiErrors<T>(IdentityResult identityResult)
         {
-            var createUserId = await this.userService.Register(registerModel);
-            if (createUserId == null)
-            {
-                return this.BadRequest();
-            }
-            return new UserRegisterResponseModel { Id = createUserId };
+            return new ApiResponse<T>(identityResult.Errors.Select(x => new ApiError(x.Code, x.Description)).ToList());
         }
     }
 }

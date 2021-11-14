@@ -1,6 +1,7 @@
 ﻿namespace StayFit.Shared.Forum
 {
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     public class PostModel
     {
@@ -14,6 +15,6 @@
 
         public string ModifiedOn { get; set; }
 
-        public IEnumerable<CommentModel> Comments { get; set; }
+        //public IEnumerable<CommentModel> Comments { get; set; }
     }
 }

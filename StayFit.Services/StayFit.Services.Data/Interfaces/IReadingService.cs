@@ -1,5 +1,6 @@
 ﻿using StayFit.Shared;
 using StayFit.Shared.SharedModels;
+using StayFit.Shared.SharedModels.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +11,25 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 {
     public interface IReadingService
     {
-        public void CreateReading(CreateReading model);
+        public Task<AddReadingResponse> CreateReading(AddReadingRequest model);
 
         public void EditArticle();
 
         public void DeleteArticle();
 
-        public IEnumerable<ReadingModel> GetLatestReadings(string readingCategory);
+        public Task<ReadingResponse> LoadLatestReadings(string readingCategory);
 
-        public IEnumerable<ReadingModel> GetReadingsByMainCategory(string readingCategory);
+        public Task<ReadingResponse> LoadReadingsByMainCategory(string readingCategory);
 
-        public IEnumerable<ReadingModel> GetReadingsBySubCategory(string mainCategory,string subCategory);
+        public Task<ReadingResponse> LoadReadingsBySubCategory(string mainCategory,string subCategory);
 
-        public IEnumerable<ReadingSubCategoryModel> GetSubCategoriesByMainCategory(string readingCategory);
+        public Task<ReadingSubCategoryResponse> LoadSubCategoriesByMainCategory(string readingCategory);
 
-        public IEnumerable<ReadingSubCategoryModel> GetLatestSubCategories(string readingCategory);
+        public Task<ReadingSubCategoryResponse> LoadLatestSubCategories(string readingCategory);
 
-        public ReadingModel GetReadingBySearchName(string subCategory,string readingSearchName);
+        public Task<ReadingResponse> LoadReadingBySearchName(string subCategory,string readingSearchName);
 
-        public IEnumerable<ReadingModel> GetExerciseByBodyPart(string bodyPart);
+        public Task<ReadingResponse> LoadExerciseByBodyPart(string bodyPart);
 
         public string TransformNameToCyrillic(string input);
 

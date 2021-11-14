@@ -1,14 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NickBuhro.Translit;
+using StayFit.Common;
 using StayFit.Data;
 using StayFit.Data.Models;
 using StayFit.Data.Models.ReadingModels;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.Shared;
 using StayFit.Shared.SharedModels;
+using StayFit.Shared.SharedModels.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace StayFit.Services.StayFit.Services.Data
 {
@@ -33,9 +38,9 @@ namespace StayFit.Services.StayFit.Services.Data
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ReadingModel> GetReadingsByMainCategory(string readingCategory)
+        public async Task<ReadingResponse> LoadReadingsByMainCategory(string readingCategory)
         {
-            return this.dbContext.Readings
+            var readings = await this.dbContext.Readings
                 .Where(reading => reading.ReadingMainCategory.SearchName.ToLower() == readingCategory.ToLower())
                 .Select(reading => new ReadingModel
                 {
@@ -44,12 +49,17 @@ namespace StayFit.Services.StayFit.Services.Data
                     ImageUrl = reading.ImageUrl,
                     Title = reading.Title
                 })
-                .ToList();
+                .ToListAsync();
+
+            return new ReadingResponse
+            {
+                Readings = readings,
+            };
         }
 
-        public IEnumerable<ReadingModel> GetReadingsBySubCategory(string mainCategory,string subCategory)
+        public async Task<ReadingResponse> LoadReadingsBySubCategory(string mainCategory, string subCategory)
         {
-            return this.dbContext.Readings
+            var readings = await this.dbContext.Readings
                 .Where(reading => reading.ReadingSubCategory.SearchName.ToLower() == subCategory.ToLower() && mainCategory.ToLower() == reading.ReadingMainCategory.SearchName.ToLower())
                 .Select(reading => new ReadingModel
                 {
@@ -58,28 +68,36 @@ namespace StayFit.Services.StayFit.Services.Data
                     ImageUrl = reading.ImageUrl,
                     Title = reading.Title
                 })
-                .ToList();
+                .ToListAsync();
+            return new ReadingResponse
+            {
+                Readings = readings
+            };
         }
 
-        public IEnumerable<ReadingModel> GetLatestReadings(string readingCategory)
+        public async Task<ReadingResponse> LoadLatestReadings(string readingCategory)
         {
-            return this.dbContext.Readings
-                .Where(reading => reading.ReadingMainCategory.SearchName.ToLower() == readingCategory.ToLower())
-                .OrderByDescending(reading => reading.CreatedOn)
-                .Take(4)
-                .Select(reading => new ReadingModel
-                {
-                    Id = reading.Id,
-                    Content = reading.Content,
-                    ImageUrl = reading.ImageUrl,
-                    Title = reading.Title
-                })
-                .ToList();
+            var readings = await this.dbContext.Readings
+                 .Where(reading => reading.ReadingMainCategory.SearchName.ToLower() == readingCategory.ToLower())
+                 .OrderByDescending(reading => reading.CreatedOn)
+                 .Take(4)
+                 .Select(reading => new ReadingModel
+                 {
+                     Id = reading.Id,
+                     Content = reading.Content,
+                     ImageUrl = reading.ImageUrl,
+                     Title = reading.Title
+                 })
+                 .ToListAsync();
+            return new ReadingResponse
+            {
+                Readings = readings,
+            };
         }
 
-        public IEnumerable<ReadingSubCategoryModel> GetLatestSubCategories(string readingCategory)
+        public async Task<ReadingSubCategoryResponse> LoadLatestSubCategories(string readingCategory)
         {
-            return this.dbContext.ReadingSubCategories
+            var subCategories = await this.dbContext.ReadingSubCategories
                 .Where(subCategory => subCategory.ReadingMainCategory.SearchName.ToLower() == readingCategory.ToLower())
                 .OrderByDescending(subCategory => subCategory.CreatedOn)
                 .Select(subCategory => new ReadingSubCategoryModel
@@ -88,51 +106,60 @@ namespace StayFit.Services.StayFit.Services.Data
                     ImageUrl = subCategory.ImageUrl
                 })
                 .Take(4)
-                .ToList();
+                .ToListAsync();
+
+            return new ReadingSubCategoryResponse
+            {
+                ReadingsSubCategories = subCategories
+            };
         }
 
-        public IEnumerable<ReadingSubCategoryModel> GetSubCategoriesByMainCategory(string readingCategory)
+        public async Task<ReadingSubCategoryResponse> LoadSubCategoriesByMainCategory(string readingCategory)
         {
-            return this.dbContext.ReadingSubCategories
+            var readingSubCategories = await this.dbContext.ReadingSubCategories
                 .Where(subCategory => subCategory.ReadingMainCategory.SearchName.ToLower() == readingCategory.ToLower())
                 .Select(subCategory => new ReadingSubCategoryModel
                 {
                     Name = subCategory.Name,
                     ImageUrl = subCategory.ImageUrl
                 })
-                .ToList();
-        }
-
-        public ReadingModel GetReadingBySearchName(string subCategory, string readingSearchName)
-        {
-            if (subCategory != null)
+                .ToListAsync();
+            return new ReadingSubCategoryResponse
             {
-                return this.dbContext.Readings
-                    .Where(reading => reading.SearchTitle == readingSearchName && reading.ReadingSubCategory.SearchName == subCategory)
-                    .Select(reading => new ReadingModel
-                    {
-                        Id = reading.Id,
-                        Title = reading.Title,
-                        Content = reading.Content,
-                        ImageUrl = reading.ImageUrl
-                    })
-                    .FirstOrDefault();
-            }
-            return this.dbContext.Readings
-               .Where(reading => reading.SearchTitle == readingSearchName)
-               .Select(reading => new ReadingModel
-               {
-                   Id = reading.Id,
-                   Title = reading.Title,
-                   Content = reading.Content,
-                   ImageUrl = reading.ImageUrl
-               })
-               .FirstOrDefault();
+                ReadingsSubCategories = readingSubCategories
+            };
         }
 
-        public IEnumerable<ReadingModel> GetExerciseByBodyPart(string bodyPart)
+        public async Task<ReadingResponse> LoadReadingBySearchName(string subCategory, string readingSearchName)
         {
-            return this.dbContext.Readings
+            IEnumerable<ReadingModel> reading = null;
+
+            reading = await this.dbContext.Readings
+                .Where(reading => reading.SearchTitle.ToLower() == readingSearchName.ToLower() && reading.ReadingSubCategory.SearchName.ToLower() == subCategory.ToLower())
+                .Select(reading => new ReadingModel
+                {
+                    Id = reading.Id,
+                    Title = reading.Title,
+                    Content = reading.Content,
+                    ImageUrl = reading.ImageUrl
+                })
+                .Take(1)
+                .ToListAsync();
+
+            if (reading.Count() == 0)
+            {
+                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, readingSearchName));
+            }
+
+            return new ReadingResponse
+            {
+                Readings = reading,
+            };
+        }
+
+        public async Task<ReadingResponse> LoadExerciseByBodyPart(string bodyPart)
+        {
+            var readings = await this.dbContext.Readings
                 .Where(x => x.BodyPart != null && x.BodyPart.SearchName.ToLower() == bodyPart.ToLower())
                 .Select(x => new ReadingModel
                 {
@@ -141,12 +168,17 @@ namespace StayFit.Services.StayFit.Services.Data
                     ImageUrl = x.ImageUrl,
                     Title = x.Title
                 })
-                .ToList();
+                .ToListAsync();
+
+            return new ReadingResponse
+            {
+                Readings = readings,
+            };
         }
 
-        public void CreateReading(CreateReading model)
+        public async Task<AddReadingResponse> CreateReading(AddReadingRequest model)
         {
-            var mainCategory = this.dbContext.ReadingMainCategories.FirstOrDefault(x => x.Id == model.MainGroupId);
+            var mainCategory = await this.dbContext.ReadingMainCategories.FirstOrDefaultAsync(x => x.Id == model.MainGroupId);
             if (mainCategory.Name != "Статии" && mainCategory.Name != "Ръководство" && model.SubGroup == null)
             {
                 throw new ArgumentException($"{mainCategory.SearchName} must have subgroups!");
@@ -166,16 +198,21 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (model.SubGroup != null)
             {
-                var subCategory = this.dbContext.ReadingSubCategories.FirstOrDefault(x => x.Id == model.SubGroup.Id);
+                var subCategory = await this.dbContext.ReadingSubCategories.FirstOrDefaultAsync(x => x.Id == model.SubGroup.Id);
                 reading.ReadingSubCategory = subCategory;
                 if (subCategory.SearchName == "Exercises")
                 {
-                    var bodyPart = this.dbContext.BodyParts.FirstOrDefault(x => x.Id == model.SubGroup.bodyPartId);
+                    var bodyPart = await this.dbContext.BodyParts.FirstOrDefaultAsync(x => x.Id == model.SubGroup.bodyPartId);
                     reading.BodyPart = bodyPart;
                 }
             }
-            this.dbContext.Readings.Add(reading);
-            this.dbContext.SaveChanges();
+            await this.dbContext.Readings.AddAsync(reading);
+            await this.dbContext.SaveChangesAsync();
+            return new AddReadingResponse
+            {
+                Id = reading.Id,
+                Title = reading.Title,
+            };
         }
 
         public string TransformNameToCyrillic(string input)

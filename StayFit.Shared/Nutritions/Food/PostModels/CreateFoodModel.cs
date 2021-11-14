@@ -1,4 +1,4 @@
-﻿namespace StayFit.Shared.Nutritions.NutrientModels.RedoFoods
+﻿namespace StayFit.Shared.Nutritions.Food.PostModels
 {
     using StayFit.Shared.Nutritions.Food;
     using System.Collections.Generic;

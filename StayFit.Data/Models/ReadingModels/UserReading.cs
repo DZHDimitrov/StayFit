@@ -1,6 +1,7 @@
 ﻿namespace StayFit.Data.Models.ReadingModels
 {
     using StayFit.Data.Common.Models;
+
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class UserReading : BaseDeletableModel<int>

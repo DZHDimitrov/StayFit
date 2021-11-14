@@ -1,10 +1,15 @@
 ﻿namespace StayFit.WebAPI.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+
+    using StayFit.Infrastructure.Extensions;
+
     using StayFit.Services.StayFit.Services.Data.Interfaces;
+
     using StayFit.Shared;
-    using StayFit.Shared.SharedModels;
-    using System.Collections.Generic;
+    using StayFit.Shared.SharedModels.Responses;
+
+    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -18,44 +23,49 @@
         }
 
         [HttpGet]
-        public IEnumerable<ReadingSubCategoryModel> LoadSubCategories()
+        public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadSubCategories()
         {
-            return this.readingService.GetSubCategoriesByMainCategory("training");
+            var response = await this.readingService.LoadSubCategoriesByMainCategory("training");
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("latest")]
-        public IEnumerable<ReadingSubCategoryModel> LoadRecentSubCategories()
+        public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadRecentSubCategories()
         {
-            return this.readingService.GetLatestSubCategories("training");
+            var response = await this.readingService.LoadLatestSubCategories("training");
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{subCategory}")]
-        public IEnumerable<ReadingModel> LoadReadingsBySubCategory(string subCategory)
+        public async Task<ApiResponse<ReadingResponse>> LoadReadingsBySubCategory(string subCategory)
         {
-            return this.readingService.GetReadingsBySubCategory("training", subCategory);
+            var response = await this.readingService.LoadReadingsBySubCategory("training", subCategory);
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{subCategory}/{searchTitle}")]
-        public ReadingModel LoadReading(string subCategory,string searchTitle)
+        public async Task<ApiResponse<ReadingResponse>> LoadReading(string subCategory,string searchTitle)
         {
-            return this.readingService.GetReadingBySearchName(subCategory, searchTitle);
+            var response = await this.readingService.LoadReadingBySearchName(subCategory, searchTitle);
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("exercises/{bodyPart}")]
-        public IEnumerable<ReadingModel> LoadExercises(string bodyPart)
+        public async Task<ApiResponse<ReadingResponse>> LoadExercises(string bodyPart)
         {
-            return this.readingService.GetExerciseByBodyPart(bodyPart);
+            var response = await this.readingService.LoadExerciseByBodyPart(bodyPart);
+            return response.ToApiResponse();
         }
 
         [HttpPost]
-        public IActionResult CreateTraining(CreateReading model)
+        public async Task<ApiResponse<AddReadingResponse>> CreateTraining(AddReadingRequest model)
         {
-            this.readingService.CreateReading(model);
-            return Ok();
+            var response = await this.readingService.CreateReading(model);
+            return response.ToApiResponse();
         }
     }
 }

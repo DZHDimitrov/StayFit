@@ -165,3 +165,7 @@ C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Sta
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\NickBuhro.Translit.dll
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Common.dll
 C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\StayFit.Common.pdb
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\Daniel\source\repos\StayFit-web app\StayFit.WebAPI\bin\Debug\net5.0\Microsoft.Extensions.DependencyModel.dll

@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StayFit.Services.StayFit.Services.Data.Interfaces;
-using StayFit.Shared;
-using StayFit.Shared.SharedModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace StayFit.WebAPI.Controllers.Api.Supplements
+﻿namespace StayFit.WebAPI.Controllers.Api.Supplements
 {
+    using Microsoft.AspNetCore.Mvc;
+
+    using StayFit.Infrastructure.Extensions;
+
+    using StayFit.Services.StayFit.Services.Data.Interfaces;
+
+    using StayFit.Shared;
+    using StayFit.Shared.SharedModels.Responses;
+
+    using System.Threading.Tasks;
+
     [Route("api/[controller]")]
     [ApiController]
     public class SupplementsController : ControllerBase
@@ -22,37 +23,41 @@ namespace StayFit.WebAPI.Controllers.Api.Supplements
         }
 
         [HttpGet]
-        public IEnumerable<ReadingSubCategoryModel> LoadSubCategories()
+        public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadSubCategories()
         {
-            return this.readingService.GetSubCategoriesByMainCategory("supplements");
+            var response = await this.readingService.LoadSubCategoriesByMainCategory("supplements");
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("latest")]
-        public IEnumerable<ReadingSubCategoryModel> LoadLatestSubCategories()
+        public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadLatestSubCategories()
         {
-            return this.readingService.GetLatestSubCategories("supplements");
+            var response = await this.readingService.LoadLatestSubCategories("supplements");
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{subcategory}")]
-        public IEnumerable<ReadingModel> LoadReadingsBySubCategory(string subcategory)
+        public async Task<ApiResponse<ReadingResponse>> LoadReadingsBySubCategory(string subcategory)
         {
-            return this.readingService.GetReadingsBySubCategory("supplements",subcategory);
+            var response =  await this.readingService.LoadReadingsBySubCategory("supplements",subcategory);
+            return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{subcategory}/{searchName}")]
-        public ReadingModel LoadReading(string subcategory,string searchName)
+        public async Task<ApiResponse<ReadingResponse>> LoadReading(string subcategory,string searchName)
         {
-            return this.readingService.GetReadingBySearchName(subcategory,searchName);
+            var response = await this.readingService.LoadReadingBySearchName(subcategory,searchName);
+            return response.ToApiResponse();
         }
 
         [HttpPost]
-        public IActionResult CreateSupplement(CreateReading model)
+        public async Task<ApiResponse<AddReadingResponse>> CreateSupplement(AddReadingRequest model)
         {
-            this.readingService.CreateReading(model);
-            return Ok();
+            var response = await this.readingService.CreateReading(model);
+            return response.ToApiResponse();
         }
     }
 }
