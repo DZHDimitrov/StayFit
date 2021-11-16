@@ -15,20 +15,17 @@ using Microsoft.OpenApi.Models;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-
 using StayFit.Data;
 using StayFit.Data.Models;
 
 using StayFit.Infrastructure;
-using StayFit.Infrastructure.Extensions;
 using StayFit.Infrastructure.Middlewares.Authorization;
-
+using StayFit.Services.Providers;
+using StayFit.Services.Providers.Interfaces;
 using StayFit.Services.StayFit.Services.Data;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 
 using StayFit.Shared;
-
-using StayFit.WebAPI.CurrentModels;
 
 using System;
 using System.Linq;
@@ -54,32 +51,41 @@ namespace StayFit.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy(allowSpecificOrigins,
-                builder =>
+            services
+                .AddCors(options =>
                 {
-                    builder.AllowAnyOrigin()
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
+                    options.AddPolicy(allowSpecificOrigins,
+                    builder =>
+                        {
+                            builder.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        });
                 });
-            });
 
-            var jwtSection = this.configuration.GetSection("JWTSettings");
-            services.Configure<JWTSettings>(jwtSection);
-            var appSettings = jwtSection.Get<JWTSettings>();
-            var key = Encoding.UTF8.GetBytes(appSettings.SecretKey);
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JwtTokenValidation:Secret"]));
+            services
+                .Configure<TokenProviderOptions>(opts =>
+                {
+                    opts.Audience = this.configuration["JwtTokenValidation:Audience"];
+                    opts.Issuer = this.configuration["JwtTokenValidation:Issuer"];
+                    opts.Path = "/api/account/login";
+                    opts.Expiration = TimeSpan.FromDays(15);
+                    opts.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+                });
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.SecretKey));
+            services
+                .AddDefaultIdentity<ApplicationUser>(x =>
+                {
+                    x.Password.RequireDigit = false;
+                    x.Password.RequireLowercase = false;
+                    x.Password.RequireUppercase = false;
+                    x.Password.RequireNonAlphanumeric = false;
+                    x.Password.RequiredLength = 5;
+                })
+                .AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
 
-            services.Configure<TokenProviderOptions>(opts =>
-            {
-                opts.Audience = this.configuration["JwtTokenValidation:Audience"];
-                opts.Issuer = this.configuration["JwtTokenValidation:Issuer"];
-                opts.Path = "/api/users/login";
-                opts.Expiration = TimeSpan.FromDays(15);
-                opts.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-            });
 
             services
                 .AddAuthentication()
@@ -96,40 +102,27 @@ namespace StayFit.WebAPI
                         ValidateLifetime = true
                     };
                 });
+            services
+                .AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 
-            services.AddDefaultIdentity<ApplicationUser>(x =>
-            {
-                x.Password.RequireDigit = false;
-                x.Password.RequireLowercase = false;
-                x.Password.RequireUppercase = false;
-                x.Password.RequireNonAlphanumeric = false;
-                x.Password.RequiredLength = 5;
-            })
-                .AddRoles<ApplicationRole>()
-                .AddEntityFrameworkStores<AppDbContext>();
-            services.AddDbContext<AppDbContext>(
-       options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+            services
+                .AddControllers()
+                 .AddNewtonsoftJson(options =>
+                 {
+                     options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                     {
+                         NamingStrategy = new CamelCaseNamingStrategy(),
+                     };
+                     options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
 
-
-            services.AddControllers()
-                .AddNewtonsoftJson(options =>
+                 });
+            services
+                .AddSwaggerGen(c =>
                 {
-                    options.SerializerSettings.ContractResolver = new DefaultContractResolver()
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy(),
-                    };
-                    options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
-
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "StayFitAPI", Version = "v1" });
                 });
-            services.AddSwaggerGen(c => 
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "StayFitAPI", Version = "v1" });
-            });
-
-            
 
             //JWToptions.GenerateJWTOptions(services, key);
-
 
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -145,6 +138,8 @@ namespace StayFit.WebAPI
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IFoodService, FoodService>();
+            services.AddSingleton<ILogger, ConsoleLogger>();
+            services.AddTransient<IConversationService, ConversationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -165,6 +160,7 @@ namespace StayFit.WebAPI
             };
             app.UseStaticFiles();
 
+            app.UseHttpsRedirection();
             //app.ConfigureCustomExceptionMiddleware();
             app.UseExceptionHandler(app =>
             {
@@ -196,13 +192,11 @@ namespace StayFit.WebAPI
 
 
             app.UseCors(allowSpecificOrigins);
-            app.UseHttpsRedirection();
             app.UseRouting();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseJwtBearerTokens(app.ApplicationServices.GetRequiredService<IOptions<TokenProviderOptions>>(),PrincipalResolver);
+            app.UseJwtBearerTokens(app.ApplicationServices.GetRequiredService<IOptions<TokenProviderOptions>>(), PrincipalResolver);
 
             app.UseEndpoints(endpoints =>
             {

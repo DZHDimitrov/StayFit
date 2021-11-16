@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StayFit.Data;
 
 namespace StayFit.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211115214947_AddMessagesTable")]
+    partial class AddMessagesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,6 +303,9 @@ namespace StayFit.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -316,17 +321,9 @@ namespace StayFit.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ReceieverId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceieverId");
-
-                    b.HasIndex("SenderId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Messages");
                 });
@@ -909,17 +906,11 @@ namespace StayFit.Data.Migrations
 
             modelBuilder.Entity("StayFit.Data.Models.ConversationModels.Message", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.ApplicationUser", "Receiver")
-                        .WithMany("RecievedMessages")
-                        .HasForeignKey("ReceieverId");
-
-                    b.HasOne("StayFit.Data.Models.ApplicationUser", "Sender")
+                    b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Messages")
-                        .HasForeignKey("SenderId");
+                        .HasForeignKey("ApplicationUserId");
 
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
@@ -1141,8 +1132,6 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("Readings");
-
-                    b.Navigation("RecievedMessages");
 
                     b.Navigation("Roles");
 

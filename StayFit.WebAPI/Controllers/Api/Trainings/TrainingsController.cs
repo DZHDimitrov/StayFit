@@ -13,7 +13,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class TrainingsController : ControllerBase
+    public class TrainingsController : BaseController
     {
         private readonly IReadingService readingService;
 

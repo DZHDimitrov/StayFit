@@ -1,10 +1,8 @@
-﻿namespace StayFit.Infrastructure.Extensions
+﻿namespace StayFit.Infrastructure.Middlewares.Authorization
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
-
-    using StayFit.Infrastructure.Middlewares.Authorization;
 
     using System;
     using System.Security.Principal;

@@ -19,7 +19,7 @@
     [Route("api/forums/[controller]")]
     [Authorize]
     [ApiController]
-    public class CommentsController : ControllerBase
+    public class CommentsController : BaseController
     {
         private readonly ICommentService commentService;
 
@@ -27,11 +27,11 @@
         {
             this.commentService = commentService;
         }
-        //TODO: Try to make query string instead of just postId
+
         [HttpGet]
         [AllowAnonymous]
         [Route("post")]
-        public async Task<ApiResponse<LoadPostCommentsResponse>>LoadCommentsByPostId(int id)
+        public async Task<ApiResponse<LoadPostCommentsResponse>>LoadCommentsByPostId([FromQuery]int id)
         {
             var response = await this.commentService.LoadCommentsByPostId(id);
             return response.ToApiResponse();

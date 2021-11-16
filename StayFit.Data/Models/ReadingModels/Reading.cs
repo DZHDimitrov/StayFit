@@ -35,6 +35,11 @@
         public int? BodyPartId { get; set; }
         public BodyPart BodyPart {get;set;}
 
+        [ForeignKey(nameof(ApplicationUser))]
+        public string ApplicationUserId { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
+
         public ICollection<UserReading> UserReadings { get; set; }
     }
 }

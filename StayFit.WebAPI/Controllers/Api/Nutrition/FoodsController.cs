@@ -1,5 +1,6 @@
 ﻿namespace StayFit.WebAPI.Controllers.Api.Nutrition
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using StayFit.Infrastructure.Extensions;
@@ -14,7 +15,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodsController : ControllerBase
+    public class FoodsController : BaseController
     {
         private readonly IFoodService foodService;
 
@@ -24,6 +25,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ApiResponse<LoadFoodCategoriesResponse>> LoadCategories()
         {
             var response =  await this.foodService.LoadFoodCategories();
@@ -38,6 +40,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("{categoryId}")]
         public async Task<ApiResponse<LoadCategoryFoodsResponse>> LoadFoodByCategoryId(int categoryId)
         {
@@ -46,6 +49,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("{categoryId}/{foodId}")]
         public async Task<ApiResponse<LoadFoodResponse>> LoadFood(int categoryId, int foodId)
         {

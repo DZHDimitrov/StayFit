@@ -1,8 +1,10 @@
 ﻿namespace StayFit.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using StayFit.Infrastructure.Extensions;
+    using StayFit.Services.Providers.Interfaces;
     using StayFit.Services.StayFit.Services.Data.Interfaces;
 
     using StayFit.Shared;
@@ -23,6 +25,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ApiResponse<ReadingResponse>> LoadArticles()
         {
             var response = await this.readingService.LoadReadingsByMainCategory("articles");
@@ -31,6 +34,7 @@
 
         [HttpGet]
         [Route("latest")]
+        [AllowAnonymous]
         public async Task<ApiResponse<ReadingResponse>> LoadLatestArticles()
         {
             var response =await this.readingService.LoadLatestReadings("articles");
@@ -39,6 +43,7 @@
 
         [HttpGet]
         [Route("{searchName}")]
+        [AllowAnonymous]
         public async Task<ApiResponse<ReadingResponse>> LoadSingleArticle(string searchName)
         {
             var response =  await this.readingService.LoadReadingBySearchName(null,searchName);

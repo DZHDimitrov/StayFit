@@ -13,7 +13,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class SupplementsController : ControllerBase
+    public class SupplementsController : BaseController
     {
         private readonly IReadingService readingService;
 

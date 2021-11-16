@@ -3,11 +3,13 @@
     using Microsoft.AspNetCore.Identity;
 
     using StayFit.Data.Common.Models;
+    using StayFit.Data.Models.ConversationModels;
     using StayFit.Data.Models.Forum;
     using StayFit.Data.Models.ReadingModels;
 
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -22,6 +24,9 @@
             this.Posts = new HashSet<Post>();
             this.Votes = new HashSet<Vote>();
             this.ChosedComments = new HashSet<UsersChosenComments>();
+            this.Messages = new HashSet<Message>();
+            this.Readings = new HashSet<Reading>();
+            this.RecievedMessages = new HashSet<Message>();
         }
 
         // Audit info
@@ -35,6 +40,10 @@
         public DateTime? DeletedOn { get; set; }
 
         public string Gender { get; set; }
+
+        public DateTime? BirthDate { get; set; }
+
+        public string ImageUrl { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
@@ -51,5 +60,13 @@
         public ICollection<Vote> Votes { get; set; } 
 
         public ICollection<UsersChosenComments> ChosedComments { get; set; }
+
+        [InverseProperty("Sender")]
+        public ICollection<Message> Messages { get; set; }
+
+        [InverseProperty("Receiver")]
+        public ICollection<Message> RecievedMessages { get; set; }
+
+        public ICollection<Reading> Readings { get; set; }
     }
 }

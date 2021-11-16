@@ -1,5 +1,6 @@
 ﻿namespace StayFit.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using StayFit.Infrastructure.Extensions;
@@ -13,7 +14,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class NutritionsController : ControllerBase
+    public class NutritionsController : BaseController
     {
         private readonly IReadingService readingService;
 

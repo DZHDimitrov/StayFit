@@ -1,5 +1,6 @@
 ﻿namespace StayFit.WebAPI.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +14,29 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
 
-        public UsersController(UserManager<ApplicationUser> userManager)
+        public AccountController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
         }
 
+        [HttpGet]
+        public IActionResult LoadUserInfoById(string userId)
+        {
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult EditUserInfoById()
+        {
+            return Ok();
+        }
+
         [HttpPost]
+        [AllowAnonymous]
         [Route("register")]
         public async Task<ApiResponse<UserRegisterResponse>> Register(UserRegisterRequest model)
         {

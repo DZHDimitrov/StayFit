@@ -16,7 +16,7 @@
 
     [Route("api/forums/[controller]")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class PostsController : BaseController
     {
         private readonly IPostService postService;
 

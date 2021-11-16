@@ -31,8 +31,6 @@
 
         public Task Invoke(HttpContext context)
         {
-            var a = context.Request.Path;
-
             if (!context.Request.Path.Equals(this.options.Path, StringComparison.Ordinal))
             {
                 return this.next(context);
