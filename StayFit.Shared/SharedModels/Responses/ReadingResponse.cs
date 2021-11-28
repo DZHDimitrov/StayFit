@@ -6,5 +6,7 @@
     public class ReadingResponse
     {
         public IEnumerable<ReadingModel> Readings { get; set; }
+
+        public IEnumerable<ReadingSubCategoryModel> ReadingsSubCategories { get; set; }
     }
 }

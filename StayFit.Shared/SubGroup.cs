@@ -2,8 +2,8 @@
 {
     public class SubGroup
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
 
-        public int bodyPartId { get; set; }
+        public int? bodyPartId { get; set; }
     }
 }

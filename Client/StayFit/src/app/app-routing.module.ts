@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthActivate } from './core/guards/auth.activate';
+import { AuthActivate } from './modules/core/guards/auth.activate';
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule),
+    loadChildren: () => import('./modules/@auth/authentication.module').then(m => m.AuthenticationModule),
     canLoad: [AuthActivate]
   },
   {

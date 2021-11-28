@@ -6,21 +6,19 @@
 
     public class CreateFoodModel
     {
-        [Required]
-        [MinLength(3)]
-        public string Description { get; set; }
 
-        [Required]
-        public int FoodNameId { get; set; }
+        public string Description { get; set; } = "test";
 
-        [Required]
-        public double Calories { get; set; }
+        public int FoodNameId { get; set; } = 5;
 
-        public string ImageUrl { get; set; }
+        public double Calories { get; set; } = 250;
 
-        [Required]
-        public int FoodCategoryId { get; set; }
+        public string ImageUrl { get; set; } = "Testpic";
+
+        public int FoodCategoryId { get; set; } = 2;
 
         public IEnumerable<NutrientModel> FoodNutrientModels { get; set; }
+
+        public int SubNutrientId { get; set; } = 1;
     }
 }

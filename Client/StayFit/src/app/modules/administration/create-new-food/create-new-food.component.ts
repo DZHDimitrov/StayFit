@@ -7,8 +7,8 @@ import {
   IFoodType,
   INutrient,
   INutrientType,
-} from 'src/app/core/interfaces/food';
-import { NutritionsService } from 'src/app/core/services/api/nutritions/nutritions.service';
+} from 'src/app/modules/core/interfaces/food';
+import { NutritionsService } from 'src/app/modules/core/services/api/nutritions/nutritions.service';
 import { getNutrients } from './misc/nutrient';
 import { NbToastrService} from '@nebular/theme';
 

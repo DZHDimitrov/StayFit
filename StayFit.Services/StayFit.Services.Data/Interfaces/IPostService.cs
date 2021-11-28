@@ -9,7 +9,7 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
     {
         public Task<LoadPostCategoriesResponse> LoadPostCategories();
 
-        public Task<LoadPostPreviewsResponse> LoadPostPreviewsByCategory(int categoryId,int page =1);
+        public Task<LoadPostPreviewsResponse> LoadPostPreviewsByCategory(int categoryId,int? page =1);
 
         public Task<LoadPostResponse> LoadPostById(int postId);
 

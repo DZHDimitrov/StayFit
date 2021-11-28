@@ -100,6 +100,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             await this.dbContext.Messages.AddAsync(message);
             await this.dbContext.SaveChangesAsync();
+
             return new SendMessageResponse
             {
                 MessageId = message.Id,

@@ -17,7 +17,7 @@
     using StayFit.Infrastructure.Extensions;
 
     [Route("api/forums/[controller]")]
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     public class CommentsController : BaseController
     {
@@ -31,7 +31,7 @@
         [HttpGet]
         [AllowAnonymous]
         [Route("post")]
-        public async Task<ApiResponse<LoadPostCommentsResponse>>LoadCommentsByPostId([FromQuery]int id)
+        public async Task<ApiResponse<LoadPostCommentsResponse>>LoadCommentsByPostId([FromQuery]int? id)
         {
             var response = await this.commentService.LoadCommentsByPostId(id);
             return response.ToApiResponse();
@@ -52,45 +52,48 @@
         }
 
         [HttpDelete]
-        public async Task<ApiResponse<DeleteCommentResponse>> DeleteComment(DeleteCommentModel model)
+        [Route("{commentId}")]
+        public async Task<ApiResponse<DeleteCommentResponse>> DeleteComment(string commentId)
         {
             var userId = this.User.GetId();
-            var response = await this.commentService.DeleteComment(model,userId);
+            var response = await this.commentService.DeleteComment(commentId,userId);
             return response.ToApiResponse();
         }
 
         [HttpGet]
-        [Route("votes")]
+        [Route("{commentId}/votes")]
         public IActionResult LoadVotesByCommentId()
         {
             return Ok();
         }
 
         [HttpPost]
-        [Route("votes")]
-        public async Task<IActionResult> CommentVote(VoteModel model)
+        [Route("{commentId}/votes")]
+        public async Task<ApiResponse<AddVoteResponse>> CommentVote(string commentId,VoteModel model)
         {
-            var userId = this.User.GetId();
-            await this.commentService.CommentVote(userId, model.CommentId, model.IsLike);
-            return Ok(string.Format(GlobalConstants.ITEM_ADD_SUCCESS, "vote"));
+            //var userId = this.User.GetId();
+            var userId = "1";
+            var response = await this.commentService.CommentVote(userId, commentId, model.IsLike);
+            return response.ToApiResponse();
         }
 
         [HttpPut]
-        [Route("votes")]
-        public async Task<IActionResult> EditVoteById(VoteModel model)
+        [Route("{commentId}/votes")]
+        public async Task<ApiResponse<ModifyVoteResponse>> EditVoteById(string commentId,VoteModel model)
         {
-            var userId = this.User.GetId();
-            await this.commentService.EditVote(userId, model.CommentId, model.IsLike);
-            return Ok();
+            //var userId = this.User.GetId();
+            var userId = "1";
+            var response = await this.commentService.EditVote(userId, commentId, model.IsLike);
+            return response.ToApiResponse();
         }
 
         [HttpDelete]
-        [Route("votes")]
-        public async Task<IActionResult> RemoveVoteByPostId(VoteModel model)
+        [Route("{commentId}/votes")]
+        public async Task<ApiResponse<ModifyVoteResponse>> RemoveVoteByPostId(string commentId,VoteModel model)
         {
             var userId = this.User.GetId();
-            await this.commentService.RemoveVote(userId, model.CommentId);
-            return Ok(string.Format(GlobalConstants.ITEM_REMOVE_SUCCESS, "vote"));
+            var response = await this.commentService.RemoveVote(userId, commentId);
+            return response.ToApiResponse();
         }
 
         [HttpGet]

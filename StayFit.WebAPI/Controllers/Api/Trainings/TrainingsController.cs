@@ -25,16 +25,18 @@
         [HttpGet]
         public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadSubCategories()
         {
-            var response = await this.readingService.LoadSubCategoriesByMainCategory("training");
-            return response.ToApiResponse();
+            //var response = await this.readingService.LoadSubCategoriesByMainCategory("training");
+            //return response.ToApiResponse();
+            return null;
         }
 
         [HttpGet]
         [Route("latest")]
-        public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadRecentSubCategories()
+        public async Task<ApiResponse<ReadingResponse>> LoadRecentSubCategories()
         {
-            var response = await this.readingService.LoadLatestSubCategories("training");
-            return response.ToApiResponse();
+            //var response = await this.readingService.LoadLatestSubCategories("training");
+            //return response.ToApiResponse();
+            return null;
         }
 
         [HttpGet]
@@ -47,9 +49,9 @@
 
         [HttpGet]
         [Route("{subCategory}/{searchTitle}")]
-        public async Task<ApiResponse<ReadingResponse>> LoadReading(string subCategory,string searchTitle)
+        public async Task<ApiResponse<ReadingResponse>> LoadReading(string subCategory,int searchTitle)
         {
-            var response = await this.readingService.LoadReadingBySearchName(subCategory, searchTitle);
+            var response = await this.readingService.LoadReadingByIdInSubGroup(subCategory,null, searchTitle);
             return response.ToApiResponse();
         }
 

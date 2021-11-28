@@ -9,9 +9,10 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './Interceptors/AuthInterceptor';
-import { AuthActivate } from './core/guards/auth.activate';
 import { LayoutModule } from './layout/layout.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationModule } from './modules/@auth/authentication.module';
+import { AuthActivate } from './modules/core/guards/auth.activate';
 
 const NB_MODULES = [
   NbThemeModule.forRoot({ name: 'default' }),
@@ -29,9 +30,9 @@ const NB_MODULES = [
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NoopAnimationsModule,
-    SharedModule,
-    LayoutModule,
+    // NoopAnimationsModule,
+    // SharedModule,
+    // LayoutModule,
     NgbModule,
     ...NB_MODULES,
   ],

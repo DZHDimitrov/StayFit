@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
-
+    using StayFit.Infrastructure.Extensions;
     using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
@@ -73,12 +73,14 @@
                 (now.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
 
             var existingClaims = principal.Claims.ToList();
+            existingClaims.Add(new Claim("username", principal.Identity.Name));
+            existingClaims.Add(new Claim("userId", principal.GetId()));
 
             var systemClaims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, principal.Identity.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, await this.options.NonceGenerator()),
-                new Claim(JwtRegisteredClaimNames.Iat, unixTimeSeconds.ToString(), ClaimValueTypes.Integer64)
+                new Claim(JwtRegisteredClaimNames.Iat, unixTimeSeconds.ToString(), ClaimValueTypes.Integer64),
             };
 
             foreach (var systemClaim in systemClaims)
@@ -108,7 +110,9 @@
             {
                 access_token = encodedJwt,
                 expires_in = (int)this.options.Expiration.TotalMilliseconds,
-                roles = existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value)
+                roles = existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value),
+                username = existingClaims.FirstOrDefault(x => x.Type == "username").Value,
+                userId = existingClaims.FirstOrDefault(x=> x.Type == "userId").Value
             };
 
             context.Response.ContentType = "application/json";

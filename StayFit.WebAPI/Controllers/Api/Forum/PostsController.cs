@@ -15,6 +15,7 @@
     using System.Threading.Tasks;
 
     [Route("api/forums/[controller]")]
+    [AllowAnonymous]
     [ApiController]
     public class PostsController : BaseController
     {
@@ -37,7 +38,7 @@
         [HttpGet]
         [AllowAnonymous]
         [Route("/api/forums/viewforum/{subCategoryId}")]
-        public async Task<ApiResponse<LoadPostPreviewsResponse>> LoadPostsPreviewsByCategory(int subCategoryId,int page = 1)
+        public async Task<ApiResponse<LoadPostPreviewsResponse>> LoadPostsPreviewsByCategory(int subCategoryId,int? page = 1)
         {
             var response =  await this.postService.LoadPostPreviewsByCategory(subCategoryId,page);
             return response.ToApiResponse();
@@ -52,6 +53,7 @@
             return response.ToApiResponse();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ApiResponse<AddPostResponse>> CreateNewPost(AddPostRequest model)
         {
@@ -69,10 +71,11 @@
         }
 
         [HttpDelete]
-        public async Task<ApiResponse<DeletePostResponse>> RemovePost(DeletePostModel model)
+        [Route("{postId}")]
+        public async Task<ApiResponse<DeletePostResponse>> RemovePost(int postId)
         {
             var userId = this.User.GetId();
-            var response = await this.postService.RemovePost(model.postId, userId);
+            var response = await this.postService.RemovePost(postId, userId);
             return response.ToApiResponse();
         }
 

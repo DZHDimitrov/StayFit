@@ -10,10 +10,10 @@
     using StayFit.Shared;
     using StayFit.Shared.Nutritions.Food.PostModels;
     using StayFit.Shared.Nutritions.Food.Responses;
-
     using System.Threading.Tasks;
 
     [Route("api/[controller]")]
+    [AllowAnonymous]
     [ApiController]
     public class FoodsController : BaseController
     {
@@ -35,6 +35,13 @@
         [HttpPost]
         public async Task<ApiResponse<AddFoodResponse>> CreateFood(CreateFoodModel model)
         {
+            //if (Enum.IsDefined(typeof(SubNutrientType),model.SubNutrientId))
+            //{
+            //    Console.WriteLine("Test");
+            //}
+            //SubNutrientType value = (SubNutrientType)model.SubNutrientId;
+            //GetDisplayValue<SubNutrientType>(value);
+            //return null;
             var response = await this.foodService.CreateNewFood(model);
             return response.ToApiResponse();
         }

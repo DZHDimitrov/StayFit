@@ -24,7 +24,7 @@ namespace StayFit.Services.StayFit.Services.Data
             this.dbContext = dbContext;
         }
 
-        public async Task CommentVote(string userId, string commentId, bool? isLike)
+        public async Task<AddVoteResponse> CommentVote(string userId, string commentId, bool? isLike)
         {
             var comment = await this.dbContext.Comments
                 .Include(c => c.Votes)
@@ -54,6 +54,11 @@ namespace StayFit.Services.StayFit.Services.Data
             this.dbContext.Votes.Add(vote);
             this.dbContext.Users.FirstOrDefault(u => u.Id == userId).Votes.Add(vote);
             await this.dbContext.SaveChangesAsync();
+
+            return new AddVoteResponse
+            {
+                IsAdded = true,
+            };
         }
 
         public async Task<AddCommentResponse> CreateComment(AddCommentRequest model,string userId)
@@ -62,7 +67,7 @@ namespace StayFit.Services.StayFit.Services.Data
             {
                 Id = Guid.NewGuid().ToString(),
                 ApplicationUserId = userId,
-                CreatedOn = DateTime.Parse(model.CreatedOn),
+                CreatedOn = DateTime.UtcNow,
                 Content = model.Content,
                 PostId = model.PostId,
                 IsDeleted = false,
@@ -77,11 +82,11 @@ namespace StayFit.Services.StayFit.Services.Data
             };
         }
 
-        public async Task<DeleteCommentResponse> DeleteComment(DeleteCommentModel model,string userId)
+        public async Task<DeleteCommentResponse> DeleteComment(string commentId,string userId)
         {
             var commentToDelete = await this.dbContext.Comments
                  .Include(c => c.ApplicationUser)
-                 .FirstOrDefaultAsync(c => c.Id == model.CommentId);
+                 .FirstOrDefaultAsync(c => c.Id == commentId);
 
             if (commentToDelete == null)
             {
@@ -124,7 +129,7 @@ namespace StayFit.Services.StayFit.Services.Data
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task EditVote(string userId, string commentId, bool? isLike)
+        public async Task<ModifyVoteResponse> EditVote(string userId, string commentId, bool? isLike)
         {
             var searchedVote = await this.dbContext.Votes.FirstOrDefaultAsync(v => v.ApplicationUserId == userId && v.CommentId == commentId);
 
@@ -135,6 +140,10 @@ namespace StayFit.Services.StayFit.Services.Data
 
             searchedVote.IsLike = (bool)isLike;
             await this.dbContext.SaveChangesAsync();
+            return new ModifyVoteResponse
+            {
+                IsModified = true,
+            };
         }
 
         public async Task<LoadCommentPreviewResponse> LoadChosenComments(string userId)
@@ -159,9 +168,9 @@ namespace StayFit.Services.StayFit.Services.Data
             };
         }
 
-        public async Task<LoadPostCommentsResponse> LoadCommentsByPostId(int postId)
+        public async Task<LoadPostCommentsResponse> LoadCommentsByPostId(int? postId)
         {
-            if (!this.dbContext.Posts.Any(p => p.Id == postId))
+            if (!this.dbContext.Posts.Any(p => p.Id == postId) || postId == null)
             {
                 throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "post"));
             }
@@ -226,7 +235,7 @@ namespace StayFit.Services.StayFit.Services.Data
             };
         }
 
-        public async Task RemoveVote(string userId, string commentId)
+        public async Task<ModifyVoteResponse> RemoveVote(string userId, string commentId)
         {
             var searchedVote = await this.dbContext.Votes.FirstOrDefaultAsync(v => v.CommentId == commentId && v.ApplicationUserId == userId);
 
@@ -237,6 +246,10 @@ namespace StayFit.Services.StayFit.Services.Data
 
             this.dbContext.Votes.Remove(searchedVote);
             await this.dbContext.SaveChangesAsync();
+            return new ModifyVoteResponse
+            {
+                IsModified = true,
+            };
         }
     }
 }

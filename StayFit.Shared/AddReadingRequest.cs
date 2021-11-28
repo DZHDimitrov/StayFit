@@ -1,8 +1,10 @@
-﻿namespace StayFit.Shared
+﻿using System;
+
+namespace StayFit.Shared
 {
     public class AddReadingRequest
     {
-        public int MainGroupId { get; set; }
+        public int ReadingMainCategoryId { get; set; }
 
         public string Title { get; set; }
 
@@ -10,6 +12,10 @@
 
         public string Content { get; set; }
 
-        public SubGroup SubGroup { get; set; }
+        public int? ReadingSubCategoryId { get; set; }
+
+        public int? BodyPartId { get; set; }
+
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
     }
 }

@@ -60,11 +60,11 @@ namespace StayFit.Services.StayFit.Services.Data
             };
         }
 
-        public async Task<LoadPostPreviewsResponse> LoadPostPreviewsByCategory(int categoryId,int page = 1)
+        public async Task<LoadPostPreviewsResponse> LoadPostPreviewsByCategory(int categoryId,int? page = 1)
         {
             var response = new LoadPostPreviewsResponse
             {
-                Page = page,
+                Page = page ?? 1,
                 Count = this.dbContext.Posts.Where(p => p.PostSubCategory.Id == categoryId).Count(),
             };
 
@@ -153,7 +153,8 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (post == null)
             {
-                throw new InvalidRequestException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "post"));
+                throw new ArgumentException("Invalid postid");
+                //throw new InvalidRequestException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "post"));
             }
             if (post.ApplicationUser.Id != userId)
             {

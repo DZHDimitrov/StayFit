@@ -1,9 +1,6 @@
-﻿using StayFit.Shared.Forum;
-using StayFit.Shared.Forum.Responses;
+﻿using StayFit.Shared.Forum.Responses;
 using StayFit.Shared.Forum.PostModels;
-using StayFit.Shared.Forum.DeleteModels;
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StayFit.Services.StayFit.Services.Data.Interfaces
@@ -18,16 +15,16 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<AddCommentResponse> CreateComment(AddCommentRequest model, string userId);
 
-        public Task<LoadPostCommentsResponse> LoadCommentsByPostId(int postId);
+        public Task<LoadPostCommentsResponse> LoadCommentsByPostId(int? postId);
 
         public Task EditComment(EditCommentRequest model, string userId);
 
-        public Task<DeleteCommentResponse> DeleteComment(DeleteCommentModel model, string userId);
+        public Task<DeleteCommentResponse> DeleteComment(string commentId, string userId);
 
-        public Task CommentVote(string userId, string commentId, bool? isLike);
+        public Task<AddVoteResponse> CommentVote(string userId, string commentId, bool? isLike);
 
-        public Task EditVote(string userId, string commentId, bool? isLike);
+        public Task<ModifyVoteResponse> EditVote(string userId, string commentId, bool? isLike);
 
-        public Task RemoveVote(string userId, string commentId);
+        public Task<ModifyVoteResponse> RemoveVote(string userId, string commentId);
     }
 }

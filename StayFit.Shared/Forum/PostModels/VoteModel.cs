@@ -2,7 +2,7 @@
 {
     public class VoteModel
     {
-        public string CommentId { get; set; }
+        //public string CommentId { get; set; }
 
         public bool? IsLike { get; set; }
     }

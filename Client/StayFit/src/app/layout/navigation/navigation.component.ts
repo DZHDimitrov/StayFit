@@ -4,7 +4,6 @@ import { NbMenuBag, NbMenuItem, NbMenuService } from '@nebular/theme';
 import { BehaviorSubject, forkJoin, fromEvent, interval, merge, Observable, of, Subject, zip } from 'rxjs';
 import { FromEventTarget } from 'rxjs/internal/observable/fromEvent';
 import { debounce, debounceTime, filter, mergeMap, takeUntil, tap } from 'rxjs/operators';
-import { UserService } from '../../shared/services/user/user.service';
 
 @Component({
   selector: 'app-navigation',
@@ -18,13 +17,12 @@ export class NavigationComponent implements OnInit,OnDestroy {
   unsubscribe$ = new Subject<void>();
 
   constructor(
-    private userService: UserService,
     private router: Router,
     private nbMenuService: NbMenuService
   ) {}
 
   get isLoggedIn() {
-    return this.userService.isLoggedIn;
+    return ''
   }
   
   ngOnInit(): void {
@@ -102,7 +100,7 @@ export class NavigationComponent implements OnInit,OnDestroy {
   ]
 
   logout() {
-    this.userService.logout();
+    // this.userService.logout();
     this.router.navigate(['/']);
   }
 

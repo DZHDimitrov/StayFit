@@ -1,5 +1,6 @@
 ﻿namespace StayFit.WebAPI.Controllers.Api.Supplements
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using StayFit.Infrastructure.Extensions;
@@ -25,16 +26,18 @@
         [HttpGet]
         public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadSubCategories()
         {
-            var response = await this.readingService.LoadSubCategoriesByMainCategory("supplements");
-            return response.ToApiResponse();
+            //var response = await this.readingService.LoadSubCategoriesByMainCategory("supplements");
+            //return response.ToApiResponse();
+            return null;
         }
 
         [HttpGet]
         [Route("latest")]
-        public async Task<ApiResponse<ReadingSubCategoryResponse>> LoadLatestSubCategories()
+        public async Task<ApiResponse<ReadingResponse>> LoadLatestSubCategories()
         {
-            var response = await this.readingService.LoadLatestSubCategories("supplements");
-            return response.ToApiResponse();
+            //var response = await this.readingService.LoadLatestSubCategories("supplements");
+            //return response.ToApiResponse();
+            return null;
         }
 
         [HttpGet]
@@ -47,9 +50,9 @@
 
         [HttpGet]
         [Route("{subcategory}/{searchName}")]
-        public async Task<ApiResponse<ReadingResponse>> LoadReading(string subcategory,string searchName)
+        public async Task<ApiResponse<ReadingResponse>> LoadReading(string subcategory,int searchName)
         {
-            var response = await this.readingService.LoadReadingBySearchName(subcategory,searchName);
+            var response = await this.readingService.LoadReadingByIdInSubGroup(subcategory,null,searchName);
             return response.ToApiResponse();
         }
 

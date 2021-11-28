@@ -4,7 +4,7 @@ import { CreateNewFoodComponent } from './create-new-food/create-new-food.compon
 import { AdministrationRoutingModule } from './administration.routing.module';
 import { NbButtonModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbSpinnerModule, NbToastrModule, NbToastrService } from '@nebular/theme';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CoreModule } from 'src/app/core/core.module';
+import { CoreModule } from 'src/app/modules/core/core.module';
 
 const NB_MODULES = [
   NbCardModule,
@@ -17,7 +17,7 @@ const NB_MODULES = [
 
 @NgModule({
   declarations: [
-    CreateNewFoodComponent
+    // CreateNewFoodComponent
   ],
   imports: [
     CommonModule,
