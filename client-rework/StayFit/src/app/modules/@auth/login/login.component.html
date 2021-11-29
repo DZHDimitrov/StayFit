@@ -1,0 +1,50 @@
+<div class="c-login-page-container">
+  <div class="form-container">
+    <form
+      class="c-login-form-box"
+      [formGroup]="userLoginForm"
+      (submit)="submit()"
+    >
+      <h4 class="hello-message">Здравей!</h4>
+      <div class="error" *ngIf="controls.username.touched">
+        <span
+          class="mb-1 text-danger"
+          *ngIf="controls.username.errors?.required"
+          >Полето е задължително</span
+        >
+        <span
+          class="mb-1 text-danger"
+          *ngIf="controls.username.errors?.minlength"
+          >Полето трябва да е поне 4 символа</span
+        >
+      </div>
+      <input
+        class="login-input"
+        type="text"
+        id="username"
+        placeholder="Потребителско име"
+        formControlName="username"
+      />
+      <div class="error" *ngIf="controls.password.touched">
+        <span
+          class="mb-1 text-danger"
+          *ngIf="controls.password.errors?.required"
+          >Полето е задължително</span
+        >
+        <span
+          class="mb-1 text-danger"
+          *ngIf="controls.password.errors?.minlength"
+          >Полето трябва да има поне 4 символа</span
+        >
+      </div>
+      <input
+        class="login-input"
+        type="password"
+        id="password"
+        placeholder="Парола"
+        formControlName="password"
+      />
+      <button class="login-button">Влез</button>
+    </form>
+  </div>
+</div>

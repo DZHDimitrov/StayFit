@@ -1,0 +1,126 @@
+<div class="c-register-page-container">
+  <form
+    class="c-register-form-box"
+    [formGroup]="userRegisterForm"
+    (submit)="submit()"
+  >
+    <h4 class="hello-message">Регистрация</h4>
+    <div class="name-errors">
+      <div *ngIf="controls.firstName.touched">
+        <span class="text-danger" *ngIf="controls.firstName.errors?.required"
+          >Полето е задължително</span
+        >
+        <span class="text-danger" *ngIf="controls.firstName.errors?.minlength"
+          >Полето трябва да е поне 4 символа</span
+        >
+      </div>
+      <div *ngIf="controls.lastName.touched">
+        <span class="text-danger" *ngIf="controls.lastName.errors?.required"
+          >Полето е задължително</span
+        >
+        <span class="text-danger" *ngIf="controls.lastName.errors?.minlength"
+          >Полето трябва да е поне 4 символа</span
+        >
+      </div>
+    </div>
+    <div class="names">
+      <input
+        class="register-input-name"
+        type="text"
+        id="firstName"
+        placeholder="Име"
+        formControlName="firstName"
+      />
+      <input
+        class="register-input-name"
+        type="text"
+        id="password"
+        placeholder="Фамилия"
+        formControlName="lastName"
+      />
+    </div>
+    <div class="error" *ngIf="controls.username.touched">
+      <span class="text-danger" *ngIf="controls.username.errors?.required"
+        >Полето е задължително</span
+      >
+      <span class="text-danger" *ngIf="controls.username.errors?.minlength"
+        >Полето трябва да е поне 6 символа</span
+      >
+    </div>
+    <input
+      class="register-input"
+      type="text"
+      id="email"
+      placeholder="Потребителско име"
+      formControlName="username"
+    />
+    <div class="error" *ngIf="controls.email.touched">
+      <span class="text-danger" *ngIf="controls.email.errors?.required"
+        >Полето е задължително</span
+      >
+      <span class="text-danger" *ngIf="controls.email.errors?.email"
+        >Невалиден имейл</span
+      >
+    </div>
+    <input
+      class="register-input"
+      type="email"
+      id="email"
+      placeholder="Имейл"
+      formControlName="email"
+    />
+    <div class="error" *ngIf="controls.password.touched">
+      <span class="text-danger" *ngIf="controls.password.errors?.required"
+        >Полето е задължително</span
+      >
+      <span class="text-danger" *ngIf="controls.password.errors?.minlength"
+        >Полето трябва да е поне 6 символа</span
+      >
+    </div>
+    <input
+      class="register-input"
+      type="password"
+      id="password"
+      placeholder="Парола"
+      formControlName="password"
+    />
+    <div class="error" *ngIf="controls.confirmPassword.touched">
+      <span
+        class="text-danger"
+        *ngIf="controls.confirmPassword.errors?.confirmedValidator"
+        >Паролите не съвпадат</span
+      >
+    </div>
+    <input
+      class="register-input"
+      type="password"
+      id="confirmPassword"
+      placeholder="Потвърждение на паролата"
+      formControlName="confirmPassword"
+    />
+    <div class="text-danger error" *ngIf="controls.gender.touched && controls.gender.errors?.required">
+      <span>Трябва да изберете пол</span>
+    </div>
+    <div class="radio-buttons">
+      <div>
+        <label for="male">Мъж</label>
+        <input
+          name="gender"
+          value="male"
+          type="radio"
+          formControlName="gender"
+        />
+      </div>
+      <div>
+        <label for="female">Жена</label>
+        <input
+          name="gender"
+          value="female"
+          type="radio"
+          formControlName="gender"
+        />
+      </div>
+    </div>
+    <button class="register-button">Регистрирай ме</button>
+  </form>
+</div>

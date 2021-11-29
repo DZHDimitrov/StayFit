@@ -1,0 +1,10 @@
+<nb-layout>
+    <nb-layout-column>
+        <app-loading-spinner *ngIf="showLoading$ | async"></app-loading-spinner>
+        <app-navigation> </app-navigation>
+        <app-error-message></app-error-message>
+        <!-- <div *ngIf="this.errorMessage$ | async as error">{{error}}</div> -->
+        <router-outlet></router-outlet>
+        <app-footer></app-footer>
+    </nb-layout-column>
+</nb-layout>

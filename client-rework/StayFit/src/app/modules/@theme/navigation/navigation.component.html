@@ -1,0 +1,7 @@
+<div>
+    <p [routerLink]="item.link" *ngFor="let item of listItems">{{ item.title }}</p>
+    <div class="user-menu">
+        <nb-icon [nbContextMenu]="items" icon="person-outline"></nb-icon>
+        <!-- <nb-icon icon="email-outline"></nb-icon> -->
+    </div>
+</div>

@@ -1,0 +1,54 @@
+.c-login-page-container {
+  span {
+    font-size: 12px;
+  }
+  .error {
+    align-self: flex-start;
+    margin-left: 2rem;
+  }
+  .c-login-form-box {
+    width: 520px;
+    height: 260px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    margin-top: 7rem;
+    box-shadow: 2px 2px 14px 2px rgba(0, 0, 0, 0.45);
+    -webkit-box-shadow: 2px 2px 14px 2px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 2px 2px 14px 2px rgba(0, 0, 0, 0.45);
+    .hello-message {
+      font-size: 30px;
+      margin-top: 1.5rem;
+    }
+    .login-input {
+      border: none;
+      width: 90%;
+      height: 37px;
+      background-color: #f5f6f8;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      border: 2px solid #dcdde6;
+      outline: none;
+    }
+    .login-input::-webkit-input-placeholder {
+      font-size: 14px;
+    }
+    .login-button {
+      width: 91.5%;
+      height: 35px;
+      border-radius: 5px;
+      background: #c1e099;
+      border: none;
+      font-size: 18px;
+      color: white;
+      font-weight: bold;
+    }
+    .login-button:hover {
+      background-color: #a2d167;
+      cursor: pointer;
+    }
+  }
+}
