@@ -5,6 +5,8 @@ import { FooterComponent } from './footer/footer.component';
 import { NbButtonModule, NbCardModule, NbContextMenuModule, NbIconModule, NbMenuModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { RouterModule } from '@angular/router';
+import { EffectsModule } from '@ngrx/effects';
+import { MaterialModule } from '../material/material.module';
 
 const NB_MODULES = [
   NbIconModule,
@@ -20,6 +22,8 @@ const NB_MODULES = [
   imports: [
     CommonModule,
     RouterModule,
+    EffectsModule.forFeature(),
+    MaterialModule,
     ...NB_MODULES
   ],
   exports: [NavigationComponent,FooterComponent]

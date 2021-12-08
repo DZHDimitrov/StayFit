@@ -1,4 +1,5 @@
 ﻿using StayFit.Shared;
+using StayFit.Shared.Readings;
 using StayFit.Shared.SharedModels;
 using StayFit.Shared.SharedModels.Responses;
 using System;
@@ -17,19 +18,21 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<ReadingDeleteResponse> DeleteReading(int articleId);
 
-        public Task<ReadingResponse> LoadLatest(string readingCategory);
+        public Task<IEnumerable<LatestCategoryReadings>> LoadLatest(string[] mainCategories);
 
         public Task<ReadingResponse> LoadByMainCategory(string readingCategory);
 
-        public Task<ReadingResponse> LoadReadingsBySubCategory(string mainCategory,string subCategory);
+        public Task<IEnumerable<ReadingModel>> LoadReadingsBySubCategory(string mainCategory,string subCategory);
 
         //public Task<ReadingSubCategoryResponse> LoadSubCategoriesByMainCategory(string readingCategory);
 
         //public Task<ReadingResponse> LoadLatestSubCategories(string readingCategory);
 
-        public Task<ReadingResponse> LoadReadingByIdInSubGroup(string mainCategory,int? subCategory,int readingId);
+        public Task<ReadingModel> LoadReadingByIdInSubGroup(string mainCategory,int readingId, int? subCategory);
 
-        public Task<ReadingResponse> LoadExerciseByBodyPart(string bodyPart);
+        public Task<IEnumerable<ReadingModel>> LoadExerciseByBodyPart(string bodyPart);
+
+        public Task<IEnumerable<string>> LoadBaseCategories();
 
         public string TransformNameToLatin(string input);
 

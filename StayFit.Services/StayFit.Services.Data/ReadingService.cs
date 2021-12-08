@@ -15,10 +15,12 @@ using StayFit.Data.Models.ReadingModels;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 
 using StayFit.Shared;
+using StayFit.Shared.Readings;
 using StayFit.Shared.SharedModels;
 using StayFit.Shared.SharedModels.Responses;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,7 +32,7 @@ namespace StayFit.Services.StayFit.Services.Data
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
 
-        public ReadingService(AppDbContext dbContext, UserManager<ApplicationUser> userManager,IMapper mapper)
+        public ReadingService(AppDbContext dbContext, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
@@ -48,7 +50,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == mainCategory))
             {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND,"group"));
+                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
             }
 
             var subCategories = await this.dbContext.ReadingSubCategories
@@ -64,7 +66,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
                 return new ReadingResponse
                 {
-                    ReadingsSubCategories = readingSubCategories
+                    Categories = readingSubCategories
                 };
             }
 
@@ -85,7 +87,7 @@ namespace StayFit.Services.StayFit.Services.Data
         /// <param name="mainCategory"></param>
         /// <param name="subCategory"></param>
         /// <returns></returns>
-        public async Task<ReadingResponse> LoadReadingsBySubCategory(string mainCategory, string subCategory)
+        public async Task<IEnumerable<ReadingModel>> LoadReadingsBySubCategory(string mainCategory, string subCategory)
         {
             mainCategory = mainCategory?.ToLower();
             subCategory = subCategory?.ToLower();
@@ -101,7 +103,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (subCategories.Count == 0)
             {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND),"sub-groups");
+                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND), "sub-groups");
             }
 
             var currentSubCategory = await this.dbContext.ReadingSubCategories
@@ -117,52 +119,69 @@ namespace StayFit.Services.StayFit.Services.Data
                 .ProjectTo<ReadingModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return new ReadingResponse
-            {
-                Readings = readings
-            };
+            return readings;
         }
+
 
         /// <summary>
         /// Loads latest subgroups if mainCategory has some. Otherwise it loads only latest readings.
         /// </summary>
         /// <param name="mainCategory"></param>
         /// <returns></returns>
-        public async Task<ReadingResponse> LoadLatest(string mainCategory)
+        public async Task<IEnumerable<LatestCategoryReadings>> LoadLatest(string[] mainCategories)
         {
-            mainCategory = mainCategory?.ToLower();
+            mainCategories = mainCategories.Select(mc => mc.ToLower()).ToArray();
 
-            if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == mainCategory))
+            foreach (var mc in mainCategories)
             {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
-            }
-
-            if (this.dbContext.ReadingSubCategories.Where(sc => sc.ReadingMainCategory.SearchName.ToLower() == mainCategory).Count() > 0)
-            {
-                var subCategories = await this.dbContext.ReadingSubCategories
-                    .Where(subCategory => subCategory.ReadingMainCategory.SearchName.ToLower() == mainCategory)
-                    .OrderByDescending(subCategory => subCategory.CreatedOn)
-                    .ProjectTo<ReadingSubCategoryModel>(this.mapper.ConfigurationProvider)
-                    .Take(4)
-                    .ToListAsync();
-
-                return new ReadingResponse
+                if (!this.dbContext.ReadingMainCategories.Any(mainCategory => mainCategory.SearchName.ToLower() == mc))
                 {
-                    ReadingsSubCategories = subCategories
-                };
+                    throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
+                }
+            }
+            var latestReadings = new List<LatestCategoryReadings>();
+
+            foreach (var mc in mainCategories)
+            {
+                var categoryReadings = new LatestCategoryReadings();
+
+                categoryReadings.Name = this.dbContext.ReadingMainCategories
+                    .FirstOrDefaultAsync(mainCategory => mainCategory.SearchName.ToLower() == mc)
+                    .GetAwaiter()
+                    .GetResult().Name;
+
+                if (this.dbContext.ReadingSubCategories.Where(sc => sc.ReadingMainCategory.SearchName.ToLower() == mc).Count() > 0)
+                {
+                    categoryReadings.Readings = await this.dbContext.ReadingSubCategories
+                        .Where(sc => sc.ReadingMainCategory.SearchName.ToLower() == mc)
+                        .OrderByDescending(sc => sc.CreatedOn)
+                        .Select(sc => new LatestReading
+                        {
+                            Title = sc.Name,
+                            ImageURL = sc.ImageUrl,
+                            SearchTitle = sc.SearchName,
+                        })
+                        .Take(4)
+                        .ToListAsync();
+                }
+                else
+                {
+                    categoryReadings.Readings = await this.dbContext.Readings
+                        .Where(r => r.ReadingMainCategory.SearchName.ToLower() == mc)
+                        .OrderByDescending(r => r.CreatedOn)
+                        .Select(r => new LatestReading
+                        {
+                            Title = r.Title,
+                            ImageURL = r.ImageUrl,
+                            SearchTitle = r.SearchTitle,
+                        })
+                        .Take(4)
+                        .ToListAsync();
+                }
+                latestReadings.Add(categoryReadings);
             }
 
-            var readings = await this.dbContext.Readings
-                 .Where(reading => reading.ReadingMainCategory.SearchName.ToLower() == mainCategory)
-                 .OrderByDescending(reading => reading.CreatedOn)
-                 .Take(4)
-                 .ProjectTo<ReadingModel>(this.mapper.ConfigurationProvider)
-                 .ToListAsync();
-
-            return new ReadingResponse
-            {
-                Readings = readings,
-            };
+            return latestReadings;
         }
 
         /// <summary>
@@ -172,7 +191,7 @@ namespace StayFit.Services.StayFit.Services.Data
         /// <param name="subCategory"></param>
         /// <param name="readingId"></param>
         /// <returns></returns>
-        public async Task<ReadingResponse> LoadReadingByIdInSubGroup(string category, int? subCategory, int readingId)
+        public async Task<ReadingModel> LoadReadingByIdInSubGroup(string category, int readingId, int? subCategory)
         {
             category = category?.ToLower();
 
@@ -181,20 +200,17 @@ namespace StayFit.Services.StayFit.Services.Data
                 throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, category));
             }
 
-            var readings = await this.dbContext.Readings
+            var reading = await this.dbContext.Readings
                 .Where(reading => reading.Id == readingId && reading.ReadingMainCategory.SearchName.ToLower() == category && reading.ReadingSubCategoryId == subCategory)
                 .ProjectTo<ReadingModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
 
-            if (readings.Count() == 0)
+            if (reading == null)
             {
                 throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "reading"));
             }
 
-            return new ReadingResponse
-            {
-                Readings = readings,
-            };
+            return reading;
         }
 
         /// <summary>
@@ -207,7 +223,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (!this.dbContext.ReadingMainCategories.Any(mc => mc.Id == model.ReadingMainCategoryId))
             {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND,"group"));
+                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
             }
 
             if (!this.dbContext.ReadingSubCategories.Any(sc => sc.ReadingMainCategoryId == model.ReadingMainCategoryId) && (model.ReadingSubCategoryId != null || model.BodyPartId != null))
@@ -219,7 +235,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (currentSubGroup?.SearchName == "Exercises" && model.BodyPartId == null)
             {
-                throw new ArgumentException(string.Format(GlobalConstants.NOT_SPECIFIED_ERROR_MSG,"exercise","bodypart"));
+                throw new ArgumentException(string.Format(GlobalConstants.NOT_SPECIFIED_ERROR_MSG, "exercise", "bodypart"));
             }
             var reading = this.mapper.Map<Reading>(model);
             reading.SearchTitle = TransformNameToLatin(model.Title);
@@ -255,49 +271,12 @@ namespace StayFit.Services.StayFit.Services.Data
             throw new NotImplementedException();
         }
 
- 
-
-        public async Task<ReadingResponse> LoadLatestSubCategories(string mainCategory)
-        {
-            var subCategories = await this.dbContext.ReadingSubCategories
-                .Where(subCategory => subCategory.ReadingMainCategory.SearchName.ToLower() == mainCategory.ToLower())
-                .OrderByDescending(subCategory => subCategory.CreatedOn)
-                .Select(subCategory => new ReadingSubCategoryModel
-                {
-                    Name = subCategory.Name,
-                    ImageUrl = subCategory.ImageUrl
-                })
-                .Take(4)
-                .ToListAsync();
-
-            return new ReadingResponse
-            {
-                ReadingsSubCategories = subCategories
-            };
-        }
-
-        public async Task<ReadingSubCategoryResponse> LoadSubCategoriesByMainCategory(string readingCategory)
-        {
-            var readingSubCategories = await this.dbContext.ReadingSubCategories
-                .Where(subCategory => subCategory.ReadingMainCategory.SearchName.ToLower() == readingCategory.ToLower())
-                .Select(subCategory => new ReadingSubCategoryModel
-                {
-                    Name = subCategory.Name,
-                    ImageUrl = subCategory.ImageUrl
-                })
-                .ToListAsync();
-            return new ReadingSubCategoryResponse
-            {
-                ReadingsSubCategories = readingSubCategories
-            };
-        }
-
         /// <summary>
         /// ok
         /// </summary>
         /// <param name="bodyPart"></param>
         /// <returns></returns>
-        public async Task<ReadingResponse> LoadExerciseByBodyPart(string bodyPart)
+        public async Task<IEnumerable<ReadingModel>> LoadExerciseByBodyPart(string bodyPart)
         {
             var readings = await this.dbContext.Readings
                 .Where(x => x.BodyPart != null && x.BodyPart.SearchName.ToLower() == bodyPart.ToLower())
@@ -311,10 +290,8 @@ namespace StayFit.Services.StayFit.Services.Data
                 })
                 .ToListAsync();
 
-            return new ReadingResponse
-            {
-                Readings = readings,
-            };
+
+            return readings;
         }
 
         public string TransformNameToLatin(string input)
@@ -322,6 +299,13 @@ namespace StayFit.Services.StayFit.Services.Data
             return this.dbContext.Readings
                 .OrderByDescending(x => x.Id)
                 .FirstOrDefault().Id + 1 + "_" + String.Join("_", Transliteration.CyrillicToLatin(input).ToLower().Split(" "));
+        }
+
+        public async Task<IEnumerable<string>> LoadBaseCategories()
+        {
+            var categories = await this.dbContext.ReadingMainCategories.Select(x => x.Name).ToListAsync();
+
+            return categories;
         }
     }
 }

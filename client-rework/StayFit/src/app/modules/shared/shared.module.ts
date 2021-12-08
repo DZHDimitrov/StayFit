@@ -4,16 +4,15 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
 import { SHARED_STATE_NAME } from './state/shared.selector';
 import { SharedReducer } from './state/shared.reducer';
 import { StoreModule } from '@ngrx/store';
-import { ErrorMessageComponent } from './error-message/error-message.component';
 
 
 
 @NgModule({
-  declarations: [LoadingSpinnerComponent, ErrorMessageComponent],
+  declarations: [LoadingSpinnerComponent],
   imports: [
     CommonModule,
     StoreModule.forFeature(SHARED_STATE_NAME,SharedReducer),
   ],
-  exports: [LoadingSpinnerComponent,ErrorMessageComponent]
+  exports: [LoadingSpinnerComponent]
 })
 export class SharedModule { }

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Readings } from '../../enums/reading.category';
 import { IApiResponse } from '../../interfaces/api.response';
 import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 import {
   ICreateReadingRes,
   IDeleteReading,
-  IReadingData,
+  ILatestCategoryReadings,
+  IReading,
 } from '../../interfaces/responses/readings/readings.res';
 import { ReadingsApi } from '../api/readings.api';
 
@@ -15,30 +18,60 @@ import { ReadingsApi } from '../api/readings.api';
 export class ReadingsService {
   constructor(private api: ReadingsApi) {}
 
-  listByMainCategory(category: string): Observable<IApiResponse<IReadingData>> {
+  listByMainCategory(
+    category: Readings
+  ): Observable<IApiResponse<IReading[]>> {
     return this.api.listByMainCategory(category);
+    // .pipe(
+    //   map((response) => {
+    //     response.data.readingsSubCategories =
+    //       response.data.readingsSubCategories.map((c) => {
+    //         if (c.name.includes('начинаещи')) {
+    //           return {
+    //             ...c,
+    //             name: 'За начинаещи',
+    //           };
+    //         } else if (c.name.includes('статии')) {
+    //           return {
+    //             ...c,
+    //             name: 'Статии',
+    //           };
+    //         }
+    //         return c;
+    //       });
+    //     return response;
+    //   })
+    // );
   }
 
   listBySubCategory(
-    category: string,
+    category: Readings,
     subcategory: string
-  ): Observable<IApiResponse<IReadingData>> {
+  ): Observable<IApiResponse<IReading[]>> {
     return this.api.listBySubCategory(category, subcategory);
   }
 
-  loadLatest(category: string): Observable<IApiResponse<IReadingData>> {
-    return this.api.loadLatest(category);
+  loadLatest(
+    categories: Readings[]
+  ): Observable<IApiResponse<ILatestCategoryReadings[]>> {
+    return this.api.loadLatest(categories);
   }
 
   loadByIdInSubGroup(
-    category: string,
+    category: Readings,
     id: number,
     subCategory?: number
-  ): Observable<IApiResponse<IReadingData>> {
+  ): Observable<IApiResponse<IReading>> {
     return this.api.loadByIdInSubGroup(category, id, subCategory);
   }
 
-  add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingRes>> {
+  loadBaseCategories() {
+    return this.api.loadBaseCategories();
+  }
+
+  add(
+    data: ICreateReadingRequest
+  ): Observable<IApiResponse<ICreateReadingRes>> {
     return this.api.add(data);
   }
 

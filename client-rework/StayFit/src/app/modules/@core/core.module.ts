@@ -2,7 +2,6 @@ import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { CommonBackendModule } from './backend/common-backend.module';
 import { throwIfAlreadyLoaded } from './module-import-guard';
-import { HttpClientModule } from '@angular/common/http';
 
 export const NB_CORE_PROVIDERS = [
   ...CommonBackendModule.forRoot().providers 

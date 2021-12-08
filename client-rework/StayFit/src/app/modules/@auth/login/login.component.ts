@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { ToastrService } from 'ngx-toastr';
 import { IAppState } from 'src/app/state/app.state';
-import { ReadingsService } from '../../@core/backend/services/readings.service';
 import { setLoadingSpinner } from '../../shared/state/shared.actions';
-import { AuthService } from '../services/auth.service';
 import { loginStart } from '../state/auth.actions';
 
 @Component({
@@ -14,7 +13,7 @@ import { loginStart } from '../state/auth.actions';
 })
 export class LoginComponent implements OnInit {
   userLoginForm!: FormGroup;
-  constructor(private fb: FormBuilder, private store: Store<IAppState>) {}
+  constructor(private fb: FormBuilder, private store: Store<IAppState>,private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.userLoginForm = this.fb.group({

@@ -1,19 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbButtonModule, NbIconModule, NbLayoutModule } from '@nebular/theme';
+import { InnerNavbarComponent } from './inner-navbar/inner-navbar.component';
+import { ReadingBlockComponent } from './reading-block/reading-block.component';
+import { EffectsModule } from '@ngrx/effects';
 
-const NbModules = []
+const NbModules = [];
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [InnerNavbarComponent, ReadingBlockComponent],
   imports: [
     CommonModule,
     NbLayoutModule,
     NbButtonModule,
     NbIconModule,
+    EffectsModule.forFeature(),
   ],
-  exports:[],
-  providers:[]
+  exports: [InnerNavbarComponent, ReadingBlockComponent],
+  providers: [],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

@@ -38,4 +38,4 @@ export const registerSuccess = createAction(
 
 export const autoLogin = createAction(AUTO_LOGIN_ACTION);
 
-export const autoLogout = createAction(AUTO_LOGIN_ACTION);
+export const autoLogout = createAction(AUTO_LOGOUT_ACTION);

@@ -1,7 +1,20 @@
-<div>
-    <p [routerLink]="item.link" *ngFor="let item of listItems">{{ item.title }}</p>
-    <div class="user-menu">
-        <nb-icon [nbContextMenu]="items" icon="person-outline"></nb-icon>
-        <!-- <nb-icon icon="email-outline"></nb-icon> -->
-    </div>
-</div>
+<mat-toolbar color="primary" class="navbar">
+  <div [routerLink]="['/']" class="mat-display-1 logo">Stay Fit</div>
+  <div class="navbar-items">
+    <span [routerLink]="item.link" *ngFor="let item of userNavItems$ | async">{{
+      item.title
+    }}</span>
+    <mat-icon *ngIf="!(isLoggedIn$ | async)" [mat-menu-trigger-for]="menu"
+      >input</mat-icon
+    >
+    <mat-icon
+      class="user-menu-icon"
+      *ngIf="isLoggedIn$ | async"
+      [mat-menu-trigger-for]="menu"
+      >menu_open</mat-icon
+    >
+    <mat-menu #menu="matMenu">
+      <button (click)="test(item)" [routerLink]="item.link" mat-menu-item *ngFor="let item of (this.userItems$ | async)">{{item.title}}</button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

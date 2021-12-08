@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs';
 import { catchError, exhaustMap, map, mergeMap, tap } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { AccountService } from '../../@core/backend/services/account.service';
@@ -10,7 +11,6 @@ import {
   setErrorMessage,
   setLoadingSpinner,
 } from '../../shared/state/shared.actions';
-import { User } from '../user.model';
 import {
   autoLogin,
   autoLogout,
@@ -26,7 +26,8 @@ export class AuthEffects {
     private actions$: Actions,
     private accountService: AccountService,
     private store: Store<IAppState>,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   login$ = createEffect(() => {
@@ -41,13 +42,12 @@ export class AuthEffects {
             this.store.dispatch(setLoadingSpinner({ status: false }));
             const user = this.accountService.generateUser(data);
             this.accountService.setUserInLocalStorage(user);
+            this.toastr.success('Влязохте успешно!', 'Success');
             return loginSuccess({ user });
           }),
           catchError((err) => {
             this.store.dispatch(setLoadingSpinner({ status: false }));
-            setTimeout(() => {
-              this.store.dispatch(setErrorMessage({ message: '' }));
-            }, 3000);
+            this.toastr.error(err.error, 'Error');
             return of(setErrorMessage({ message: err.error }));
           })
         );
@@ -119,10 +119,16 @@ export class AuthEffects {
       })
     );
   });
-  logout$ = createEffect(() => {
-    return this.actions$.pipe(ofType(autoLogout),map(action => {
-      this.accountService.logout();
-      this.router.navigate(['account','login'])
-    }))
-  },{dispatch:false})
+  logout$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(autoLogout),
+        map((action) => {
+          this.accountService.logout();
+          this.router.navigate(['account', 'login']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

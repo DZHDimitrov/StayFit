@@ -1,4 +1,108 @@
-<div class="c-register-page-container">
+<div class="register-container">
+  <div class="register-content">
+    <mat-toolbar class="register-toolbar mat-title" color="primary">Регистрация</mat-toolbar>
+    <mat-card>
+      <form
+        [formGroup]="this.userRegisterForm"
+        #formDirective="ngForm"
+        (ngSubmit)="submit()"
+      >
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="First name *"
+            formControlName="firstName"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Last name *"
+            formControlName="lastName"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-icon matPrefix>email</mat-icon>
+          <input
+            autofocus
+            type="email"
+            matInput
+            placeholder="Email *"
+            formControlName="email"
+          />
+          <!-- <mat-error *ngIf="checkValidation('email')">
+						{{ emaiErrors() }}
+          
+					</mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-icon matPrefix>person_outline</mat-icon>
+          <input
+            autofocus
+            type="text"
+            matInput
+            placeholder="Username *"
+            formControlName="username"
+          />
+          <!-- <mat-error *ngIf="checkValidation('username')">
+						{{ fieldRequired }}
+					</mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <input
+            type="password"
+            autocomplete="false"
+            matInput
+            placeholder="Password *"
+            formControlName="password"
+          />
+          <mat-hint
+            >Choose a password of at least eight characters, one uppercase
+            letter and one number</mat-hint
+          >
+          <!-- <mat-error *ngIf="checkValidation('password')">
+        {{ getErrorPassword() }}
+      </mat-error> -->
+        </mat-form-field>
+        <mat-form-field>
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <input
+            type="password"
+            autocomplete="false"
+            matInput
+            placeholder="ConfirmPassword *"
+            formControlName="confirmPassword"
+          />
+          <!-- <mat-error *ngIf="checkValidation('password')">
+        {{ getErrorPassword() }}
+      </mat-error> -->
+        </mat-form-field>
+        <mat-radio-group color="warn" formControlName="gender">
+          <mat-radio-button value="male">Мъж</mat-radio-button>
+          <mat-radio-button value="female">Жена</mat-radio-button>
+        </mat-radio-group>
+        <div class="socialMediaFlex">
+          <button
+            style="width: 50%"
+            [disabled]="!this.userRegisterForm.valid"
+            type="submit"
+            mat-raised-button
+            color="primary"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>
+
+<!-- <div class="c-register-page-container">
   <form
     class="c-register-form-box"
     [formGroup]="userRegisterForm"
@@ -123,4 +227,4 @@
     </div>
     <button class="register-button">Регистрирай ме</button>
   </form>
-</div>
+</div> -->

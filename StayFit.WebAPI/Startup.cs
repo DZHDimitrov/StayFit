@@ -19,8 +19,6 @@ using StayFit.Data.Models;
 
 using StayFit.Infrastructure;
 using StayFit.Infrastructure.Middlewares.Authorization;
-using StayFit.Services.Providers;
-using StayFit.Services.Providers.Interfaces;
 using StayFit.Services.StayFit.Services.Data;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 
@@ -137,7 +135,6 @@ namespace StayFit.WebAPI
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IFoodService, FoodService>();
-            services.AddSingleton<ILogger, ConsoleLogger>();
             services.AddTransient<IConversationService, ConversationService>();
         }
 

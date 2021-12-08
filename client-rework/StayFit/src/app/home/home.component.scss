@@ -1,86 +1,59 @@
-.home-wrapper {
-  button {
-    padding: 1.5rem 2.5rem;
-    font-size: 1rem;
-    background: rgb(121, 236, 121);
-    border: none;
-    border-radius: 5px !important;
-    font-size: 20px;
+.home-page-container {
+  width: 100%;
+  height: 100%;
+  display:flex;
+  flex-flow: column;
+  .service-button {
+    margin: 0 auto;
+    padding: 1rem 2.5rem;
     color:white;
-    &:hover {
-        background:rgba(159, 247, 159, 0.993);
+  }
+  & > * {
+    margin: 0 auto;
+  }
+  .site-motto {
+    width: 60%;
+    display:flex;
+    flex-flow: column;
+    & > * {
+      text-align: center;
+      margin-bottom: 3rem;
     }
   }
-  .starting-page-wrapper {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    .heading,
-    .quote {
+  .site-description {
+    width: 60%;
+    .title {
       text-align: center;
-    }
-    .heading {
-      font-size: 3rem;
-    }
-    .quote {
-      font-size: 1.5rem;
-      width: 30%;
-      line-height: 2;
-    }
-    .services-button {
-      width: 12rem;
-    }
-    .pic {
-      width: 100%;
-    }
-  }
-  .site-description-wrapper {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    .heading-1 {
-      font-size: 2.5rem;
-    }
-    .quote-1 {
-      width: 40%;
-      font-size: 1.2rem;
-      text-align: center;
-    }
+      margin-bottom: 5rem;
 
-    .mini-article {
-      width: 85%;
-      margin-top: 5rem;
-      display: flex;
-      flex-flow: row;
-      justify-content: center;
-
-      .description {
-        width: 35%;
-        p {
-          font-size: 1.1rem;
-          line-height: 1.8;
+      .mat-display-3 {
+        margin-bottom:2rem;
+      }
+    }
+    .article {
+      display:flex;
+      flex-flow:row wrap;
+      justify-content: space-between;
+      vertical-align: auto;
+      .article-text{
+        width:45%;
+        display:flex;
+        flex-flow:column wrap;
+        justify-content: center;
+      }
+      .article-image {
+        width:45%;
+        img {
+          width: 100%;
         }
       }
-      .description-img img {
-        width: 35rem;
-      }
+
     }
   }
-  .send-question {
-    display: flex;
-    flex-flow: column;
+  .home-end {
     margin-top: 3rem;
-    height: 12rem;
-    background: #2a3854;
-    align-items: center;
-    h5 {
-      color: white;
-      margin-top: 1.5rem;
-    }
-    button {
-      min-width: 12%;
-      padding: 1.6rem 0.5rem;
-      font-size: 1.1rem;
+    & > * {
+      justify-content: center;
     }
   }
 }

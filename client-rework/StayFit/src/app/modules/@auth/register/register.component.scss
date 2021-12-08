@@ -1,105 +1,42 @@
-@mixin input {
-  border: none;
-  height: 37px;
-  border-radius: 5px;
-  margin-bottom: 12px;
-  border: 2px solid #dcdde6;
-  background-color: #f5f6f8;
-  outline: none;
-}
 
-span {
-  font-size: 12px;
-}
-
-.c-register-page-container {
-  display: flex;
+.register-container {
+  margin-top: 50px;
+  height: 100%;
+  width: 100%;
   align-items: center;
-  h4 {
-    text-align: center;
-    font-size: 35px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
+  display: flex;
+}
 
-  .c-register-form-box {
-    background: white;
-    height: 550px;
-    width: 520px;
-    margin: 0 auto;
-    display: flex;
-    flex-flow: column wrap;
-    border-radius: 8px;
-    margin-top: 7rem;
-    box-shadow: 2px 2px 14px 2px rgba(0, 0, 0, 0.45);
-    -webkit-box-shadow: 2px 2px 14px 2px rgba(0, 0, 0, 0.45);
-    -moz-box-shadow: 2px 2px 14px 2px rgba(0, 0, 0, 0.45);
+form {
+  width: 100%;
+}
 
-    .names {
-      width: 90%;
-      display: flex;
-      align-self: center;
-      justify-content: space-between;
+.register-content {
+  width: 400px;
+  display: block;
+  margin: 0 auto;
+}
 
-      .register-input-name {
-        width: 47.5%;
-        @include input();
-      }
-    }
-    .name-errors {
-      width: 90%;
-      display: flex;
-      align-self: center;
-      div:nth-child(1) {
-        width: 53.1%;
-      }
-    }
-    .register-input {
-      width: 90%;
-      align-self: center;
-      @include input();
-    }
-    nb-radio {
-      margin-left: 1.8rem;
-    }
-    .gender {
-      h5 {
-        margin: 0;
-        font-weight: lighter;
-        font-size: 18px;
-      }
-    }
+.register-toolbar {
+  justify-content: center;
+}
 
-    .register-button {
-      width: 91.5%;
-      height: 35px;
-      border-radius: 5px;
-      background: #c1e099;
-      border: none;
-      font-size: 18px;
-      color: white;
-      font-weight: bold;
-      align-self: center;
-    }
-    .register-button:hover {
-      background-color: #a2d167;
-      cursor: pointer;
-    }
-    .radio-buttons {
-      margin-left: 1.7rem;
-      margin-bottom: 0.2rem;
-      label {
-        width: 3rem;
-        margin-bottom: 0.1rem;
-      }
-      input:hover {
-        cursor: pointer;
-      }
-    }
+.mat-form-field {
+  width: 100%;
+  display: block;
+}
 
-    .error {
-      width: 90%;
-      margin-left: 1.8rem;
-    }
-  }
+.mat-raised-button {
+  width: 100%;
+  height: 60px;
+  margin-top: 15px;
+}
+.socialMediaFlex{
+ 
+  display:flex;
+  justify-content: space-around;
+}
+
+.mat-radio-button {
+  margin-right: 1rem;
 }

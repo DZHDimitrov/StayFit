@@ -7,6 +7,6 @@
     {
         public IEnumerable<ReadingModel> Readings { get; set; }
 
-        public IEnumerable<ReadingSubCategoryModel> ReadingsSubCategories { get; set; }
+        public IEnumerable<ReadingSubCategoryModel> Categories { get; set; }
     }
 }

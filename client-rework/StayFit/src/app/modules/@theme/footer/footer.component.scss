@@ -2,11 +2,11 @@ h5,
 .icon {
     color: #37A76B;
 }
-.footer-wrapper {
+.footer-container {
     display:flex;
     flex-flow: column wrap;
     align-items: center;
-    .footer-img-wrapper{
+    .footer-img-container{
         img {
             width: 15rem;
             margin-top: 2rem;

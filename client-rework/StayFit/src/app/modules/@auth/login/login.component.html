@@ -1,50 +1,47 @@
-<div class="c-login-page-container">
-  <div class="form-container">
-    <form
-      class="c-login-form-box"
-      [formGroup]="userLoginForm"
-      (submit)="submit()"
-    >
-      <h4 class="hello-message">Здравей!</h4>
-      <div class="error" *ngIf="controls.username.touched">
-        <span
-          class="mb-1 text-danger"
-          *ngIf="controls.username.errors?.required"
-          >Полето е задължително</span
+<form>
+  <div class="login-container">
+    <div class="login-content">
+      <mat-toolbar class="login-toolbar" color="primary">Login</mat-toolbar>
+      <mat-card>
+        <form
+          [formGroup]="this.userLoginForm"
+          #formDirective="ngForm"
+          (ngSubmit)="submit()"
         >
-        <span
-          class="mb-1 text-danger"
-          *ngIf="controls.username.errors?.minlength"
-          >Полето трябва да е поне 4 символа</span
+          <mat-form-field>
+            <mat-icon matPrefix>person_outline</mat-icon>
+            <input
+              autofocus
+              type="text"
+              matInput
+              placeholder="Username"
+              formControlName="username"
+            />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-icon matPrefix>lock_outline</mat-icon>
+            <input
+              type="password"
+              autocomplete="false"
+              matInput
+              placeholder="Password"
+              formControlName="password"
+            />
+          </mat-form-field>
+
+          <button type="submit" mat-raised-button color="primary">LOGIN</button>
+        </form>
+        <mat-toolbar class="login-toolbar" style="background-color: white"
+          >login with</mat-toolbar
         >
-      </div>
-      <input
-        class="login-input"
-        type="text"
-        id="username"
-        placeholder="Потребителско име"
-        formControlName="username"
-      />
-      <div class="error" *ngIf="controls.password.touched">
-        <span
-          class="mb-1 text-danger"
-          *ngIf="controls.password.errors?.required"
-          >Полето е задължително</span
+        <div class="socialMediaFlex"></div>
+        <br />
+        <span>
+          If You don't have a account yet please
+          <a routerLink="/account/register">REGISTER HERE</a></span
         >
-        <span
-          class="mb-1 text-danger"
-          *ngIf="controls.password.errors?.minlength"
-          >Полето трябва да има поне 4 символа</span
-        >
-      </div>
-      <input
-        class="login-input"
-        type="password"
-        id="password"
-        placeholder="Парола"
-        formControlName="password"
-      />
-      <button class="login-button">Влез</button>
-    </form>
+      </mat-card>
+    </div>
   </div>
-</div>
+</form>

@@ -1,40 +1,63 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { IApiResponse } from "../../interfaces/api.response";
-import { ICreateReadingRequest } from "../../interfaces/requests/reading.req";
-import { ICreateReadingRes, IDeleteReading, IReadingData } from "../../interfaces/responses/readings/readings.res";
-import { HttpService } from "./http.service";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Readings } from '../../enums/reading.category';
+import { IApiResponse } from '../../interfaces/api.response';
+import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
+import {
+  ICreateReadingRes,
+  IDeleteReading,
+  ILatestCategoryReadings,
+  IReading,
+} from '../../interfaces/responses/readings/readings.res';
+import { HttpService } from './http.service';
 
 @Injectable()
 export class ReadingsApi {
-    private readonly apiController: string = 'readings';
-    constructor(private api: HttpService){}
+  private readonly apiController: string = 'readings';
+  constructor(private api: HttpService) {}
 
-    listByMainCategory(category:string): Observable<IApiResponse<IReadingData>>{
-        return this.api.get(`${this.apiController}/${category}`);
-    }
+  listByMainCategory(
+    category: Readings
+  ): Observable<IApiResponse<IReading[]>> {
+    return this.api.get(`${this.apiController}/${category}`);
+  }
 
-    listBySubCategory(category:string,subcategory:string): Observable<IApiResponse<IReadingData>> {
-        return this.api.get(`${this.apiController}/${category}/${subcategory}`)
-    }
+  listBySubCategory(
+    category: Readings,
+    subcategory: string
+  ): Observable<IApiResponse<IReading[]>> {
+    return this.api.get(`${this.apiController}/${category}/${subcategory}`);
+  }
 
-    loadLatest(category:string):Observable<IApiResponse<IReadingData>> {
-        return this.api.get(`${this.apiController}/${category}/latest`)
-    }
+  loadLatest(categories: Readings[]): Observable<IApiResponse<ILatestCategoryReadings[]>> {
+    return this.api.post(`${this.apiController}/latest`, categories);
+  }
 
-    loadByIdInSubGroup(category: string,id:number,subCategory?: number): Observable<IApiResponse<IReadingData>> {
-        return this.api.get(`${this.apiController}/${category}/single/${id}?subcategory=${subCategory}`)
-    }
+  loadByIdInSubGroup(
+    category: Readings,
+    id: number,
+    subCategory?: number
+  ): Observable<IApiResponse<IReading>> {
+    return this.api.get(
+      `${this.apiController}/${category}/single/${id}?subcategory=${subCategory}`
+    );
+  }
 
-    add(data:ICreateReadingRequest): Observable<IApiResponse<ICreateReadingRes>> {
-        return this.api.post(this.apiController,data);
-    }
+  loadBaseCategories(): Observable<IApiResponse<any>> {
+    return this.api.get(`${this.apiController}/categories`);
+  }
 
-    update(data:any): Observable<any> {
-        return this.api.put(this.apiController,data);
-    }
+  add(
+    data: ICreateReadingRequest
+  ): Observable<IApiResponse<ICreateReadingRes>> {
+    return this.api.post(this.apiController, data);
+  }
 
-    delete(id:number):Observable<IApiResponse<IDeleteReading>> {
-        return this.api.delete(`${this.apiController}/${id}`);
-    }
+  update(data: any): Observable<any> {
+    return this.api.put(this.apiController, data);
+  }
+
+  delete(id: number): Observable<IApiResponse<IDeleteReading>> {
+    return this.api.delete(`${this.apiController}/${id}`);
+  }
 }
