@@ -6,7 +6,13 @@ interface IBaseReading {
 export interface IReading extends IBaseReading {
   content: string;
   searchName: string;
-  imageUrl: string;
+  imageURL: string;
+}
+
+export interface IReadingPreview extends IBaseReading {
+  content:string;
+  searchName:string;
+  imageURL:string;
 }
 
 export interface ICreateReadingRes extends IBaseReading {

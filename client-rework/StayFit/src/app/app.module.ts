@@ -28,6 +28,8 @@ import { PagesEffects } from './modules/@pages/store/pages.effects';
 import { ToastrModule } from 'ngx-toastr';
 import { MaterialModule } from './modules/material/material.module';
 import { HomeComponent } from './home/home.component';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { CustomSerializer } from './state/router/custome-serializer';
 
 const NB_MODULES = [
   NbThemeModule.forRoot({ name: 'default' }),
@@ -58,6 +60,9 @@ const NB_MODULES = [
       logOnly: environment.production,
     }),
     MaterialModule,
+    StoreRouterConnectingModule.forRoot({
+      serializer:CustomSerializer
+    }),
   ],
   providers: [
     {

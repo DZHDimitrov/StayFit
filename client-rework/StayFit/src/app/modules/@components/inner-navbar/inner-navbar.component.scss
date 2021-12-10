@@ -1,0 +1,23 @@
+
+.inner-navbar-container {
+  .heading {
+    text-align: center;
+    margin:0;
+    margin-bottom: 2rem;
+  }
+  .inner-navbar {
+    display:flex;
+    justify-content: center;
+    .toolbar {
+      background: white;
+      width: 80%;
+      display:flex;
+      justify-content: space-between;
+      border-radius: 5px;
+      & > *:hover {
+        cursor: pointer;
+        font-size: 21px;
+      }
+    }
+  }
+}

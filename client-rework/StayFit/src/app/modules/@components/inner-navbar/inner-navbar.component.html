@@ -1,0 +1,13 @@
+<div class="inner-navbar-container">
+  <div class="mat-display-1 heading">{{ navTitle$ | async }}</div>
+  <div class="inner-navbar">
+    <mat-toolbar class="toolbar">
+      <span
+        (click)="changeTitle(reading.name)"
+        [routerLink]="['/', 'pages', reading.searchName]"
+        *ngFor="let reading of navItems$ | async"
+        >{{ reading.name }}</span
+      >
+    </mat-toolbar>
+  </div>
+</div>

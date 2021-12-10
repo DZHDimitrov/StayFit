@@ -1,0 +1,19 @@
+<div class="knowledge-container">
+  <br />
+  <app-inner-navbar></app-inner-navbar>
+  <div class="categories-container">
+    <section
+      class="category"
+      *ngFor="let category of readingsByMainCategory$ | async"
+    >
+      <span class="mat-title">{{ category.name }}</span>
+      <div class="block-row">
+        <app-reading-block
+          [title]="reading.title"
+          [imageUrl]="reading.imageURL"
+          *ngFor="let reading of category.readings"
+        ></app-reading-block>
+      </div>
+    </section>
+  </div>
+</div>

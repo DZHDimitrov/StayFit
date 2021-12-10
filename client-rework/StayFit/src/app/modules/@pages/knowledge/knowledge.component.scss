@@ -1,0 +1,21 @@
+.knowledge-container {
+  width: 65%;
+  margin: 0 auto;
+  .categories-container {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 2rem;
+    .category {
+      .block-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        app-reading-block {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

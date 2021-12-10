@@ -39,6 +39,49 @@ namespace StayFit.Services.StayFit.Services.Data
             this.mapper = mapper;
         }
 
+
+        public async Task<IEnumerable<ReadingPreviewModel>> LoadPreviewsByMainCategory(string mainCategory)
+        {
+            mainCategory = mainCategory?.ToLower();
+            if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == mainCategory))
+            {
+                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
+            }
+
+            var subCategories = await this.dbContext.ReadingSubCategories
+                .Where(sc => sc.ReadingMainCategory.SearchName.ToLower() == mainCategory)
+                .ToListAsync();
+            IEnumerable<ReadingPreviewModel> previews = null;
+
+            if (subCategories.Count != 0)
+            {
+                previews = await this.dbContext.ReadingSubCategories
+               .Where(sc => sc.ReadingMainCategory.SearchName.ToLower() == mainCategory)
+               .Select(sc => new ReadingPreviewModel
+               {
+                   Id = sc.Id,
+                   Title = sc.Name,
+                   SearchName = sc.SearchName,
+                   ImageURL = sc.ImageUrl
+               })
+               .ToListAsync();
+
+                return previews;
+            }
+
+            previews = await this.dbContext.Readings
+            .Where(reading => reading.ReadingMainCategory.SearchName.ToLower() == mainCategory)
+            .Select(r => new ReadingPreviewModel
+            {
+                Id = r.Id,
+                Title = r.Title,
+                ImageURL = r.ImageUrl,
+                SearchName = r.SearchTitle
+            })
+            .ToListAsync();
+            return previews;
+        }
+
         /// <summary>
         /// Loads subgroups if mainCategory has some. Otherwise it loads only readings.
         /// </summary>
@@ -122,7 +165,7 @@ namespace StayFit.Services.StayFit.Services.Data
             return readings;
         }
 
-
+        //TODO: Decide if I want to remove mainCategories array and return all by default instead of passing all enitites in array???
         /// <summary>
         /// Loads latest subgroups if mainCategory has some. Otherwise it loads only latest readings.
         /// </summary>
@@ -160,9 +203,11 @@ namespace StayFit.Services.StayFit.Services.Data
                             Title = sc.Name,
                             ImageURL = sc.ImageUrl,
                             SearchTitle = sc.SearchName,
+                            MainCategoryName = sc.ReadingMainCategory.Name
                         })
                         .Take(4)
                         .ToListAsync();
+                    categoryReadings.HasChildren = true;
                 }
                 else
                 {
@@ -174,9 +219,11 @@ namespace StayFit.Services.StayFit.Services.Data
                             Title = r.Title,
                             ImageURL = r.ImageUrl,
                             SearchTitle = r.SearchTitle,
+                            MainCategoryName = r.ReadingMainCategory.Name,
                         })
                         .Take(4)
                         .ToListAsync();
+                    categoryReadings.HasChildren = false;
                 }
                 latestReadings.Add(categoryReadings);
             }
@@ -301,9 +348,11 @@ namespace StayFit.Services.StayFit.Services.Data
                 .FirstOrDefault().Id + 1 + "_" + String.Join("_", Transliteration.CyrillicToLatin(input).ToLower().Split(" "));
         }
 
-        public async Task<IEnumerable<string>> LoadBaseCategories()
+        public async Task<IEnumerable<MainCategoryDto>> LoadBaseCategories()
         {
-            var categories = await this.dbContext.ReadingMainCategories.Select(x => x.Name).ToListAsync();
+            var categories = await this.dbContext.ReadingMainCategories
+                .Select(x => new MainCategoryDto { Name = x.Name, SearchName = x.SearchName, Id = x.Id })
+                .ToListAsync();
 
             return categories;
         }

@@ -7,9 +7,10 @@ import { KnowledgeComponent } from './knowledge/knowledge.component';
 import { ComponentsModule } from '../@components/components.module';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../material/material.module';
+import { CatalogueComponent } from './knowledge/catalogue/catalogue.component';
 
 @NgModule({
-  declarations: [KnowledgeComponent],
+  declarations: [KnowledgeComponent, CatalogueComponent],
   imports: [
     CommonModule,
     PagesRoutingModule,

@@ -20,7 +20,8 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<IEnumerable<LatestCategoryReadings>> LoadLatest(string[] mainCategories);
 
-        public Task<ReadingResponse> LoadByMainCategory(string readingCategory);
+        //public Task<ReadingResponse> LoadByMainCategory(string readingCategory);
+        public Task<IEnumerable<ReadingPreviewModel>> LoadPreviewsByMainCategory(string mainCategory);
 
         public Task<IEnumerable<ReadingModel>> LoadReadingsBySubCategory(string mainCategory,string subCategory);
 
@@ -32,7 +33,7 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<IEnumerable<ReadingModel>> LoadExerciseByBodyPart(string bodyPart);
 
-        public Task<IEnumerable<string>> LoadBaseCategories();
+        public Task<IEnumerable<MainCategoryDto>> LoadBaseCategories();
 
         public string TransformNameToLatin(string input);
 

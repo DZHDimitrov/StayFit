@@ -1,3 +1,4 @@
+import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { AuthReducer } from '../modules/@auth/state/auth.reducer';
 import { AUTH_STATE_NAME } from '../modules/@auth/state/auth.selector';
 import { IAuthState } from '../modules/@auth/state/auth.state';
@@ -20,6 +21,7 @@ export interface IAppState {
   [THEME_STATE_NAME]: IThemeState;
   [COMPONENTS_STATE_NAME]: IComponentState;
   [PAGES_STATE_NAME]: IPagesState;
+  router:RouterReducerState,
 }
 
 export const appReducer = {
@@ -28,4 +30,5 @@ export const appReducer = {
   [THEME_STATE_NAME]: ThemeReducer,
   [COMPONENTS_STATE_NAME]: ComponentsReducer,
   [PAGES_STATE_NAME]: PagesReducer,
+  router:routerReducer,
 };

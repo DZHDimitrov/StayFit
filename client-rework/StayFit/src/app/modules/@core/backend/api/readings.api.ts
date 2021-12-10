@@ -8,6 +8,7 @@ import {
   IDeleteReading,
   ILatestCategoryReadings,
   IReading,
+  IReadingPreview,
 } from '../../interfaces/responses/readings/readings.res';
 import { HttpService } from './http.service';
 
@@ -18,14 +19,14 @@ export class ReadingsApi {
 
   listByMainCategory(
     category: Readings
-  ): Observable<IApiResponse<IReading[]>> {
+  ): Observable<IApiResponse<IReadingPreview[]>> {
     return this.api.get(`${this.apiController}/${category}`);
   }
 
   listBySubCategory(
     category: Readings,
     subcategory: string
-  ): Observable<IApiResponse<IReading[]>> {
+  ): Observable<IApiResponse<IReadingPreview[]>> {
     return this.api.get(`${this.apiController}/${category}/${subcategory}`);
   }
 
