@@ -60,8 +60,8 @@
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=StayFit;Trusted_Connection=True;MultipleActiveResultSets=true");
-            //base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=StayFit;Trusted_Connection=True;MultipleActiveResultSets=true");
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -73,6 +73,16 @@
             builder.Entity<Message>().HasOne(c => c.Sender).WithMany(c => c.Messages).HasForeignKey(c => c.SenderId);
             builder.Entity<Message>().HasOne(c => c.Receiver).WithMany(c => c.RecievedMessages).HasForeignKey(c => c.ReceieverId);
 
+            builder.Entity<ReadingSubCategory>((entity) =>
+            {
+                entity.HasKey(x => x.Id);
+                entity.Property(x => x.Name);
+                entity.HasOne(x => x.Parent)
+                    .WithMany(x => x.ReadingSubCategories)
+                    .HasForeignKey(x => x.ParentId)
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
             base.OnModelCreating(builder);
         }
     }

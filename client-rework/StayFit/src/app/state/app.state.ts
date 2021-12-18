@@ -11,6 +11,9 @@ import { IPagesState } from '../modules/@pages/store/pages.state';
 import { ThemeReducer } from '../modules/@theme/state/theme.reducer';
 import { THEME_STATE_NAME } from '../modules/@theme/state/theme.selector';
 import { IThemeState } from '../modules/@theme/state/theme.state';
+import { AdminReducer } from '../modules/admin/store/admin.reducer';
+import { ADMIN_STATE_NAME } from '../modules/admin/store/admin.selector';
+import { IAdminState } from '../modules/admin/store/admin.state';
 import { SharedReducer } from '../modules/shared/state/shared.reducer';
 import { SHARED_STATE_NAME } from '../modules/shared/state/shared.selector';
 import { ISharedState } from '../modules/shared/state/shared.state';
@@ -21,6 +24,7 @@ export interface IAppState {
   [THEME_STATE_NAME]: IThemeState;
   [COMPONENTS_STATE_NAME]: IComponentState;
   [PAGES_STATE_NAME]: IPagesState;
+  [ADMIN_STATE_NAME]:IAdminState
   router:RouterReducerState,
 }
 
@@ -30,5 +34,6 @@ export const appReducer = {
   [THEME_STATE_NAME]: ThemeReducer,
   [COMPONENTS_STATE_NAME]: ComponentsReducer,
   [PAGES_STATE_NAME]: PagesReducer,
+  [ADMIN_STATE_NAME]:AdminReducer,
   router:routerReducer,
 };

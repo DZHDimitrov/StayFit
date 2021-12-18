@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReadingBlockComponent } from './reading-block.component';
+import { ReadingBlockComponent } from './reading-preview.component';
 
 describe('ReadingBlockComponent', () => {
   let component: ReadingBlockComponent;

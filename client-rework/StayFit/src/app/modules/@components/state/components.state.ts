@@ -1,5 +1,7 @@
+import { IInnerNavBar } from "../interfaces/navbar.interface";
+
 export interface IComponentState {
-  innerNavBar:{title:string,navItems:any[]}
+  innerNavBar:IInnerNavBar
 }
 
 export const initialState: IComponentState = {

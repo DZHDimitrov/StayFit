@@ -6,12 +6,13 @@
       class="category"
       *ngFor="let category of readingsByMainCategory$ | async"
     >
-      <span class="mat-title">{{ category.name }}</span>
+      <span [routerLink]="['/','pages',category.searchName]" class="mat-title">{{ category.name }}</span>
       <div class="block-row">
         <app-reading-block
-          [title]="reading.title"
-          [imageUrl]="reading.imageURL"
-          *ngFor="let reading of category.readings"
+          (click)="navigate(preview)"
+          [title]="preview.name"
+          [imageUrl]="preview.imageUrl"
+          *ngFor="let preview of category.previews"
         ></app-reading-block>
       </div>
     </section>

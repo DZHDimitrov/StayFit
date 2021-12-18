@@ -1,0 +1,64 @@
+<div class="page-container">
+  <mat-card>
+    <form [formGroup]="this.formGroup" (ngSubmit)="submit()">
+      <mat-card-header>
+        <h2 class="mat-display-1 title">Добавяне на ново четиво към сайта</h2>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+          <mat-form-field class="title">
+            <mat-label>Заглавие</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Тренировки на открито"
+              formControlName="title"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="main-category">
+            <mat-label>Избор на основна категория</mat-label>
+            <mat-select
+              formControlName="readingMainCategoryId"
+              (valueChange)="loadSubCategories($event)"
+            >
+              <mat-option
+                *ngFor="let category of this.mainCategories$ | async"
+                [value]="{ id: category.id, hasChildren: category.hasChildren }"
+              >
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field
+            *ngIf="this.subCategories$ | async"
+            appearance="fill"
+            class="main-category"
+          >
+            <mat-label>Избор на подкатегория</mat-label>
+            <mat-select formControlName="readingSubCategoryId">
+              <mat-option
+                *ngFor="let category of this.subCategories$ | async"
+                [value]="category.id"
+              >
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Съдържание</mat-label>
+            <textarea
+              matInput
+              formControlName="content"
+              cols="30"
+              rows="10"
+            ></textarea>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button type="submit" mat-flat-button color="primary">Изпрати</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

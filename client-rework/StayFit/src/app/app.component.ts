@@ -9,6 +9,7 @@ import {
   getLoading,
 } from './modules/shared/state/shared.selector';
 import { IAppState } from './state/app.state';
+import { autoLogin } from './modules/@auth/state/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.showLoading$ = this.store.select(getLoading);
     this.store.dispatch(setNavMenu({ navItems: GUEST_NAV_ITEMS }));
-    // this.store.dispatch(autoLogin());
+    this.store.dispatch(autoLogin());
   }
   title = 'StayFit';
 }

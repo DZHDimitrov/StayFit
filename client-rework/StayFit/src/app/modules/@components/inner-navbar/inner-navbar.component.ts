@@ -1,40 +1,52 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { getRouterState } from 'src/app/state/router/router.selector';
 import { IAuthState } from '../../@auth/state/auth.state';
-import { ReadingsService } from '../../@core/backend/services/readings.service';
-import { Readings } from '../../@core/enums/reading.category';
-import {
-  setInnerNavItems,
-  setInnerNavTitle,
-} from '../state/components.actions';
-import {
-  getInnerNavItems,
-  getInnerNavTitle,
-} from '../state/components.selector';
+import { getInnerNav } from '../state/components.selector';
 
 @Component({
   selector: 'app-inner-navbar',
   templateUrl: './inner-navbar.component.html',
   styleUrls: ['./inner-navbar.component.scss'],
 })
-export class InnerNavbarComponent implements OnInit {
-  navItems$!: Observable<any[]>;
-  navTitle$!: Observable<string>;
+export class InnerNavbarComponent implements OnInit, OnDestroy {
+  navBar$!: Observable<{ title: string; navItems: any[] }>;
+  unsubscribe$: Subject<void> = new Subject();
+  subCategory: string | undefined;
   constructor(
     private store: Store<IAuthState>,
-    private service: ReadingsService
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
-
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   ngOnInit(): void {
-    this.store.dispatch(setInnerNavItems({ category: undefined }));
-    this.navItems$ = this.store.select(getInnerNavItems);
-    this.navTitle$ = this.store.select(getInnerNavTitle);
+    this.navBar$ = this.store.select(getInnerNav);
+    this.store
+      .select(getRouterState)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((route) => {
+        this.subCategory = route.state.params['subCategory'];
+      });
   }
 
-  changeTitle(title: string) {
-    console.log(title);
-    this.store.dispatch(setInnerNavTitle({ title }));
+  loadGroup(reading: any) {
+    if (
+      (reading.isRoot !== undefined && reading.isRoot == true) ||
+      this.subCategory !== undefined
+    ) {
+      this.router.navigate(['../', reading.searchName], {
+        relativeTo: this.route,
+      });
+    } else {
+      this.router.navigate([reading.searchName], {
+        relativeTo: this.route,
+      });
+    }
   }
 }

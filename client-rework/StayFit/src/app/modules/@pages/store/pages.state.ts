@@ -1,17 +1,17 @@
-import { ILatestCategoryReadings } from '../../@core/interfaces/responses/readings/readings.res';
+import { ICategoryReadingPreviews, IReading } from '../../@core/interfaces/responses/readings/readings.res';
 
 export interface IPagesState {
-  latestReadings: ILatestCategoryReadings[];
+  latestPreviews: ICategoryReadingPreviews[];
   catalogue: {
-    readings: any[];
-    haveChildren: boolean;
+    previews: any[];
   };
+  currentReading:IReading | null;
 }
 
 export const initialState: IPagesState = {
-  latestReadings: [],
+  latestPreviews: [],
   catalogue: {
-    readings: [],
-    haveChildren: false,
+    previews: [],
   },
+  currentReading: null,
 };

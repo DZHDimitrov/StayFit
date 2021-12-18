@@ -67,7 +67,7 @@ namespace StayFit.WebAPI
                     opts.Audience = this.configuration["JwtTokenValidation:Audience"];
                     opts.Issuer = this.configuration["JwtTokenValidation:Issuer"];
                     opts.Path = "/api/account/login";
-                    opts.Expiration = TimeSpan.FromDays(15);
+                    opts.Expiration = TimeSpan.FromDays(1);
                     opts.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
                 });
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { IAppState } from 'src/app/state/app.state';
-import { ConfirmedValidator } from '../../@core/validators/validator';
+import { ConfirmedValidator } from '../../@core/utility/validators/form-validator';
 import { setLoadingSpinner } from '../../shared/state/shared.actions';
 import { registerStart } from '../state/auth.actions';
 

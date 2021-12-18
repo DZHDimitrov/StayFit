@@ -1,9 +1,9 @@
-import { NbMenuItem } from '@nebular/theme';
 import { INavItem } from '../misc/content/navigation.content';
+import { IMenuItem } from '../misc/content/user-menu.content';
 
 export interface IThemeState {
   navItems: INavItem[];
-  menuItems: NbMenuItem[];
+  menuItems: IMenuItem[];
 }
 
 export const initialState: IThemeState = {

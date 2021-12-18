@@ -5,8 +5,6 @@ import { SHARED_STATE_NAME } from './state/shared.selector';
 import { SharedReducer } from './state/shared.reducer';
 import { StoreModule } from '@ngrx/store';
 
-
-
 @NgModule({
   declarations: [LoadingSpinnerComponent],
   imports: [

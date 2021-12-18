@@ -7,6 +7,7 @@ import { IAppState } from 'src/app/state/app.state';
 import { autoLogout } from '../../@auth/state/auth.actions';
 import { isAuthenticated } from '../../@auth/state/auth.selector';
 import { INavItem } from '../misc/content/navigation.content';
+import { IMenuItem } from '../misc/content/user-menu.content';
 import { getMenuItems, getNavItems } from '../state/theme.selector';
 
 @Component({
@@ -15,7 +16,7 @@ import { getMenuItems, getNavItems } from '../state/theme.selector';
   styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
-  userItems$!: Observable<NbMenuItem[]>;
+  userItems$!: Observable<IMenuItem[]>;
   userNavItems$!: Observable<INavItem[]>;
   isLoggedIn$!: Observable<boolean>;
   constructor(
@@ -26,12 +27,10 @@ export class NavigationComponent implements OnInit {
     this.userItems$ = this.store.select(getMenuItems).pipe(map(this.cloneArray));
     this.userNavItems$ = this.store.select(getNavItems).pipe(map(this.cloneArray));
     this.isLoggedIn$ = this.store.select(isAuthenticated);
-    this.userItems$.subscribe(console.log)
   }
 
-  test(a:any) {
-    console.log(a);
-    if (a.data?.id == 'logout') {
+  logout(item:any) {
+    if (item.data?.id == 'logout') {
       this.store.dispatch(autoLogout());
     }
   }

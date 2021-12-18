@@ -24,16 +24,23 @@ namespace StayFit.WebAPI.Controllers.Api.Readings
         }
 
         [HttpGet]
-        [Route("categories")]
-        public async Task<ApiResponse<IEnumerable<MainCategoryDto>>> LoadCategories()
+        public async Task<ApiResponse<IEnumerable<ReadingMainCategoryModel>>> LoadMainCategories()
         {
-            var response = await this.readingService.LoadBaseCategories();
+            var response = await this.readingService.LoadMainCategories();
+            return response.ToApiResponse();
+        }
+
+        [HttpGet]
+        [Route("subcategories")]
+        public async Task<ApiResponse<IEnumerable<ReadingSubCategoryModel>>> LoadSubCategories([FromQuery] int mainId)
+        {
+            var response = await this.readingService.LoadSubCategories(mainId);
             return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("{category}")]
-        public async Task<ApiResponse<IEnumerable<ReadingPreviewModel>>> LoadByMainCategory(string category)
+        public async Task<ApiResponse<ReadingCategoryPreviewsModel>> LoadByMainCategory(string category)
         {
             var response = await this.readingService.LoadPreviewsByMainCategory(category);
             return response.ToApiResponse();
@@ -41,26 +48,33 @@ namespace StayFit.WebAPI.Controllers.Api.Readings
 
         [HttpGet]
         [Route("{category}/{subcategory}")]
-        public async Task<ApiResponse<IEnumerable<ReadingModel>>> LoadReadingsBySubCategory(string category,string subcategory)
+        public async Task<ApiResponse<ReadingCategoryPreviewsModel>> LoadReadingsBySubCategory(string category,string subcategory)
         {
             var response = await this.readingService.LoadReadingsBySubCategory(category, subcategory);
             return response.ToApiResponse();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("latest")]
-        public async Task<ApiResponse<IEnumerable<LatestCategoryReadings>>> LoadLatest(string[] categories)
+        public async Task<ApiResponse<IEnumerable<ReadingCategoryPreviewsModel>>> LoadLatest()
         {
-            var response = await this.readingService.LoadLatest(categories);
+            var response = await this.readingService.LoadLatest();
             return response.ToApiResponse();
         }
 
         [HttpGet]
-        [Route("{category}/single/{id}")]
+        [Route("single/{category}/{subcategory}/{id}")]
         [AllowAnonymous]
-        public async Task<ApiResponse<ReadingModel>> LoadReadingByIdInSubGroup(string category, int id, [FromQuery] int? subCategory)
+        public async Task<ApiResponse<ReadingModel>> LoadReadingByIdInSubGroup(string category, string subcategory,int id)
         {
-            var response = await this.readingService.LoadReadingByIdInSubGroup(category,  id, subCategory);
+            var response = await this.readingService.LoadReadingByIdInSubGroup(category,  subcategory,id);
+            return response.ToApiResponse();
+        }
+
+        [Route("single/{category}/{searchName}")]
+        public async Task<ApiResponse<ReadingModel>> LoadReadingByMainCategory(string category,string searchName)
+        {
+            var response = await this.readingService.LoadReadingBySearchNameInMainCategory(category, searchName);
             return response.ToApiResponse();
         }
 

@@ -7,16 +7,6 @@ export const getComponentsSelector = createFeatureSelector<IComponentState>(
   COMPONENTS_STATE_NAME
 );
 
-export const getInnerNavItems = createSelector(
-  getComponentsSelector,
-  (state) => {
-    return state.innerNavBar.navItems;
-  }
-);
-
-export const getInnerNavTitle = createSelector(
-  getComponentsSelector,
-  (state) => {
-    return state.innerNavBar.title
-  }
-)
+export const getInnerNav = createSelector(getComponentsSelector, (state) => {
+  return state.innerNavBar;
+});

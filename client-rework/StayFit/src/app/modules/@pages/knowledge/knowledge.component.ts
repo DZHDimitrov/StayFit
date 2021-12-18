@@ -1,27 +1,61 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
-import { ReadingsService } from '../../@core/backend/services/readings.service';
-import { ILatestCategoryReadings } from '../../@core/interfaces/responses/readings/readings.res';
-import { loadLatestReadings } from '../store/pages.actions';
-import { getLatestReadings } from '../store/pages.selector';
+import { getRouterState } from 'src/app/state/router/router.selector';
+import { ICategoryReadingPreviews } from '../../@core/interfaces/responses/readings/readings.res';
+import {
+  loadCategoriesLatestPreviews,
+} from '../store/pages.actions';
+import { getCatalogue, getLatestPreviews } from '../store/pages.selector';
 
 @Component({
   selector: 'app-knowledge',
   templateUrl: './knowledge.component.html',
   styleUrls: ['./knowledge.component.scss'],
 })
-export class KnowledgeComponent implements OnInit {
-  readingsByMainCategory$!: Observable<ILatestCategoryReadings[]>;
-  constructor(
-    private store: Store<IAppState>,
-    private service: ReadingsService
-  ) {}
+export class KnowledgeComponent implements OnInit, OnDestroy {
+  readingsByMainCategory$!: Observable<ICategoryReadingPreviews[]>;
+  currentRoute!: string[];
+  unsubscribe$: Subject<void> = new Subject();
+
+  constructor(private store: Store<IAppState>, private router: Router) {}
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   ngOnInit(): void {
-    this.store.dispatch(loadLatestReadings());
-    this.readingsByMainCategory$ = this.store.select(getLatestReadings);
-    this.readingsByMainCategory$.subscribe(console.log);
+    this.store.dispatch(loadCategoriesLatestPreviews());
+    this.readingsByMainCategory$ = this.store.select(getLatestPreviews);
+    this.store
+      .select(getRouterState)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((route) => {
+        this.currentRoute = route.state.url
+          .split('/')
+          .filter((segment) => segment !== '');
+      });
+  }
+
+  navigate(preview: any) {
+    if (preview.hasChildren) {
+      this.router.navigate([
+        '/',
+        'pages',
+        preview.mainCategoryName,
+        preview.searchName,
+      ]);
+    } else {
+      this.router.navigate([
+        '/',
+        'pages',
+        preview.mainCategoryName,
+        preview.searchName,
+      ]);
+    }
   }
 }

@@ -797,6 +797,9 @@ namespace StayFit.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ReadingMainCategoryId")
                         .HasColumnType("int");
 
@@ -804,6 +807,8 @@ namespace StayFit.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("ReadingMainCategoryId");
 
@@ -1100,11 +1105,18 @@ namespace StayFit.Data.Migrations
 
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingSubCategory", b =>
                 {
+                    b.HasOne("StayFit.Data.Models.ReadingModels.ReadingSubCategory", "Parent")
+                        .WithMany("ReadingSubCategories")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("StayFit.Data.Models.ReadingModels.ReadingMainCategory", "ReadingMainCategory")
                         .WithMany("ReadingSubCategories")
                         .HasForeignKey("ReadingMainCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Parent");
 
                     b.Navigation("ReadingMainCategory");
                 });
@@ -1222,6 +1234,8 @@ namespace StayFit.Data.Migrations
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingSubCategory", b =>
                 {
                     b.Navigation("Readings");
+
+                    b.Navigation("ReadingSubCategories");
                 });
 #pragma warning restore 612, 618
         }

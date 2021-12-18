@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Readings } from '../../enums/reading.category';
+import {
+  ReadingCategory,
+  ReadingSubCategory,
+} from '../../enums/reading.category';
 import { IApiResponse } from '../../interfaces/api.response';
 import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 import {
+  ICategoryReadingPreviews,
   ICreateReadingRes,
   IDeleteReading,
-  ILatestCategoryReadings,
   IReading,
-  IReadingPreview,
 } from '../../interfaces/responses/readings/readings.res';
 import { HttpService } from './http.service';
 
@@ -17,35 +19,51 @@ export class ReadingsApi {
   private readonly apiController: string = 'readings';
   constructor(private api: HttpService) {}
 
+  loadCategoriesLatestPreviews(): Observable<
+    IApiResponse<ICategoryReadingPreviews[]>
+  > {
+    return this.api.get(`${this.apiController}/latest`);
+  }
+
   listByMainCategory(
-    category: Readings
-  ): Observable<IApiResponse<IReadingPreview[]>> {
+    category: ReadingCategory
+  ): Observable<IApiResponse<ICategoryReadingPreviews>> {
     return this.api.get(`${this.apiController}/${category}`);
   }
 
   listBySubCategory(
-    category: Readings,
+    category: ReadingCategory,
     subcategory: string
-  ): Observable<IApiResponse<IReadingPreview[]>> {
+  ): Observable<IApiResponse<ICategoryReadingPreviews>> {
     return this.api.get(`${this.apiController}/${category}/${subcategory}`);
   }
 
-  loadLatest(categories: Readings[]): Observable<IApiResponse<ILatestCategoryReadings[]>> {
-    return this.api.post(`${this.apiController}/latest`, categories);
-  }
-
-  loadByIdInSubGroup(
-    category: Readings,
-    id: number,
-    subCategory?: number
-  ): Observable<IApiResponse<IReading>> {
+  loadOneByMainCategory(
+    category: ReadingCategory | string,
+    searchName: string
+  ) {
     return this.api.get(
-      `${this.apiController}/${category}/single/${id}?subcategory=${subCategory}`
+      `${this.apiController}/single/${category}/${searchName}`
     );
   }
 
-  loadBaseCategories(): Observable<IApiResponse<any>> {
-    return this.api.get(`${this.apiController}/categories`);
+  loadOneByIdInSubCategory(
+    category: ReadingCategory | string,
+    subCategory: ReadingSubCategory | string,
+    id: number
+  ): Observable<IApiResponse<IReading>> {
+    return this.api.get(
+      `${this.apiController}/single/${category}/${subCategory}/${id}`
+    );
+  }
+
+  loadMainCategories(): Observable<any> {
+    return this.api.get(this.apiController);
+  }
+
+  loadSubCategories(mainId: number): Observable<any> {
+    debugger;
+    return this.api.get(`${this.apiController}/subcategories?mainId=${mainId}`);
   }
 
   add(

@@ -1,25 +1,37 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-  loadGroupContentSuccess,
-  loadLatestReadingSuccess,
+  loadCategoriesLatestPreviewsSuccess,
+  loadCatalogueByMainCategorySuccess,
+  loadCatalogueBySubCategorySuccess,
+  loadReadingById,
+  loadReadingByIdSuccess,
 } from './pages.actions';
 import { initialState } from './pages.state';
 
 export const _pagesReducer = createReducer(
   initialState,
-  on(loadLatestReadingSuccess, (state, action) => {
+  on(loadCategoriesLatestPreviewsSuccess, (state, action) => {
     return {
       ...state,
-      latestReadings: action.latestReadings,
+      latestPreviews: action.latestPreviews,
     };
   }),
-  on(loadGroupContentSuccess, (state, action) => {
+  on(loadCatalogueByMainCategorySuccess, (state, action) => {
     return {
       ...state,
-      catalogue: {
-        readings: action.content,
-        haveChildren: action.hasChildren,
-      },
+      catalogue: { previews: action.previews },
+    };
+  }),
+  on(loadCatalogueBySubCategorySuccess, (state, action) => {
+    return {
+      ...state,
+      catalogue: { previews: action.previews },
+    };
+  }),
+  on(loadReadingByIdSuccess, (state, action) => {
+    return {
+      ...state,
+      currentReading: action.currentReading,
     };
   })
 );

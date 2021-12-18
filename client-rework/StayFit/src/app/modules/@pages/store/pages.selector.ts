@@ -5,10 +5,15 @@ export const PAGES_STATE_NAME = 'pages';
 
 const getPagesState = createFeatureSelector<IPagesState>(PAGES_STATE_NAME);
 
-export const getLatestReadings = createSelector(getPagesState, (state) => {
-  return state.latestReadings;
+export const getLatestPreviews = createSelector(getPagesState, (state) => {
+  return state.latestPreviews;
 });
 
 export const getCatalogue = createSelector(getPagesState, (state) => {
   return state.catalogue;
 })
+
+export const getReadingById = createSelector(getPagesState,(state) => {
+  return state.currentReading;
+})
+

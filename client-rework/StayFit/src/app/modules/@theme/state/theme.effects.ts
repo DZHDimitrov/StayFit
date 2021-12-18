@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { exhaustMap, map, mergeMap, take, takeLast, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { autoLogout, loginSuccess } from '../../@auth/state/auth.actions';
 import {
@@ -18,7 +17,6 @@ export class ThemeEffects {
   constructor(
     private actions$: Actions,
     private store: Store<IAppState>,
-    private router: Router
   ) {}
 
   setUserMenu$ = createEffect(

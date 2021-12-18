@@ -1,40 +1,35 @@
-interface IBaseReading {
-  id: number;
-  title: string;
-}
-
-export interface IReading extends IBaseReading {
-  content: string;
-  searchName: string;
-  imageURL: string;
-}
-
-export interface IReadingPreview extends IBaseReading {
-  content:string;
+export interface ICategoryReadingPreviews {
+  name:string;
   searchName:string;
-  imageURL:string;
+  hasChildren:boolean;
+  isRoot:boolean;
+  categories:any[];
+  previews:IReadingPreview[];
 }
 
-export interface ICreateReadingRes extends IBaseReading {
-  id: number;
-  title: string;
+export interface IReadingPreview {
+  id:number;
+  name:string;
+  mainCategoryName:string;
+  searchName:string;
+  imageUrl:string;
+  hasChildren:boolean;
 }
 
-export interface IDeleteReading extends IBaseReading {
-  id: number;
-  title: string;
-}
-
-export interface IReadingCategory {
-  name: string;
+export interface IReading {
+  id:number;
+  title:string;
+  content: string;
+  searchTitle: string;
   imageUrl: string;
 }
 
-export interface ILatestCategoryReadings {
-  name: string;
-  readings: {
-    searchTitle: string;
-    title: string;
-    imageURL: string;
-  }[];
+export interface ICreateReadingRes {
+  id: number;
+  title: string;
+}
+
+export interface IDeleteReading {
+  id: number;
+  title: string;
 }

@@ -14,26 +14,26 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
     {
         public Task<AddReadingResponse> CreateReading(AddReadingRequest model);
 
+        public Task<IEnumerable<ReadingMainCategoryModel>> LoadMainCategories();
+
+        public Task<IEnumerable<ReadingSubCategoryModel>> LoadSubCategories(int id);
+
         public void EditArticle();
 
         public Task<ReadingDeleteResponse> DeleteReading(int articleId);
 
-        public Task<IEnumerable<LatestCategoryReadings>> LoadLatest(string[] mainCategories);
+        public Task<IEnumerable<ReadingCategoryPreviewsModel>> LoadLatest();
 
-        //public Task<ReadingResponse> LoadByMainCategory(string readingCategory);
-        public Task<IEnumerable<ReadingPreviewModel>> LoadPreviewsByMainCategory(string mainCategory);
+        public Task<ReadingCategoryPreviewsModel> LoadPreviewsByMainCategory(string mainCategory);
 
-        public Task<IEnumerable<ReadingModel>> LoadReadingsBySubCategory(string mainCategory,string subCategory);
+        public Task<ReadingCategoryPreviewsModel> LoadReadingsBySubCategory(string mainCategory,string subCategory);
 
-        //public Task<ReadingSubCategoryResponse> LoadSubCategoriesByMainCategory(string readingCategory);
+        public Task<ReadingModel> LoadReadingBySearchNameInMainCategory(string category, string searchName);
 
-        //public Task<ReadingResponse> LoadLatestSubCategories(string readingCategory);
+        public Task<ReadingModel> LoadReadingByIdInSubGroup(string mainCategory,string subCategory,int readingId);
 
-        public Task<ReadingModel> LoadReadingByIdInSubGroup(string mainCategory,int readingId, int? subCategory);
 
         public Task<IEnumerable<ReadingModel>> LoadExerciseByBodyPart(string bodyPart);
-
-        public Task<IEnumerable<MainCategoryDto>> LoadBaseCategories();
 
         public string TransformNameToLatin(string input);
 

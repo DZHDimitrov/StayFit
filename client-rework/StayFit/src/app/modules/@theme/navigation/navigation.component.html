@@ -14,7 +14,35 @@
       >menu_open</mat-icon
     >
     <mat-menu #menu="matMenu">
-      <button (click)="test(item)" [routerLink]="item.link" mat-menu-item *ngFor="let item of (this.userItems$ | async)">{{item.title}}</button>
+      <button
+      
+      mat-menu-item
+      [mat-menu-trigger-for]="admin"
+      >
+        Администрация
+      </button>
+      <button
+        (click)="logout(item)"
+        [routerLink]="item.link"
+        mat-menu-item
+        *ngFor="let item of this.userItems$ | async"
+      >
+        {{ item.title }}
+      </button>
     </mat-menu>
+    <mat-menu dire #admin="matMenu">
+      <button
+      [routerLink]="['admin','new-reading']"
+      mat-menu-item
+      >
+        Добави ново четиво
+      </button>
+      <button
+      mat-menu-item
+      >
+        Добави нова статия
+      </button>
+    </mat-menu>
+    <mat-menu #dummy></mat-menu>
   </div>
 </mat-toolbar>

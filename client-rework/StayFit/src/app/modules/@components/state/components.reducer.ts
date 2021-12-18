@@ -1,28 +1,22 @@
 import { createReducer, on } from '@ngrx/store';
-import {
-  innerNavItemsLoaded,
-  setInnerNavTitle,
-} from './components.actions';
+import { setInnerNav } from './components.actions';
 import { initialState } from './components.state';
 
 const _componentsReducer = createReducer(
   initialState,
-  on(innerNavItemsLoaded, (state, action) => {
+  on(setInnerNav, (state, action) => {
     return {
       ...state,
       innerNavBar: {
-        ...state.innerNavBar,
-        navItems: action.navItems,
+        ...action.navBar,
+        navItems:
+          action.hasChildren !== undefined && action.hasChildren === false
+            ? state.innerNavBar.navItems
+            : action.navBar.navItems,
       },
-    };
-  }),
-  on(setInnerNavTitle, (state, action) => {
-    return {
-      ...state,
-      innerNavBar: {
-        ...state.innerNavBar,
-        title: action.title,
-      },
+      // action.hasChildren !== undefined && action.hasChildren === false
+      //   ? state.innerNavBar
+      //   : action.navBar,
     };
   })
 );
