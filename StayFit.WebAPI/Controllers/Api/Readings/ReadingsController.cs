@@ -79,7 +79,7 @@ namespace StayFit.WebAPI.Controllers.Api.Readings
         }
 
         [HttpPost]
-        public async Task<ApiResponse<AddReadingResponse>> CreateReading(AddReadingRequest model)
+        public async Task<ApiResponse<AddReadingResponse>> CreateReading([FromForm]AddReadingRequest model)
         {
             //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var response = await this.readingService.CreateReading(model);

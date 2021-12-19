@@ -2,12 +2,7 @@
   <app-inner-navbar></app-inner-navbar>
   <div class="block-row">
     <!-- [routerLink]="[reading.searchName]" -->
-    <app-reading-block
-      (click)="navigate(reading)"
-      [title]="reading.name"
-      [width]="300"
-      [height]="210"
-      *ngFor="let reading of (catalogue$ | async).previews"
-    ></app-reading-block>
+    <app-reading-block (click)="navigate(reading)" [imageUrl]="reading.imageUrl" [title]="reading.name" [width]="300"
+      [height]="210" *ngFor="let reading of (catalogue$ | async).previews"></app-reading-block>
   </div>
 </div>

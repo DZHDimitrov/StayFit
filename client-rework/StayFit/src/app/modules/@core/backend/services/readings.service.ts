@@ -11,8 +11,10 @@ import {
   ICategoryReadingPreviews,
   ICreateReadingRes,
   IDeleteReading,
+  IMainCategory,
   IReading,
-} from '../../interfaces/responses/readings/readings.res';
+  ISubCategory,
+} from '../../interfaces/readings/readings.interface';
 import { ReadingsApi } from '../api/readings.api';
 
 @Injectable({
@@ -57,11 +59,11 @@ export class ReadingsService {
     return this.api.loadOneByIdInSubCategory(category, subCategory, id);
   }
 
-  loadMainCategories(): Observable<any> {
+  loadMainCategories(): Observable<IApiResponse<IMainCategory[]>> {
     return this.api.loadMainCategories();
   }
 
-  loadSubCategories(mainId: number): Observable<any> {
+  loadSubCategories(mainId: number): Observable<IApiResponse<ISubCategory[]>> {
     return this.api.loadSubCategories(mainId);
   }
 

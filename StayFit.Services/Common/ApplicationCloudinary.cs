@@ -1,0 +1,48 @@
+﻿namespace StayFit.Services.Common
+{
+    using System.IO;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
+
+    using Microsoft.AspNetCore.Http;
+
+    public static class ApplicationCloudinary
+    {
+        public static async Task<string> UploadImage(Cloudinary cloudinary, IFormFile image, string name)
+        {
+            byte[] destinationImage;
+            using (var ms = new MemoryStream())
+            {
+                await image.CopyToAsync(ms);
+                destinationImage = ms.ToArray();
+            }
+
+            using (var ms = new MemoryStream(destinationImage))
+            {
+                name = name.Replace("&", "And");
+
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(name, ms),
+                    PublicId = name,
+                };
+
+                var uploadResult = cloudinary.Upload(uploadParams);
+                return uploadResult.SecureUrl.AbsoluteUri;
+            }
+        }
+
+        public static void DeleteImage(Cloudinary cloudinary, string name)
+        {
+            var delParams = new DelResParams()
+            {
+                PublicIds = new List<string>() { name },
+                Invalidate = true
+            };
+            cloudinary.DeleteResources(delParams);
+        }
+    }
+}

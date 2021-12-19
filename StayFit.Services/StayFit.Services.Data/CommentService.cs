@@ -4,7 +4,6 @@ using StayFit.Shared.Forum;
 using StayFit.Data.Models.Forum;
 using StayFit.Shared.Forum.Responses;
 using StayFit.Shared.Forum.PostModels;
-using StayFit.Shared.Forum.DeleteModels;
 using StayFit.Infrastructure.CustomErros;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 

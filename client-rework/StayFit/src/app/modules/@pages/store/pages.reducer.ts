@@ -3,7 +3,6 @@ import {
   loadCategoriesLatestPreviewsSuccess,
   loadCatalogueByMainCategorySuccess,
   loadCatalogueBySubCategorySuccess,
-  loadReadingById,
   loadReadingByIdSuccess,
 } from './pages.actions';
 import { initialState } from './pages.state';

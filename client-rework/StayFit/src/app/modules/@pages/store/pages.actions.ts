@@ -55,10 +55,14 @@ export const loadCatalogueBySubCategorySuccess = createAction(
 
 export const loadReadingById = createAction(
   LOAD_READING,
-  props<{ mainCategory: ReadingCategory | string; subCategory: ReadingSubCategory | string; id?: number }>()
+  props<{
+    mainCategory: ReadingCategory | string;
+    subCategory: ReadingSubCategory | string;
+    id?: number;
+  }>()
 );
 
 export const loadReadingByIdSuccess = createAction(
   LOAD_READING_SUCCESS,
-  props<{currentReading:any}>()
-)
+  props<{ currentReading: any }>()
+);

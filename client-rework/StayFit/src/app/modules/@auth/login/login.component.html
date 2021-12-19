@@ -3,31 +3,15 @@
     <div class="login-content">
       <mat-toolbar class="login-toolbar" color="primary">Login</mat-toolbar>
       <mat-card>
-        <form
-          [formGroup]="this.userLoginForm"
-          #formDirective="ngForm"
-          (ngSubmit)="submit()"
-        >
+        <form [formGroup]="this.userLoginForm" #formDirective="ngForm" (ngSubmit)="submit()">
           <mat-form-field>
             <mat-icon matPrefix>person_outline</mat-icon>
-            <input
-              autofocus
-              type="text"
-              matInput
-              placeholder="Username"
-              formControlName="username"
-            />
+            <input autofocus type="text" matInput placeholder="Username" formControlName="username" />
           </mat-form-field>
 
           <mat-form-field>
             <mat-icon matPrefix>lock_outline</mat-icon>
-            <input
-              type="password"
-              autocomplete="false"
-              matInput
-              placeholder="Password"
-              formControlName="password"
-            />
+            <input type="password" autocomplete="false" matInput placeholder="Password" formControlName="password" />
           </mat-form-field>
 
           <button type="submit" mat-raised-button color="primary">LOGIN</button>
@@ -35,9 +19,8 @@
         <div class="socialMediaFlex"></div>
         <br />
         <span>
-          If You don't have a account yet please
-          <a routerLink="/account/register">REGISTER HERE</a></span
-        >
+          Ако нямате профил, може да се регистрирате
+          <a routerLink="/account/register">тук</a></span>
       </mat-card>
     </div>
   </div>

@@ -5,7 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { getRouterState } from 'src/app/state/router/router.selector';
-import { ICategoryReadingPreviews } from '../../@core/interfaces/responses/readings/readings.res';
+import { ICategoryReadingPreviews } from '../../@core/interfaces/readings/readings.interface';
 import {
   loadCategoriesLatestPreviews,
 } from '../store/pages.actions';

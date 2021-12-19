@@ -5,7 +5,7 @@ import { share, shareReplay, takeUntil } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { getRouterState } from 'src/app/state/router/router.selector';
 import { ReadingCategory } from '../../@core/enums/reading.category';
-import { IReading } from '../../@core/interfaces/responses/readings/readings.res';
+import { IReading } from '../../@core/interfaces/readings/readings.interface';
 import { loadReadingById } from '../store/pages.actions';
 import { getReadingById } from '../store/pages.selector';
 

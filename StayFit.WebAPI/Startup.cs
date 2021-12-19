@@ -1,4 +1,5 @@
 using AutoMapper;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -48,6 +49,7 @@ namespace StayFit.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //CORS configuration
             services
                 .AddCors(options =>
                 {
@@ -102,6 +104,7 @@ namespace StayFit.WebAPI
             services
                 .AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 
+            //JSON serializer config
             services
                 .AddControllers()
                  .AddNewtonsoftJson(options =>
@@ -126,8 +129,17 @@ namespace StayFit.WebAPI
                 mc.AddProfile(new MappingProfile());
             });
 
+            //Auto mapper
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            //Cloudinary setup
+            var cloudinaryAccount = new CloudinaryDotNet.Account(
+            this.configuration["Authentication:Cloudinary:CloudName"],
+            this.configuration["Authentication:Cloudinary:ApiKey"],
+            this.configuration["Authentication:Cloudinary:ApiSecret"]);
+            var cloudinary = new Cloudinary(cloudinaryAccount);
+            services.AddSingleton(cloudinary);
 
             services.AddMvc();
 

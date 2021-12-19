@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import {
   loadReadingMainCategoriesSuccess,
   loadReadingSubCategoriesSuccess,
+  resetReadingSubCategories,
 } from './admin.actions';
 import { InitialState } from './admin.state';
 
@@ -17,6 +18,12 @@ export const _adminReducer = createReducer(
     return {
       ...state,
       subCategories: action.subCategories,
+    };
+  }),
+  on(resetReadingSubCategories, (state, action) => {
+    return {
+      ...state,
+      subCategories: [],
     };
   })
 );

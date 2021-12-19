@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +9,8 @@ using NickBuhro.Translit;
 using StayFit.Common;
 
 using StayFit.Data;
-using StayFit.Data.Models;
 using StayFit.Data.Models.ReadingModels;
-
+using StayFit.Services.Common;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 
 using StayFit.Shared;
@@ -30,11 +29,13 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private readonly AppDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly Cloudinary cloudinary;
 
-        public ReadingService(AppDbContext dbContext, IMapper mapper)
+        public ReadingService(AppDbContext dbContext, IMapper mapper,Cloudinary cloudinary)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.cloudinary = cloudinary;
         }
 
 
@@ -248,8 +249,21 @@ namespace StayFit.Services.StayFit.Services.Data
             {
                 throw new ArgumentException(string.Format(GlobalConstants.NOT_SPECIFIED_ERROR_MSG, "exercise", "bodypart"));
             }
-            var reading = this.mapper.Map<Reading>(model);
-            reading.SearchTitle = TransformNameToLatin(model.Title);
+            //var reading = this.mapper.Map<Reading>(model);
+            var imageUrl = await ApplicationCloudinary.UploadImage(this.cloudinary, model.Image, model.Title);
+
+            var reading = new Reading
+            {
+                ReadingMainCategoryId = model.ReadingMainCategoryId,
+                ReadingSubCategoryId = model.ReadingSubCategoryId ?? null,
+                CreatedOn = DateTime.UtcNow,
+                Title = model.Title,
+                BodyPartId = model.BodyPartId ?? null,
+                Content = model.Content,
+                SearchTitle = TransformNameToLatin(model.Title),
+                ImageUrl = imageUrl
+            };
+
             await this.dbContext.Readings.AddAsync(reading);
             await this.dbContext.SaveChangesAsync();
 

@@ -11,6 +11,9 @@ export const LOAD_READING_SUB_CATEGORIES =
 export const LOAD_READING_SUB_CATEGORIES_SUCCESS =
   '[admin] load reading sub categories success';
 
+export const RESET_READING_SUB_CATEGORIES =
+  '[admin] reset reading sub-categories';
+
 export const ADD_READING = '[admin] add reading';
 export const ADD_READING_SUCCESS = '[admin] add reading success';
 
@@ -31,6 +34,10 @@ export const loadReadingSubCategories = createAction(
 export const loadReadingSubCategoriesSuccess = createAction(
   LOAD_READING_SUB_CATEGORIES_SUCCESS,
   props<{ subCategories: any[] }>()
+);
+
+export const resetReadingSubCategories = createAction(
+  RESET_READING_SUB_CATEGORIES
 );
 
 export const addReading = createAction(ADD_READING, props<{ data: any }>());

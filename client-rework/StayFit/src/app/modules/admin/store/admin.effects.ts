@@ -44,7 +44,6 @@ export class AdminEffects {
           .loadSubCategories(action.mainCategoryId)
           .pipe(
             map((x) => {
-              console.log(x);
               return loadReadingSubCategoriesSuccess({ subCategories: x.data });
             })
           );

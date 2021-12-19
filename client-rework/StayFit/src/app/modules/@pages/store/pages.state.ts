@@ -1,4 +1,4 @@
-import { ICategoryReadingPreviews, IReading } from '../../@core/interfaces/responses/readings/readings.res';
+import { ICategoryReadingPreviews, IReading } from '../../@core/interfaces/readings/readings.interface';
 
 export interface IPagesState {
   latestPreviews: ICategoryReadingPreviews[];

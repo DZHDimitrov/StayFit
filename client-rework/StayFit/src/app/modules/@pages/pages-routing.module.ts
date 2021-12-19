@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ReadingSubCategory } from '../@core/enums/reading.category';
 import { CatalogueComponent } from './catalogue/catalogue.component';
 import { KnowledgeComponent } from './knowledge/knowledge.component';
 import { ReadingComponent } from './reading/reading.component';
