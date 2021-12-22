@@ -5,9 +5,9 @@ import { IAuthState } from '../modules/@auth/state/auth.state';
 import { ComponentsReducer } from '../modules/@components/state/components.reducer';
 import { COMPONENTS_STATE_NAME } from '../modules/@components/state/components.selector';
 import { IComponentState } from '../modules/@components/state/components.state';
-import { PagesReducer } from '../modules/@pages/store/pages.reducer';
-import { PAGES_STATE_NAME } from '../modules/@pages/store/pages.selector';
-import { IPagesState } from '../modules/@pages/store/pages.state';
+import { PagesReducer } from '../modules/@pages/knowledge/store/knowledge.reducer';
+import { KNOWLEDGE_STATE_NAME } from '../modules/@pages/knowledge/store/knowledge.selector';
+import { IKnowledgeState } from '../modules/@pages/knowledge/store/knowledge.state';
 import { ThemeReducer } from '../modules/@theme/state/theme.reducer';
 import { THEME_STATE_NAME } from '../modules/@theme/state/theme.selector';
 import { IThemeState } from '../modules/@theme/state/theme.state';
@@ -23,7 +23,7 @@ export interface IAppState {
   [AUTH_STATE_NAME]: IAuthState;
   [THEME_STATE_NAME]: IThemeState;
   [COMPONENTS_STATE_NAME]: IComponentState;
-  [PAGES_STATE_NAME]: IPagesState;
+  [KNOWLEDGE_STATE_NAME]: IKnowledgeState;
   [ADMIN_STATE_NAME]:IAdminState
   router:RouterReducerState,
 }
@@ -33,7 +33,7 @@ export const appReducer = {
   [AUTH_STATE_NAME]: AuthReducer,
   [THEME_STATE_NAME]: ThemeReducer,
   [COMPONENTS_STATE_NAME]: ComponentsReducer,
-  [PAGES_STATE_NAME]: PagesReducer,
+  [KNOWLEDGE_STATE_NAME]: PagesReducer,
   [ADMIN_STATE_NAME]:AdminReducer,
   router:routerReducer,
 };

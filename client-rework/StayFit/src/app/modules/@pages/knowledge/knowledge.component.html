@@ -6,7 +6,7 @@
       class="category"
       *ngFor="let category of readingsByMainCategory$ | async"
     >
-      <span [routerLink]="['/','pages',category.searchName]" class="mat-title">{{ category.name }}</span>
+      <span [routerLink]="['/','pages','knowledge',category.searchName]" class="mat-title">{{ category.name }}</span>
       <div class="block-row">
         <app-reading-block
           (click)="navigate(preview)"

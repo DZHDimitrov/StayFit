@@ -35,18 +35,13 @@ export class InnerNavbarComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadGroup(reading: any) {
-    if (
-      (reading.isRoot !== undefined && reading.isRoot == true) ||
-      this.subCategory !== undefined
-    ) {
+  loadGroup(reading: any): void {
+    if (this.subCategory) {
       this.router.navigate(['../', reading.searchName], {
         relativeTo: this.route,
       });
-    } else {
-      this.router.navigate([reading.searchName], {
-        relativeTo: this.route,
-      });
+      return;
     }
+    this.router.navigate([reading.searchName], { relativeTo: this.route });
   }
 }

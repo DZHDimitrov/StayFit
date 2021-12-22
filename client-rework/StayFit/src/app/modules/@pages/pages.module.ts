@@ -7,19 +7,20 @@ import { KnowledgeComponent } from './knowledge/knowledge.component';
 import { ComponentsModule } from '../@components/components.module';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../material/material.module';
-import { CatalogueComponent } from './catalogue/catalogue.component';
-import { PagesEffects } from './store/pages.effects';
+import { CatalogueComponent } from './knowledge/catalogue/catalogue.component';
+import { PagesEffects } from './knowledge/store/knowledge.effects';
 import { ComponentsEffects } from '../@components/state/components.effects';
-import { ReadingComponent } from './reading/reading.component';
+import { ReadingComponent } from './knowledge/reading/reading.component';
+import { KnowledgeModule } from './knowledge/knowledge.module';
 
 @NgModule({
-  declarations: [KnowledgeComponent, CatalogueComponent, ReadingComponent],
+  declarations: [],
   imports: [
     CommonModule,
     PagesRoutingModule,
     ComponentsModule,
     MaterialModule,
-    EffectsModule.forFeature([PagesEffects,ComponentsEffects]),
+    // EffectsModule.forFeature([PagesEffects,ComponentsEffects]),
   ],
 })
 export class PagesModule {}

@@ -1,30 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CatalogueComponent } from './catalogue/catalogue.component';
-import { KnowledgeComponent } from './knowledge/knowledge.component';
-import { ReadingComponent } from './reading/reading.component';
 
 const routes: Routes = [
   {
     path: 'knowledge',
-    component: KnowledgeComponent,
+    loadChildren: () =>
+      import('./knowledge/knowledge.module').then((m) => m.KnowledgeModule),
   },
   {
-    path: 'articles/:subCategory',
-    component:ReadingComponent
+    path: 'foods',
+    loadChildren: () =>
+      import('./foods/foods.module').then((m) => m.FoodsModule),
   },
-  {
-    path: ':mainCategory',
-    component: CatalogueComponent,
-  },
-  {
-    path:':mainCategory/:subCategory',
-    component:CatalogueComponent,
-  },
-  {
-    path:':mainCategory/:subCategory/:id',
-    component:ReadingComponent,
-  }
 ];
 
 @NgModule({

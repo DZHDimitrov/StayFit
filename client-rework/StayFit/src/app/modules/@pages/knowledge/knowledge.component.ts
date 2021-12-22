@@ -8,8 +8,8 @@ import { getRouterState } from 'src/app/state/router/router.selector';
 import { ICategoryReadingPreviews } from '../../@core/interfaces/readings/readings.interface';
 import {
   loadCategoriesLatestPreviews,
-} from '../store/pages.actions';
-import { getCatalogue, getLatestPreviews } from '../store/pages.selector';
+} from './store/knowledge.actions';
+import { getCatalogue, getLatestPreviews } from './store/knowledge.selector';
 
 @Component({
   selector: 'app-knowledge',
@@ -46,6 +46,7 @@ export class KnowledgeComponent implements OnInit, OnDestroy {
       this.router.navigate([
         '/',
         'pages',
+        'knowledge',
         preview.mainCategoryName,
         preview.searchName,
       ]);
@@ -53,6 +54,7 @@ export class KnowledgeComponent implements OnInit, OnDestroy {
       this.router.navigate([
         '/',
         'pages',
+        'knowledge',
         preview.mainCategoryName,
         preview.searchName,
       ]);
