@@ -1,0 +1,5 @@
+<div class="reading-container">
+  <img src="{{ (this.currentReading$ | async)?.imageUrl }}" alt="" />
+  <h1 class="mat-display-3 title">{{ (this.currentReading$ | async)?.title }}</h1>
+  <p class="mat-body-1 content">{{ (this.currentReading$ | async)?.content }}</p>
+</div>
