@@ -5,6 +5,9 @@ import { IAuthState } from '../modules/@auth/state/auth.state';
 import { ComponentsReducer } from '../modules/@components/state/components.reducer';
 import { COMPONENTS_STATE_NAME } from '../modules/@components/state/components.selector';
 import { IComponentState } from '../modules/@components/state/components.state';
+import { FoodsReducer } from '../modules/@pages/foods/store/foods.reducer';
+import { FOODS_STATE_NAME } from '../modules/@pages/foods/store/foods.selector';
+import { IFoodsState } from '../modules/@pages/foods/store/foods.state';
 import { PagesReducer } from '../modules/@pages/knowledge/store/knowledge.reducer';
 import { KNOWLEDGE_STATE_NAME } from '../modules/@pages/knowledge/store/knowledge.selector';
 import { IKnowledgeState } from '../modules/@pages/knowledge/store/knowledge.state';
@@ -24,7 +27,8 @@ export interface IAppState {
   [THEME_STATE_NAME]: IThemeState;
   [COMPONENTS_STATE_NAME]: IComponentState;
   [KNOWLEDGE_STATE_NAME]: IKnowledgeState;
-  [ADMIN_STATE_NAME]:IAdminState
+  [ADMIN_STATE_NAME]:IAdminState;
+  [FOODS_STATE_NAME]:IFoodsState;
   router:RouterReducerState,
 }
 
@@ -35,5 +39,6 @@ export const appReducer = {
   [COMPONENTS_STATE_NAME]: ComponentsReducer,
   [KNOWLEDGE_STATE_NAME]: PagesReducer,
   [ADMIN_STATE_NAME]:AdminReducer,
+  [FOODS_STATE_NAME]:FoodsReducer,
   router:routerReducer,
 };

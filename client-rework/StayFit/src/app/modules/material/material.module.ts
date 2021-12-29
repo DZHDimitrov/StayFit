@@ -7,10 +7,11 @@ import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input'
-import {MatRadioModule} from '@angular/material/radio'
-import {MatSidenavModule} from '@angular/material/sidenav'
-import {MatSelectModule} from '@angular/material/select'
+import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSelectModule} from '@angular/material/select';
+import {MatAutocompleteModule} from '@angular/material/autocomplete'
 
 export const MAT_MODULES = [
   MatButtonModule,
@@ -24,6 +25,7 @@ export const MAT_MODULES = [
   MatRadioModule,
   MatSidenavModule,
   MatSelectModule,
+  MatAutocompleteModule,
 ]
 
 @NgModule({

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IApiResponse } from '../../interfaces/api.response';
 import {
   IAddFoodRes,
-  IFoodCategoryRes,
+  IFoodCategory,
+  ISearchedFood,
 } from '../../interfaces/responses/foods/foods.res';
 import { FoodsApi } from '../api/foods.api';
 
@@ -12,8 +14,12 @@ import { FoodsApi } from '../api/foods.api';
 export class FoodsService {
   constructor(private api: FoodsApi) {}
 
-  listCategories(): Observable<IFoodCategoryRes> {
+  listCategories(): Observable<IApiResponse<IFoodCategory[]>> {
     return this.api.listCategories();
+  }
+
+  listSearchedFood(searchedFood:string): Observable<IApiResponse<ISearchedFood[]>> {
+    return this.api.listSearchedFood(searchedFood);
   }
 
   add(data: any): Observable<IAddFoodRes> {

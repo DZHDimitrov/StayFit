@@ -19,7 +19,7 @@ import { KnowledgeModule } from './knowledge/knowledge.module';
     CommonModule,
     PagesRoutingModule,
     ComponentsModule,
-    MaterialModule,
+    // MaterialModule,
     // EffectsModule.forFeature([PagesEffects,ComponentsEffects]),
   ],
 })

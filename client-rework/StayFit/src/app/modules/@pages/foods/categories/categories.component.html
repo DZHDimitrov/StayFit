@@ -1,1 +1,23 @@
-<p>categories works!</p>
+<div class="foods-categories-container">
+    <section class="description">
+        <h2 class="mat-display-2">Хранителен състав на храни и продукти</h2>
+        <p>
+            Запознай се със състава на предпочитаните от теб храни и направи
+            информиран избор, когато пазаруваш.
+        </p>
+        <div class="search-bar-container">
+            <mat-form-field appearance="fill">
+                <input matInput [matAutocomplete]="auto" type="search" (keyup)="search($event.target)" placeholder="Търси продукт">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of searchedFood$ | async" [value]="option.id">{{option.searchName}}</mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <button  class="search-button" color="primary" mat-flat-button>
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </section>
+    <section class="content">
+        <app-reading-block [routerLink]="[category.searchName]" (click)="navigate(category)" *ngFor="let category of this.foodCategories$ | async" [title]="category.name" [imageUrl]="category.imageUrl" [width]="200" [height]="228"></app-reading-block>
+    </section>
+</div>

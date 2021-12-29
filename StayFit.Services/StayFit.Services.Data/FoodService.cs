@@ -28,30 +28,24 @@ namespace StayFit.Services.StayFit.Services.Data
             this.mapper = mapper;
         }
 
-        public async Task<LoadFoodCategoriesResponse> LoadFoodCategories()
+        public async Task<IEnumerable<FoodCategoryModel>> LoadFoodCategories()
         {
             var categories = await this.dbContext
                 .FoodCategories
                 .ProjectTo<FoodCategoryModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return new LoadFoodCategoriesResponse
-            {
-                FoodCategories = categories,
-            };
+            return categories;
         }
 
-        public async Task<LoadCategoryFoodsResponse> LoadFoodByCategory(int id)
+        public async Task<IEnumerable<CategoryFoodModel>> LoadFoodByCategory(int id)
         {
             var foods = await this.dbContext.Foods
                 .Where(x => x.FoodCategoryId == id)
                 .ProjectTo<CategoryFoodModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return new LoadCategoryFoodsResponse
-            {
-                CategoryFoods = foods,
-            };
+            return foods;
         }
 
         public async Task<LoadFoodResponse> GetSingleFood(int categoryId, int foodId)
@@ -123,7 +117,7 @@ namespace StayFit.Services.StayFit.Services.Data
             foreach (var fnb in model.FoodNutrientModels)
             {
                 BaseNutrient baseNutrient = await this.dbContext.BaseNutrients
-                    .FirstOrDefaultAsync(x =>  x.Name.Split().Length > 1 ? EnumValueFinder.GetDisplayValue(fnb.BaseNutrientName) == x.Name : x.Name == fnb.BaseNutrientName);
+                    .FirstOrDefaultAsync(x => x.Name.Split().Length > 1 ? EnumValueFinder.GetDisplayValue(fnb.BaseNutrientName) == x.Name : x.Name == fnb.BaseNutrientName);
                 ICollection<FoodSubNutrient> subNutrients = new List<FoodSubNutrient>();
                 foreach (var sn in fnb.SubNutrients)
                 {
@@ -157,6 +151,23 @@ namespace StayFit.Services.StayFit.Services.Data
                 Id = food.Id,
                 FoodName = food.FoodName.Name,
             };
+        }
+
+        public async Task<IEnumerable<object>> LoadSearchedFood(string searchedFood)
+        {
+            searchedFood = searchedFood.ToLower();
+
+            return await this.dbContext.Foods
+                .Where(food => food.FoodName.Name.ToLower().Contains(searchedFood) || searchedFood.Contains(food.FoodName.Name.ToLower()))
+                .Select(food => new
+                {
+                    Id = food.Id,
+                    foodNameId = food.FoodNameId,
+                    Name = food.FoodName.Name,
+                    Description = food.Description,
+                    Category = food.FoodCategory.Category
+                })
+                .ToListAsync();
         }
 
         //public IEnumerable<SingleFoodTypeModel> GetFoodTypesByCategory(int categoryId)

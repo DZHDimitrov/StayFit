@@ -9,7 +9,7 @@ import { ICategoryReadingPreviews } from '../../@core/interfaces/readings/readin
 import {
   loadCategoriesLatestPreviews,
 } from './store/knowledge.actions';
-import { getCatalogue, getLatestPreviews } from './store/knowledge.selector';
+import { getLatestPreviews } from './store/knowledge.selector';
 
 @Component({
   selector: 'app-knowledge',

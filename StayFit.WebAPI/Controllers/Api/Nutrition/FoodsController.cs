@@ -8,8 +8,11 @@
     using StayFit.Services.StayFit.Services.Data.Interfaces;
 
     using StayFit.Shared;
+    using StayFit.Shared.Nutritions;
+    using StayFit.Shared.Nutritions.Food;
     using StayFit.Shared.Nutritions.Food.PostModels;
     using StayFit.Shared.Nutritions.Food.Responses;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     [Route("api/[controller]")]
@@ -25,10 +28,19 @@
         }
 
         [HttpGet]
+        [Route("categories")]
         [AllowAnonymous]
-        public async Task<ApiResponse<LoadFoodCategoriesResponse>> LoadCategories()
+        public async Task<ApiResponse<IEnumerable<FoodCategoryModel>>> LoadCategories()
         {
             var response =  await this.foodService.LoadFoodCategories();
+            return response.ToApiResponse();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ApiResponse<IEnumerable<object>>> LoadSearchedFoods([FromQuery] string food)
+        {
+            var response = await this.foodService.LoadSearchedFood(food);
             return response.ToApiResponse();
         }
 
@@ -49,7 +61,7 @@
         [HttpGet]
         [AllowAnonymous]
         [Route("{categoryId}")]
-        public async Task<ApiResponse<LoadCategoryFoodsResponse>> LoadFoodByCategoryId(int categoryId)
+        public async Task<ApiResponse<IEnumerable<CategoryFoodModel>>> LoadFoodByCategoryId(int categoryId)
         {
             var response =  await this.foodService.LoadFoodByCategory(categoryId);
             return response.ToApiResponse();
