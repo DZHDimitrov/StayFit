@@ -10,6 +10,7 @@ export class ReadingBlockComponent implements OnInit {
   @Input() title: string = '';
   @Input() width: number = 250;
   @Input() height: number = 215;
+  @Input() description: string = '';
 
   constructor() {}
 

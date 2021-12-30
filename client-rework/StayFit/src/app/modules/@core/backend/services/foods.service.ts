@@ -18,8 +18,18 @@ export class FoodsService {
     return this.api.listCategories();
   }
 
-  listSearchedFood(searchedFood:string): Observable<IApiResponse<ISearchedFood[]>> {
+  listSearchedFood(
+    searchedFood: string
+  ): Observable<IApiResponse<ISearchedFood[]>> {
     return this.api.listSearchedFood(searchedFood);
+  }
+
+  listFoodByCategory(category: string): Observable<any> {
+    return this.api.listFoodByCategory(category);
+  }
+
+  loadFoodById(id: number): Observable<any> {
+    return this.api.loadFoodById(id);
   }
 
   add(data: any): Observable<IAddFoodRes> {

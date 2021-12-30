@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
 import { FoodsService } from 'src/app/modules/@core/backend/services/foods.service';
-import { transliterate } from 'src/app/modules/@core/utility/text-transilerator';
+import { cyrillicToLatin } from 'src/app/modules/@core/utility/text-transilerator';
 import {
+  loadFoodById,
+  loadFoodByIdSuccess,
+  loadFoodsByCategory,
+  loadFoodsByCategoryIdSuccess,
   loadFoodsCategories,
   loadFoodsCategoriesSuccess,
   loadSearchedFood,
@@ -27,7 +31,7 @@ export class FoodsEffects {
                   searchName: category.name
                     .split(' ')
                     .map((word) => {
-                      return transliterate(word.toLowerCase());
+                      return cyrillicToLatin(word.toLowerCase());
                     })
                     .join('-'),
                 };
@@ -60,6 +64,48 @@ export class FoodsEffects {
                 };
               }),
             });
+          })
+        );
+      })
+    );
+  });
+
+  loadFoodByCategoryId$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadFoodsByCategory),
+      switchMap((action) => {
+        return this.service.listFoodByCategory(action.category).pipe(
+          map((res) => {
+            return loadFoodsByCategoryIdSuccess({ foods: res.data });
+          })
+        );
+      })
+    );
+  });
+
+  loadFoodById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadFoodById),
+      switchMap((action) => {
+        return this.service.loadFoodById(action.id).pipe(
+          map((res) => {
+            const food = {
+              ...res.data,
+              coreNutrients: res.data.nutrientModels
+                .filter(
+                  (model) =>
+                    model.baseNutrientName == 'Въглехидрати' ||
+                    model.baseNutrientName == 'Мазнини' ||
+                    model.baseNutrientName == 'Протеин'
+                )
+                .map((model) => {
+                  return {
+                    name: model.baseNutrientName,
+                    quantity: model.quantity,
+                  };
+                }),
+            };
+            return loadFoodByIdSuccess({ food });
           })
         );
       })

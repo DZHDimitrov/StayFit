@@ -1,0 +1,12 @@
+div {
+  display:flex;
+  justify-content: space-between;
+  flex-flow: row;
+  mat-form-field {
+    width: 90.5%;
+  }
+  button {
+    height: 3.3rem;
+  }
+}
+

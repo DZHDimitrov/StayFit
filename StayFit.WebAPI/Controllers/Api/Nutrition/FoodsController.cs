@@ -60,17 +60,17 @@
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("{categoryId}")]
-        public async Task<ApiResponse<IEnumerable<CategoryFoodModel>>> LoadFoodByCategoryId(int categoryId)
+        [Route("{categoryName}")]
+        public async Task<ApiResponse<IEnumerable<CategoryFoodModel>>> LoadFoodByCategoryId(string categoryName)
         {
-            var response =  await this.foodService.LoadFoodByCategory(categoryId);
+            var response =  await this.foodService.LoadFoodByCategory(categoryName);
             return response.ToApiResponse();
         }
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("{categoryId}/{foodId}")]
-        public async Task<ApiResponse<LoadFoodResponse>> LoadFood(int categoryId, int foodId)
+        [Route("id/{foodId}")]
+        public async Task<ApiResponse<FoodModel>> LoadFood(int categoryId, int foodId)
         {
             var response = await this.foodService.GetSingleFood(categoryId, foodId);
             return response.ToApiResponse();

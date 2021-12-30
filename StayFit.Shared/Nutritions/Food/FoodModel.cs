@@ -11,6 +11,8 @@
 
         public double Calories { get; set; }
 
+        public string Description { get; set; }
+
         public IEnumerable<NutrientModel> NutrientModels { get; set; }
     }
 }

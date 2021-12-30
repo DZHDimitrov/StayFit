@@ -1,5 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
 import {
+  loadFoodById,
+  loadFoodByIdSuccess,
+  loadFoodsByCategoryIdSuccess,
   loadFoodsCategoriesSuccess,
   loadSearchedFoodSuccess,
 } from './foods.actions';
@@ -17,6 +20,18 @@ export const _foodsReducer = createReducer(
     return {
       ...state,
       searchedFood: action.foods,
+    };
+  }),
+  on(loadFoodsByCategoryIdSuccess, (state, action) => {
+    return {
+      ...state,
+      foodsByCategory: action.foods,
+    };
+  }),
+  on(loadFoodByIdSuccess, (state, action) => {
+    return {
+      ...state,
+      foodDetails: action.food,
     };
   })
 );

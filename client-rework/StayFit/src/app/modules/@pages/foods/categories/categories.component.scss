@@ -21,18 +21,6 @@
             font-size: 20px;
             line-height: 1.5;
         }
-
-        .search-bar-container {
-            width: 100%;
-            display:flex;
-            justify-content: center;
-            mat-form-field {
-                width: 100%;
-            }
-            button {
-                height: 3.3rem;
-            }
-        }
     }
 
     .content {

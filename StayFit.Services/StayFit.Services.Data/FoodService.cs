@@ -38,17 +38,19 @@ namespace StayFit.Services.StayFit.Services.Data
             return categories;
         }
 
-        public async Task<IEnumerable<CategoryFoodModel>> LoadFoodByCategory(int id)
+        public async Task<IEnumerable<CategoryFoodModel>> LoadFoodByCategory(string categoryName)
         {
+            categoryName = categoryName.Substring(0, 1).ToUpper() + categoryName.Substring(1);
+
             var foods = await this.dbContext.Foods
-                .Where(x => x.FoodCategoryId == id)
+                .Where(x => x.FoodCategory.Category == categoryName)
                 .ProjectTo<CategoryFoodModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return foods;
         }
 
-        public async Task<LoadFoodResponse> GetSingleFood(int categoryId, int foodId)
+        public async Task<FoodModel> GetSingleFood(int categoryId, int foodId)
         {
             var food = await this.dbContext.Foods
                 .Where(food => food.Id == foodId)
@@ -57,6 +59,7 @@ namespace StayFit.Services.StayFit.Services.Data
                     Id = food.Id,
                     Name = food.FoodName.Name,
                     Calories = food.Calories,
+                    Description = food.Description,
                     NutrientModels = food.FoodBaseNutrients
                     .Select(nutrient => new NutrientModel
                     {
@@ -73,10 +76,7 @@ namespace StayFit.Services.StayFit.Services.Data
                 })
                 .FirstOrDefaultAsync();
 
-            return new LoadFoodResponse
-            {
-                Food = food
-            };
+            return food;
         }
 
         public async Task<LoadNutrientsResponse> LoadNutrients()

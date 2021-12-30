@@ -7,13 +7,15 @@ import { ComponentsModule } from '../../@components/components.module';
 import { EffectsModule } from '@ngrx/effects';
 import { FoodsEffects } from './store/foods.effects';
 import { CatalogueComponent } from './catalogue/catalogue.component';
+import { FoodDetailsComponent } from './food-details/food-details.component';
 
 
 
 @NgModule({
   declarations: [
     CategoriesComponent,
-    CatalogueComponent
+    CatalogueComponent,
+    FoodDetailsComponent
   ],
   imports: [
     CommonModule,

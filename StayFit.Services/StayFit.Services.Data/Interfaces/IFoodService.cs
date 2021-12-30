@@ -13,9 +13,9 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<IEnumerable<object>> LoadSearchedFood(string searchedFood);
 
-        public Task<IEnumerable<CategoryFoodModel>> LoadFoodByCategory(int id);
+        public Task<IEnumerable<CategoryFoodModel>> LoadFoodByCategory(string categoryName);
 
-        public Task<LoadFoodResponse> GetSingleFood(int foodCategory, int foodId);
+        public Task<FoodModel> GetSingleFood(int foodCategory, int foodId);
 
         public Task<AddFoodResponse> CreateNewFood(CreateFoodModel model);
 

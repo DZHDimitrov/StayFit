@@ -1,1 +1,6 @@
-<p>catalogue works!</p>
+<div class="foods-container">
+    <app-foods-intro></app-foods-intro>
+    <section class="content">
+        <app-reading-block [description]="food.description" [title]=" food.name" [width]="180" [height]="253" *ngFor="let food of foods$ | async" >{{food.name}}</app-reading-block>
+    </section>
+</div>

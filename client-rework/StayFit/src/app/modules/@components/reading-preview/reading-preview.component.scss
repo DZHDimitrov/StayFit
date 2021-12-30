@@ -6,9 +6,15 @@
     height: 150px;
   }
 
-  article {
-    padding: 0 0.5rem;
-    float: left;
+  div {
+    h2 {
+      text-align: center;
+    }
+    p {
+      text-align: center;
+      font-size: 17px;
+      color: #9C9DA6;
+    }
   }
   .mat-subheading-2 {
     font-weight: 500;

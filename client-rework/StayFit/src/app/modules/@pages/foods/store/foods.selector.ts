@@ -12,3 +12,11 @@ export const getFoodsCategories = createSelector(getFoodsState, (state) => {
 export const getSearchedFoods = createSelector(getFoodsState, (state) => {
   return state.searchedFood;
 });
+
+export const getFoodsByCategory = createSelector(getFoodsState, (state) => {
+  return state.foodsByCategory;
+});
+
+export const getFoodDetails = createSelector(getFoodsState, (state) => {
+  return state.foodDetails;
+});

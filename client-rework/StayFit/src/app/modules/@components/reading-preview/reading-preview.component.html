@@ -4,8 +4,16 @@
     [ngStyle]="{ width: this.width + 'px', height: this.height + 'px' }"
   >
     <img src="{{ imageUrl }}" alt="" />
-    <article class="mat-subheading-2">
-      {{ title }}
-    </article>
+    <mat-card-content>
+      <div>
+        <h2 class="mat-subheading-2">
+          {{ title }}
+        </h2>
+        <p class="mat-body-1">
+          {{description}}
+        </p>
+      </div>
+    </mat-card-content>
+
   </mat-card>
 </div>

@@ -10,3 +10,10 @@ export const getComponentsSelector = createFeatureSelector<IComponentState>(
 export const getInnerNav = createSelector(getComponentsSelector, (state) => {
   return state.innerNavBar;
 });
+
+export const getFoodsIntroTitle = createSelector(
+  getComponentsSelector,
+  (state) => {
+    return state.foodsIntro.title;
+  }
+);

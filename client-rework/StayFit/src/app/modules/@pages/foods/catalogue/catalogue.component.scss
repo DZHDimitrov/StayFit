@@ -1,0 +1,14 @@
+.foods-container {
+    width: 65%;
+    margin: 0 auto;
+    display:flex;
+    flex-flow: column wrap;
+
+    .content {
+        display: flex;
+        flex-flow: row wrap;
+        app-reading-block {
+            margin: 1.2rem;
+        }
+    }
+}

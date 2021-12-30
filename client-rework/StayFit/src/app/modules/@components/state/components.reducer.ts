@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { setInnerNav } from './components.actions';
+import { setFoodsIntroTitle, setInnerNav } from './components.actions';
 import { initialState } from './components.state';
 
 const _componentsReducer = createReducer(
@@ -17,6 +17,15 @@ const _componentsReducer = createReducer(
       // action.hasChildren !== undefined && action.hasChildren === false
       //   ? state.innerNavBar
       //   : action.navBar,
+    };
+  }),
+  on(setFoodsIntroTitle, (state, action) => {
+    return {
+      ...state,
+      foodsIntro: {
+        ...state.foodsIntro,
+        title: action.title,
+      },
     };
   })
 );
