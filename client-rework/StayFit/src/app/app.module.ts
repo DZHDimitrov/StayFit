@@ -24,6 +24,7 @@ import { MaterialModule } from './modules/material/material.module';
 import { HomeComponent } from './home/home.component';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { CustomSerializer } from './state/router/custome-serializer';
+import { ComponentsModule } from './modules/@components/components.module';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -39,6 +40,7 @@ import { CustomSerializer } from './state/router/custome-serializer';
     NoopAnimationsModule,
     ThemeModule,
     SharedModule,
+    ComponentsModule,
     StoreModule.forRoot(appReducer),
     EffectsModule.forRoot([AuthEffects, ThemeEffects]),
     StoreDevtoolsModule.instrument({

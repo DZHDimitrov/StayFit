@@ -1,6 +1,6 @@
 import { IHaveId, IHaveName } from './readings.base.interface';
 
-export interface ICategoryReadingPreviews extends IHaveName {
+export interface ICategoryReadingPreview extends IHaveName {
   hasChildren: boolean;
   isRoot: boolean;
   categories: any[];

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { IFoodCategory } from 'src/app/modules/@core/interfaces/responses/foods/foods.res';
 import { IAppState } from 'src/app/state/app.state';
+import { IFoodCategoryData } from '../interfaces/food.interface';
 import {
   loadFoodsCategories,
 } from '../store/foods.actions';
@@ -19,7 +19,7 @@ export class CategoriesComponent implements OnInit {
     private store: Store<IAppState>,
   ) {}
 
-  foodCategories$!: Observable<IFoodCategory[]>;
+  foodCategories$!: Observable<IFoodCategoryData[]>;
 
   ngOnInit(): void {
     this.store.dispatch(loadFoodsCategories());

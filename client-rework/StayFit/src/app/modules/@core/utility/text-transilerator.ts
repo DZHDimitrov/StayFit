@@ -41,8 +41,7 @@ export const cyrillicToLatin = function (text) {
 };
 
 export const latinToCyrillic = (text: string) => {
-  text = text
-    .toLowerCase()
+  text = text.toLowerCase()
     .replace(/yo/g, 'йо')
     .replace(/zh/g, 'ж')
     .replace(/ts/g, 'ц')

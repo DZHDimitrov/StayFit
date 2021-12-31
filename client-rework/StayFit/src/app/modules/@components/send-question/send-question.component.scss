@@ -1,0 +1,11 @@
+.home-end {
+  margin-top: 3rem;
+  & > * {
+    justify-content: center;
+  }
+}
+.service-button {
+  margin: 0 auto;
+  padding: 1rem 2.5rem;
+  color: white;
+}

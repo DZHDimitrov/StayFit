@@ -13,6 +13,8 @@
 
         public string Description { get; set; }
 
-        public IEnumerable<NutrientModel> NutrientModels { get; set; }
+        public string ImageUrl { get; set; }
+
+        public IEnumerable<NutrientModel> Nutrients { get; set; }
     }
 }

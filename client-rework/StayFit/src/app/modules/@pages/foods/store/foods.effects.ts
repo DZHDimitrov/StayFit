@@ -3,15 +3,16 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
 import { FoodsService } from 'src/app/modules/@core/backend/services/foods.service';
 import { cyrillicToLatin } from 'src/app/modules/@core/utility/text-transilerator';
+import { IFoodData } from '../interfaces/food.interface';
 import {
   loadFoodById,
   loadFoodByIdSuccess,
   loadFoodsByCategory,
-  loadFoodsByCategoryIdSuccess,
+  loadFoodsByCategorySuccess,
   loadFoodsCategories,
   loadFoodsCategoriesSuccess,
-  loadSearchedFood,
-  loadSearchedFoodSuccess,
+  loadAutocompleteSearchedFood,
+  loadAutocompleteSearchedFoodSuccess,
 } from './foods.actions';
 
 @Injectable()
@@ -45,21 +46,22 @@ export class FoodsEffects {
 
   loadSearchedFood$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadSearchedFood),
+      ofType(loadAutocompleteSearchedFood),
       switchMap((action) => {
         return this.service.listSearchedFood(action.searchedFood).pipe(
           map((res) => {
-            return loadSearchedFoodSuccess({
+            return loadAutocompleteSearchedFoodSuccess({
               foods: res.data?.map((food) => {
                 return {
                   id: food.id,
+                  name: food.name,
                   foodNameId: food.foodNameId,
                   searchName: [
-                    food.category.split(' ')[0].toLowerCase(),
+                    food.category?.split(' ')[0].toLowerCase(),
                     '-',
                     food.name.toLocaleLowerCase(),
                     '-',
-                    food.description.toLowerCase(),
+                    food.description?.toLowerCase(),
                   ].join(' '),
                 };
               }),
@@ -74,9 +76,9 @@ export class FoodsEffects {
     return this.actions$.pipe(
       ofType(loadFoodsByCategory),
       switchMap((action) => {
-        return this.service.listFoodByCategory(action.category).pipe(
+        return this.service.listFoodsByCategory(action.category).pipe(
           map((res) => {
-            return loadFoodsByCategoryIdSuccess({ foods: res.data });
+            return loadFoodsByCategorySuccess({ foods: res.data });
           })
         );
       })
@@ -89,19 +91,32 @@ export class FoodsEffects {
       switchMap((action) => {
         return this.service.loadFoodById(action.id).pipe(
           map((res) => {
-            const food = {
+            const food:IFoodData = {
               ...res.data,
-              coreNutrients: res.data.nutrientModels
+              coreNutrients: res.data.nutrients
                 .filter(
-                  (model) =>
-                    model.baseNutrientName == 'Въглехидрати' ||
-                    model.baseNutrientName == 'Мазнини' ||
-                    model.baseNutrientName == 'Протеин'
+                  (nutrient) =>
+                    nutrient.name == 'Въглехидрати' ||
+                    nutrient.name == 'Мазнини' ||
+                    nutrient.name == 'Протеин'
                 )
-                .map((model) => {
+                .map((nutrient) => {
                   return {
-                    name: model.baseNutrientName,
-                    quantity: model.quantity,
+                    name: nutrient.name,
+                    quantity: nutrient.quantity?.toFixed(2) ?? '0.00',
+                  };
+                }),
+              nutrients: res.data.nutrients
+                .filter((nutrient) => nutrient.name !== 'Протеин')
+                .map((nutrient) => {
+                  return {
+                    ...nutrient,
+                    subNutrients: nutrient.subNutrients.map((subNutrient) => {
+                      return {
+                        ...subNutrient,
+                        quantity: subNutrient.quantity ?? 'Няма данни',
+                      };
+                    }),
                   };
                 }),
             };

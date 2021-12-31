@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { share, shareReplay, takeUntil } from 'rxjs/operators';
+import { shareReplay, takeUntil } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { getRouterState } from 'src/app/state/router/router.selector';
 import { ReadingCategory } from '../../../@core/enums/reading.category';
-import { IReading } from '../../../@core/interfaces/readings/readings.interface';
+import { IReading } from '../../../@core/interfaces/responses/readings/readings.interface';
 import { loadReadingById } from '../store/knowledge.actions';
 import { getReadingById } from '../store/knowledge.selector';
 

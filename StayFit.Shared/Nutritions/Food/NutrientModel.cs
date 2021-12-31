@@ -4,7 +4,7 @@
 
     public class NutrientModel
     {
-        public string BaseNutrientName { get; set; }
+        public string Name { get; set; }
 
         public double? Quantity { get; set; }
 

@@ -60,10 +60,11 @@ namespace StayFit.Services.StayFit.Services.Data
                     Name = food.FoodName.Name,
                     Calories = food.Calories,
                     Description = food.Description,
-                    NutrientModels = food.FoodBaseNutrients
+                    ImageUrl = food.ImageUrl,
+                    Nutrients = food.FoodBaseNutrients
                     .Select(nutrient => new NutrientModel
                     {
-                        BaseNutrientName = nutrient.BaseNutrient.Name,
+                        Name = nutrient.BaseNutrient.Name,
                         Quantity = nutrient.Quantity,
                         SubNutrients = nutrient.Food.FoodSubNutrients
                         .Where(foodSn => foodSn.SubNutrient.BaseNutrient.Name == nutrient.BaseNutrient.Name)
@@ -84,7 +85,7 @@ namespace StayFit.Services.StayFit.Services.Data
             var nutrients = await this.dbContext.BaseNutrients
                 .Select(nutrient => new NutrientModel
                 {
-                    BaseNutrientName = nutrient.Name.ToString(),
+                    Name = nutrient.Name.ToString(),
                     SubNutrients = nutrient.SubNutrients
                         .Where(foodSn => foodSn.BaseNutrient.Name == nutrient.Name)
                         .Select(foodSn => new SubNutrientModel
@@ -117,13 +118,13 @@ namespace StayFit.Services.StayFit.Services.Data
             foreach (var fnb in model.FoodNutrientModels)
             {
                 BaseNutrient baseNutrient = await this.dbContext.BaseNutrients
-                    .FirstOrDefaultAsync(x => x.Name.Split().Length > 1 ? EnumValueFinder.GetDisplayValue(fnb.BaseNutrientName) == x.Name : x.Name == fnb.BaseNutrientName);
+                    .FirstOrDefaultAsync(x => x.Name.Split().Length > 1 ? EnumValueFinder.GetDisplayValue(fnb.Name) == x.Name : x.Name == fnb.Name);
                 ICollection<FoodSubNutrient> subNutrients = new List<FoodSubNutrient>();
                 foreach (var sn in fnb.SubNutrients)
                 {
                     SubNutrient subNutrient = await this.dbContext
                         .SubNutrients
-                        .Where(x => x.BaseNutrient.Name == fnb.BaseNutrientName)
+                        .Where(x => x.BaseNutrient.Name == fnb.Name)
                         .FirstOrDefaultAsync(x => x.Name == sn.Name);
                     FoodSubNutrient fsn = new FoodSubNutrient
                     {

@@ -3,7 +3,7 @@
         <input matInput [matAutocomplete]="auto" type="search" (keyup)="search($event.target)"
             placeholder="Търси продукт" />
         <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of searchedFood$ | async" [value]="option.id">{{ option.searchName }}
+            <mat-option *ngFor="let option of searchedFood$ | async" [value]="option.searchName">{{ option.searchName }}
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>

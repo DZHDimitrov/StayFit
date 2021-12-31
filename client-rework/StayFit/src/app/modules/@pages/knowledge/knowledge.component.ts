@@ -5,10 +5,8 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { getRouterState } from 'src/app/state/router/router.selector';
-import { ICategoryReadingPreviews } from '../../@core/interfaces/readings/readings.interface';
-import {
-  loadCategoriesLatestPreviews,
-} from './store/knowledge.actions';
+import { ICategoryReadingPreviewData } from './interfaces/reading.interface';
+import { loadCategoriesLatestPreviews } from './store/knowledge.actions';
 import { getLatestPreviews } from './store/knowledge.selector';
 
 @Component({
@@ -17,7 +15,7 @@ import { getLatestPreviews } from './store/knowledge.selector';
   styleUrls: ['./knowledge.component.scss'],
 })
 export class KnowledgeComponent implements OnInit, OnDestroy {
-  readingsByMainCategory$!: Observable<ICategoryReadingPreviews[]>;
+  readingsByMainCategory$!: Observable<ICategoryReadingPreviewData[]>;
   currentRoute!: string[];
   unsubscribe$: Subject<void> = new Subject();
 
@@ -41,7 +39,11 @@ export class KnowledgeComponent implements OnInit, OnDestroy {
       });
   }
 
-  navigate(preview: any) {
+  navigate(preview: any): void {
+    if (preview.name.includes('състав')) {
+      this.router.navigate(['/', 'pages', 'foods']);
+      return;
+    }
     if (preview.hasChildren) {
       this.router.navigate([
         '/',

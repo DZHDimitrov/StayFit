@@ -7,7 +7,7 @@ import { IAppState } from 'src/app/state/app.state';
 import {
   IMainCategory,
   ISubCategory,
-} from '../../@core/interfaces/readings/readings.interface';
+} from '../../@core/interfaces/responses/readings/readings.interface';
 import {
   addReading,
   loadReadingMainCategories,

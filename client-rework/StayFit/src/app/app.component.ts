@@ -5,7 +5,6 @@ import { GUEST_ITEMS } from './modules/@theme/misc/content/user-menu.content';
 import { GUEST_NAV_ITEMS } from './modules/@theme/misc/content/navigation.content';
 import { setNavMenu, setUserMenu } from './modules/@theme/state/theme.actions';
 import {
-  getErrorMessage,
   getLoading,
 } from './modules/shared/state/shared.selector';
 import { IAppState } from './state/app.state';

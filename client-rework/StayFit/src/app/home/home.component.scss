@@ -49,10 +49,7 @@
       }
     }
   }
-  .home-end {
-    margin-top: 3rem;
-    & > * {
-      justify-content: center;
-    }
+  app-send-question {
+    width: 100%;
   }
 }

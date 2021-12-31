@@ -7,13 +7,13 @@ import {
 import { IApiResponse } from '../../interfaces/api.response';
 import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 import {
-  ICategoryReadingPreviews,
+  ICategoryReadingPreview,
   ICreateReadingRes,
   IDeleteReading,
   IMainCategory,
   IReading,
   ISubCategory,
-} from '../../interfaces/readings/readings.interface';
+} from '../../interfaces/responses/readings/readings.interface';
 import { HttpService } from './http.service';
 
 @Injectable()
@@ -22,21 +22,21 @@ export class ReadingsApi {
   constructor(private api: HttpService) {}
 
   loadCategoriesLatestPreviews(): Observable<
-    IApiResponse<ICategoryReadingPreviews[]>
+    IApiResponse<ICategoryReadingPreview[]>
   > {
     return this.api.get(`${this.apiController}/latest`);
   }
 
   listByMainCategory(
     category: ReadingCategory
-  ): Observable<IApiResponse<ICategoryReadingPreviews>> {
+  ): Observable<IApiResponse<ICategoryReadingPreview>> {
     return this.api.get(`${this.apiController}/${category}`);
   }
 
   listBySubCategory(
     category: ReadingCategory,
     subcategory: string
-  ): Observable<IApiResponse<ICategoryReadingPreviews>> {
+  ): Observable<IApiResponse<ICategoryReadingPreview>> {
     return this.api.get(`${this.apiController}/${category}/${subcategory}`);
   }
 

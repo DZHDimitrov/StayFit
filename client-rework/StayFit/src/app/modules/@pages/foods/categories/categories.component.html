@@ -2,7 +2,7 @@
     <app-foods-intro></app-foods-intro>
     <section class="content">
         <app-reading-block [routerLink]="[category.searchName]"
-            *ngFor="let category of this.foodCategories$ | async" [title]="category.name" [imageUrl]="category.imageUrl"
+            *ngFor="let category of this.foodCategories$ | async" [title]="category.name" [imageUrl]="category.imageUrl!"
             [width]="200" [height]="228"></app-reading-block>
     </section>
 </div>

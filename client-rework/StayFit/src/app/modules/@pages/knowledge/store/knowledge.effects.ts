@@ -65,7 +65,6 @@ export class PagesEffects {
       mergeMap((action) => {
         return this.readingService.listByMainCategory(action.category).pipe(
           map((res) => {
-            console.log(res);
             res.data.previews = res.data.previews.map((p) => {
               if (p.name.includes('начинаещи')) {
                 return {

@@ -1,7 +1,8 @@
-import { ICategoryReadingPreviews, IReading } from '../../../@core/interfaces/readings/readings.interface';
+import { IReading } from '../../../@core/interfaces/responses/readings/readings.interface';
+import { ICategoryReadingPreviewData } from '../interfaces/reading.interface';
 
 export interface IKnowledgeState {
-  latestPreviews: ICategoryReadingPreviews[];
+  latestPreviews: ICategoryReadingPreviewData[];
   catalogue: {
     previews: any[];
   };

@@ -7,16 +7,30 @@ import { MaterialModule } from '../material/material.module';
 import { RouterModule } from '@angular/router';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { FoodsIntroComponent } from './foods-intro/foods-intro.component';
+import { SendQuestionComponent } from './send-question/send-question.component';
 
 @NgModule({
-  declarations: [InnerNavbarComponent, ReadingBlockComponent, SearchBarComponent,SearchBarComponent, FoodsIntroComponent,],
+  declarations: [
+    InnerNavbarComponent,
+    ReadingBlockComponent,
+    SearchBarComponent,
+    SearchBarComponent,
+    FoodsIntroComponent,
+    SendQuestionComponent,
+  ],
   imports: [
     CommonModule,
     MaterialModule,
     RouterModule,
     EffectsModule.forFeature(),
   ],
-  exports: [InnerNavbarComponent, ReadingBlockComponent,SearchBarComponent,FoodsIntroComponent],
+  exports: [
+    InnerNavbarComponent,
+    ReadingBlockComponent,
+    SearchBarComponent,
+    FoodsIntroComponent,
+    SendQuestionComponent,
+  ],
   providers: [],
 })
 export class ComponentsModule {}

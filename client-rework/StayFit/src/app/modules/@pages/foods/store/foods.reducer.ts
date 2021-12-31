@@ -1,10 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-  loadFoodById,
   loadFoodByIdSuccess,
-  loadFoodsByCategoryIdSuccess,
+  loadFoodsByCategorySuccess,
   loadFoodsCategoriesSuccess,
-  loadSearchedFoodSuccess,
+  loadAutocompleteSearchedFoodSuccess,
 } from './foods.actions';
 import { initialState } from './foods.state';
 
@@ -16,13 +15,13 @@ export const _foodsReducer = createReducer(
       foodsCategories: action.foodCategories,
     };
   }),
-  on(loadSearchedFoodSuccess, (state, action) => {
+  on(loadAutocompleteSearchedFoodSuccess, (state, action) => {
     return {
       ...state,
       searchedFood: action.foods,
     };
   }),
-  on(loadFoodsByCategoryIdSuccess, (state, action) => {
+  on(loadFoodsByCategorySuccess, (state, action) => {
     return {
       ...state,
       foodsByCategory: action.foods,

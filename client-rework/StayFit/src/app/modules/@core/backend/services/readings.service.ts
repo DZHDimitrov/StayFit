@@ -8,13 +8,13 @@ import {
 import { IApiResponse } from '../../interfaces/api.response';
 import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 import {
-  ICategoryReadingPreviews,
+  ICategoryReadingPreview,
   ICreateReadingRes,
   IDeleteReading,
   IMainCategory,
   IReading,
   ISubCategory,
-} from '../../interfaces/readings/readings.interface';
+} from '../../interfaces/responses/readings/readings.interface';
 import { ReadingsApi } from '../api/readings.api';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class ReadingsService {
 
   listByMainCategory(
     category: ReadingCategory
-  ): Observable<IApiResponse<ICategoryReadingPreviews>> {
+  ): Observable<IApiResponse<ICategoryReadingPreview>> {
     return this.api
       .listByMainCategory(category)
       .pipe(filter((x) => x.data !== undefined));
@@ -34,12 +34,12 @@ export class ReadingsService {
   listBySubCategory(
     category: ReadingCategory,
     subcategory: string
-  ): Observable<IApiResponse<ICategoryReadingPreviews>> {
+  ): Observable<IApiResponse<ICategoryReadingPreview>> {
     return this.api.listBySubCategory(category, subcategory);
   }
 
   loadCategoriesLatestPreviews(): Observable<
-    IApiResponse<ICategoryReadingPreviews[]>
+    IApiResponse<ICategoryReadingPreview[]>
   > {
     return this.api.loadCategoriesLatestPreviews();
   }

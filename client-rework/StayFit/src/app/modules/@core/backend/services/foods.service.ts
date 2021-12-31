@@ -3,8 +3,9 @@ import { Observable } from 'rxjs';
 import { IApiResponse } from '../../interfaces/api.response';
 import {
   IAddFoodRes,
+  IFoodPreview,
   IFoodCategory,
-  ISearchedFood,
+  IFood,
 } from '../../interfaces/responses/foods/foods.res';
 import { FoodsApi } from '../api/foods.api';
 
@@ -20,15 +21,15 @@ export class FoodsService {
 
   listSearchedFood(
     searchedFood: string
-  ): Observable<IApiResponse<ISearchedFood[]>> {
+  ): Observable<IApiResponse<IFoodPreview[]>> {
     return this.api.listSearchedFood(searchedFood);
   }
 
-  listFoodByCategory(category: string): Observable<any> {
-    return this.api.listFoodByCategory(category);
+  listFoodsByCategory(category: string): Observable<IApiResponse<IFoodPreview[]>> {
+    return this.api.listFoodsByCategory(category);
   }
 
-  loadFoodById(id: number): Observable<any> {
+  loadFoodById(id: number): Observable<IApiResponse<IFood>> {
     return this.api.loadFoodById(id);
   }
 

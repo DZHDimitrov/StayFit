@@ -3,7 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
-import { loadSearchedFood } from '../../@pages/foods/store/foods.actions';
+import { IFoodPreviewData } from '../../@pages/foods/interfaces/food.interface';
+import { loadAutocompleteSearchedFood } from '../../@pages/foods/store/foods.actions';
 import { getSearchedFoods } from '../../@pages/foods/store/foods.selector';
 
 @Component({
@@ -14,14 +15,12 @@ import { getSearchedFoods } from '../../@pages/foods/store/foods.selector';
 export class SearchBarComponent implements OnInit {
   constructor(private store: Store<IAppState>) {}
 
-  searchedFood$!: Observable<
-    { id: number; foodNameId: number; searchName: string }[]
-  >;
+  searchedFood$!: Observable<IFoodPreviewData[]>;
 
   search$: Subject<string> = new Subject();
 
   search(ev: any): void {
-    this.store.dispatch(loadSearchedFood({ searchedFood: '' }));
+    this.store.dispatch(loadAutocompleteSearchedFood({ searchedFood: '' }));
     this.search$.next(ev.value);
   }
 
@@ -30,7 +29,7 @@ export class SearchBarComponent implements OnInit {
       debounceTime(1200),
       switchMap((searchedFood) => {
         if (searchedFood) {
-          this.store.dispatch(loadSearchedFood({ searchedFood }));
+          this.store.dispatch(loadAutocompleteSearchedFood({ searchedFood }));
           return this.store.select(getSearchedFoods);
         }
         return of([]);

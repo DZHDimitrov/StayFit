@@ -1,10 +1,14 @@
-import { IFoodCategory } from 'src/app/modules/@core/interfaces/responses/foods/foods.res';
+import {
+  IFoodCategoryData,
+  IFoodData,
+  IFoodPreviewData,
+} from '../interfaces/food.interface';
 
 export interface IFoodsState {
-  foodsCategories: IFoodCategory[];
-  searchedFood: any[];
-  foodsByCategory: any[];
-  foodDetails: any;
+  foodsCategories: IFoodCategoryData[];
+  searchedFood: IFoodPreviewData[];
+  foodsByCategory: IFoodPreviewData[];
+  foodDetails: IFoodData | {};
 }
 
 export const initialState: IFoodsState = {

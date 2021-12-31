@@ -16,15 +16,13 @@ export class InnerNavbarComponent implements OnInit, OnDestroy {
   navBar$!: Observable<{ title: string; navItems: any[] }>;
   unsubscribe$: Subject<void> = new Subject();
   subCategory: string | undefined;
+
   constructor(
     private store: Store<IAuthState>,
     private router: Router,
     private route: ActivatedRoute
   ) {}
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
+
   ngOnInit(): void {
     this.navBar$ = this.store.select(getInnerNav);
     this.store
@@ -36,6 +34,10 @@ export class InnerNavbarComponent implements OnInit, OnDestroy {
   }
 
   loadGroup(reading: any): void {
+    if (reading.name.includes('състав')) {
+      this.router.navigate(['/', 'pages', 'foods']);
+      return;
+    }
     if (this.subCategory) {
       this.router.navigate(['../', reading.searchName], {
         relativeTo: this.route,
@@ -43,5 +45,10 @@ export class InnerNavbarComponent implements OnInit, OnDestroy {
       return;
     }
     this.router.navigate([reading.searchName], { relativeTo: this.route });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
