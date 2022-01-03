@@ -23,6 +23,11 @@
         }
     }
 
+    .error-message {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
     .content {
         display:flex;
         flex-flow: row wrap;

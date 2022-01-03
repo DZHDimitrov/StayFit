@@ -9,18 +9,21 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 {
     public interface IFoodService
     {
-        public Task<IEnumerable<FoodCategoryModel>> LoadFoodCategories();
+        public Task<IEnumerable<FoodCategoryPreviewModel>> LoadFoodCategories();
 
-        public Task<IEnumerable<object>> LoadSearchedFood(string searchedFood);
+        public Task<IEnumerable<FoodPreviewModel>> LoadFoodByCategory(string categoryName);
 
-        public Task<IEnumerable<CategoryFoodModel>> LoadFoodByCategory(string categoryName);
+        public Task<IEnumerable<FoodKeywordModel>> LoadFoodKeywords(string searchedFood);
 
-        public Task<FoodModel> GetSingleFood(int foodCategory, int foodId);
+        public Task<IEnumerable<FoodPreviewModel>> Search(string text);
+
+        public Task<FoodModel> LoadFoodById(int foodId);
 
         public Task<AddFoodResponse> CreateNewFood(CreateFoodModel model);
 
+        public Task<IEnumerable<NutrientModel>> LoadNutrients();
+
         //public IEnumerable<SingleFoodTypeModel> GetFoodTypesByCategory(int categoryId);
 
-        public Task<LoadNutrientsResponse> LoadNutrients();
     }
 }

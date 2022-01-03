@@ -30,6 +30,7 @@ export class CatalogueComponent implements OnInit, OnDestroy {
         const category = latinToCyrillic(
           route.state.params['category']
         ).replace(/-/g, ' ');
+        console.log(category);
         this.store.dispatch(loadFoodsByCategory({ category }));
         this.store.dispatch(setFoodsIntroTitle({ title: category }));
         return this.store.select(getFoodsByCategory);

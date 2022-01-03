@@ -9,10 +9,10 @@ export const LOAD_CATEGORIES_ACTION = '[foods] load categories action';
 export const LOAD_CATEGORIES_SUCCESS = '[foods] load categories success';
 export const LOAD_CATEGORIES_FAILURE = '[foods] load categories failure';
 
-export const LOAD_AUTOCOMPLETE_SEARCHED_FOOD_ACTION =
-  '[foods] load autocomplete searched food action';
-export const LOAD_AUTOCOMPLETE_SEARCHED_FOOD_SUCCESS =
-  '[foods] load autocomplete searched food success';
+export const LOAD_AUTOCOMPLETE_KEYWORDS_ACTION =
+  '[foods] load autocomplete keywords action';
+export const LOAD_AUTOCOMPLETE_KEYWORDS_SUCCESS =
+  '[foods] load autocomplete keywords success';
 
 export const LOAD_SEARCHED_FOOD_ACTION = '[foods] load searched food action';
 export const LOAD_SEARCHED_FOOD_SUCCESS = '[foods] load searched food success';
@@ -30,19 +30,25 @@ export const loadFoodsCategoriesSuccess = createAction(
   props<{ foodCategories: IFoodCategoryData[] }>()
 );
 
-export const loadAutocompleteSearchedFood = createAction(
-  LOAD_AUTOCOMPLETE_SEARCHED_FOOD_ACTION,
+export const loadAutocompleteKeywords = createAction(
+  LOAD_AUTOCOMPLETE_KEYWORDS_ACTION,
   props<{ searchedFood: string }>()
 );
 
-export const loadAutocompleteSearchedFoodSuccess = createAction(
-  LOAD_AUTOCOMPLETE_SEARCHED_FOOD_SUCCESS,
+export const loadAutocompleteKeywordsSuccess = createAction(
+  LOAD_AUTOCOMPLETE_KEYWORDS_SUCCESS,
   props<{ foods: IFoodPreviewData[] }>()
 );
 
-// export const loadSearchedFood = createAction(
+export const loadSearchedFood = createAction(
+  LOAD_SEARCHED_FOOD_ACTION,
+  props<{ text: string }>()
+);
 
-// )
+export const loadSearchedFoodSuccess = createAction(
+  LOAD_SEARCHED_FOOD_SUCCESS,
+  props<{foods:any}>()
+)
 
 export const loadFoodsByCategory = createAction(
   LOAD_FOODS_BY_CATEGORY,

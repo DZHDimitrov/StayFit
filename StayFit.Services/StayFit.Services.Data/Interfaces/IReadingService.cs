@@ -26,9 +26,9 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<ReadingCategoryPreviewsModel> LoadPreviewsByMainCategory(string mainCategory);
 
-        public Task<ReadingCategoryPreviewsModel> LoadReadingsBySubCategory(string mainCategory,string subCategory);
+        public Task<ReadingCategoryPreviewsModel> LoadPreviewsBySubCategory(string mainCategory,string subCategory);
 
-        public Task<ReadingModel> LoadReadingBySearchNameInMainCategory(string category, string searchName);
+        public Task<ReadingModel> LoadReadingByMainCategory(string category, string searchName);
 
         public Task<ReadingModel> LoadReadingByIdInSubGroup(string mainCategory,string subCategory,int readingId);
 

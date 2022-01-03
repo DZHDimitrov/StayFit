@@ -15,11 +15,3 @@ export interface IReadingData extends IReading {}
 export interface IMainCategoryData extends IMainCategory {}
 
 export interface ISubCategoryData extends ISubCategory {}
-
-//   export interface ICreateReadingData extends IHaveId<number> {
-//     title: string;
-//   }
-
-//   export interface IDeleteReading extends IHaveId<number> {
-//     title: string;
-//   }

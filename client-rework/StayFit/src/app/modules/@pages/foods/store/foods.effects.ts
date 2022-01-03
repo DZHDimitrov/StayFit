@@ -11,8 +11,10 @@ import {
   loadFoodsByCategorySuccess,
   loadFoodsCategories,
   loadFoodsCategoriesSuccess,
-  loadAutocompleteSearchedFood,
-  loadAutocompleteSearchedFoodSuccess,
+  loadAutocompleteKeywords,
+  loadAutocompleteKeywordsSuccess,
+  loadSearchedFood,
+  loadSearchedFoodSuccess,
 } from './foods.actions';
 
 @Injectable()
@@ -44,13 +46,13 @@ export class FoodsEffects {
     );
   });
 
-  loadSearchedFood$ = createEffect(() => {
+  loadAutocompleteKeywords$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadAutocompleteSearchedFood),
+      ofType(loadAutocompleteKeywords),
       switchMap((action) => {
-        return this.service.listSearchedFood(action.searchedFood).pipe(
+        return this.service.listAutocompleteKeywords(action.searchedFood).pipe(
           map((res) => {
-            return loadAutocompleteSearchedFoodSuccess({
+            return loadAutocompleteKeywordsSuccess({
               foods: res.data?.map((food) => {
                 return {
                   id: food.id,
@@ -91,7 +93,7 @@ export class FoodsEffects {
       switchMap((action) => {
         return this.service.loadFoodById(action.id).pipe(
           map((res) => {
-            const food:IFoodData = {
+            const food: IFoodData = {
               ...res.data,
               coreNutrients: res.data.nutrients
                 .filter(
@@ -121,6 +123,26 @@ export class FoodsEffects {
                 }),
             };
             return loadFoodByIdSuccess({ food });
+          })
+        );
+      })
+    );
+  });
+
+  loadSearchedFood$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadSearchedFood),
+      switchMap((action) => {
+        return this.service.search(action.text).pipe(
+          map((res) => {
+            return loadSearchedFoodSuccess({
+              foods: res.data.map((p) => {
+                return {
+                  ...p,
+                  name: p.category.split(' ')[0] + ' ' + p.name.toLowerCase(),
+                };
+              }),
+            });
           })
         );
       })

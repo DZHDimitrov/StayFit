@@ -19,10 +19,10 @@ export class FoodsService {
     return this.api.listCategories();
   }
 
-  listSearchedFood(
+  listAutocompleteKeywords(
     searchedFood: string
   ): Observable<IApiResponse<IFoodPreview[]>> {
-    return this.api.listSearchedFood(searchedFood);
+    return this.api.listAutocompleteKeywords(searchedFood);
   }
 
   listFoodsByCategory(category: string): Observable<IApiResponse<IFoodPreview[]>> {
@@ -31,6 +31,10 @@ export class FoodsService {
 
   loadFoodById(id: number): Observable<IApiResponse<IFood>> {
     return this.api.loadFoodById(id);
+  }
+
+  search(text:string):Observable<IApiResponse<any>> {
+    return this.api.search(text);
   }
 
   add(data: any): Observable<IAddFoodRes> {

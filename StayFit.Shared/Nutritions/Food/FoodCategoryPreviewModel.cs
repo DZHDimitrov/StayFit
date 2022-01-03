@@ -1,6 +1,6 @@
 ﻿namespace StayFit.Shared.Nutritions
 {
-    public class FoodCategoryModel
+    public class FoodCategoryPreviewModel
     {
         public int Id { get; set; }
 

@@ -28,29 +28,29 @@ namespace StayFit.Services.StayFit.Services.Data
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<FoodCategoryModel>> LoadFoodCategories()
+        public async Task<IEnumerable<FoodCategoryPreviewModel>> LoadFoodCategories()
         {
             var categories = await this.dbContext
                 .FoodCategories
-                .ProjectTo<FoodCategoryModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<FoodCategoryPreviewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return categories;
         }
 
-        public async Task<IEnumerable<CategoryFoodModel>> LoadFoodByCategory(string categoryName)
+        public async Task<IEnumerable<FoodPreviewModel>> LoadFoodByCategory(string categoryName)
         {
-            categoryName = categoryName.Substring(0, 1).ToUpper() + categoryName.Substring(1);
+            categoryName = categoryName.ToLower();
 
             var foods = await this.dbContext.Foods
-                .Where(x => x.FoodCategory.Category == categoryName)
-                .ProjectTo<CategoryFoodModel>(this.mapper.ConfigurationProvider)
+                .Where(x => x.FoodCategory.Category.ToLower() == categoryName)
+                .ProjectTo<FoodPreviewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return foods;
         }
 
-        public async Task<FoodModel> GetSingleFood(int categoryId, int foodId)
+        public async Task<FoodModel> LoadFoodById(int foodId)
         {
             var food = await this.dbContext.Foods
                 .Where(food => food.Id == foodId)
@@ -80,7 +80,7 @@ namespace StayFit.Services.StayFit.Services.Data
             return food;
         }
 
-        public async Task<LoadNutrientsResponse> LoadNutrients()
+        public async Task<IEnumerable<NutrientModel>> LoadNutrients()
         {
             var nutrients = await this.dbContext.BaseNutrients
                 .Select(nutrient => new NutrientModel
@@ -91,14 +91,12 @@ namespace StayFit.Services.StayFit.Services.Data
                         .Select(foodSn => new SubNutrientModel
                         {
                             Name = foodSn.Name,
-                        }).ToList(),
+                        })
+                        .ToList(),
                 })
                 .ToListAsync();
 
-            return new LoadNutrientsResponse
-            {
-                Nutrients = nutrients,
-            };
+            return nutrients;
         }
 
         public async Task<AddFoodResponse> CreateNewFood(CreateFoodModel model)
@@ -114,18 +112,24 @@ namespace StayFit.Services.StayFit.Services.Data
                 FoodCategory = await this.dbContext.FoodCategories.Where(x => x.Id == model.FoodCategoryId).FirstOrDefaultAsync(),
                 IsDeleted = false,
             };
+
             ICollection<FoodBaseNutrient> baseNutrients = new List<FoodBaseNutrient>();
+
             foreach (var fnb in model.FoodNutrientModels)
             {
                 BaseNutrient baseNutrient = await this.dbContext.BaseNutrients
-                    .FirstOrDefaultAsync(x => x.Name.Split().Length > 1 ? EnumValueFinder.GetDisplayValue(fnb.Name) == x.Name : x.Name == fnb.Name);
+                    .FirstOrDefaultAsync(bn => bn.Name.Split().Length > 1 ?
+                    EnumValueFinder.GetDisplayValue(fnb.Name) == bn.Name 
+                    : bn.Name == fnb.Name);
+
                 ICollection<FoodSubNutrient> subNutrients = new List<FoodSubNutrient>();
                 foreach (var sn in fnb.SubNutrients)
                 {
                     SubNutrient subNutrient = await this.dbContext
                         .SubNutrients
-                        .Where(x => x.BaseNutrient.Name == fnb.Name)
-                        .FirstOrDefaultAsync(x => x.Name == sn.Name);
+                        .Where(sn => sn.BaseNutrient.Name == fnb.Name)
+                        .FirstOrDefaultAsync(sn => sn.Name == sn.Name);
+
                     FoodSubNutrient fsn = new FoodSubNutrient
                     {
                         Food = food,
@@ -144,9 +148,11 @@ namespace StayFit.Services.StayFit.Services.Data
                 };
                 baseNutrients.Add(fbn);
             }
+
             await this.dbContext.FoodBaseNutrients.AddRangeAsync(baseNutrients);
             await this.dbContext.Foods.AddAsync(food);
             await this.dbContext.SaveChangesAsync();
+
             return new AddFoodResponse
             {
                 Id = food.Id,
@@ -154,34 +160,91 @@ namespace StayFit.Services.StayFit.Services.Data
             };
         }
 
-        public async Task<IEnumerable<object>> LoadSearchedFood(string searchedFood)
+        public async Task<IEnumerable<FoodKeywordModel>> LoadFoodKeywords(string searchedFood)
         {
-            searchedFood = searchedFood.ToLower();
+            searchedFood = searchedFood?.ToLower();
 
             return await this.dbContext.Foods
                 .Where(food => food.FoodName.Name.ToLower().Contains(searchedFood) || searchedFood.Contains(food.FoodName.Name.ToLower()))
-                .Select(food => new
-                {
-                    Id = food.Id,
-                    foodNameId = food.FoodNameId,
-                    Name = food.FoodName.Name,
-                    Description = food.Description,
-                    Category = food.FoodCategory.Category
-                })
+                .ProjectTo<FoodKeywordModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
-        //public IEnumerable<SingleFoodTypeModel> GetFoodTypesByCategory(int categoryId)
-        //{
-        //    return this.dbContext.TypeCategories
-        //        .Where(x => x.CategoryId == categoryId)
-        //        .Select(x =>
-        //            new SingleFoodTypeModel
-        //            {
-        //                Id = x.FoodTypeId,
-        //                Name = x.FoodType.Name
-        //            })
-        //        .ToList();
-        //}
+        public async Task<IEnumerable<FoodPreviewModel>> Search(string text)
+        {
+            var words = text.Split(new char[] { ',', '-', ':', ' ', ';', '_' }).Where(x => x != "").ToArray();
+
+            string existingCategory = null;
+            string existingFood = null;
+            string description = null;
+
+
+            foreach (var word in words)
+            {
+                existingCategory = await this.dbContext.FoodCategories
+                    .Where(c => c.Category.ToLower().Contains(word))
+                    .Select(c => c.Category)
+                    .FirstOrDefaultAsync();
+
+                if (existingCategory != null)
+                {
+                    break;
+                }
+            }
+
+            foreach (var word in words)
+            {
+
+                existingFood = await this.dbContext.Foods
+                    .Where(f => f.FoodName.Name.ToLower() == word)
+                    .Select(f => f.FoodName.Name)
+                    .FirstOrDefaultAsync();
+
+                if (existingFood != null)
+                {
+                    break;
+                }
+            }
+
+            foreach (var word in words)
+            {
+                description = await this.dbContext.Foods
+                    .Where(food => food.Description.Contains(word))
+                    .Select(x => x.Description)
+                    .FirstOrDefaultAsync();
+
+                if (description != null)
+                {
+                    break;
+                }
+            }
+
+            if (existingCategory != null && existingFood != null && description != null)
+            {
+                return await this.dbContext.Foods
+                    .Where
+                    (
+                        f =>
+                        f.FoodCategory.Category.ToLower() == existingCategory &&
+                        f.FoodName.Name == existingFood &&
+                        f.Description == description
+                    )
+                    .ProjectTo<FoodPreviewModel>(this.mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
+            else if (existingCategory != null && existingFood != null && description == null)
+            {
+                return await this.dbContext.Foods.Where(f => f.FoodCategory.Category.ToLower() == existingCategory && f.FoodName.Name == existingFood)
+                    .ProjectTo<FoodPreviewModel>(this.mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
+            else if (existingFood != null)
+            {
+                return await this.dbContext.Foods.Where(f => f.FoodName.Name == existingFood)
+                    .ProjectTo<FoodPreviewModel>(this.mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
+            return new List<FoodPreviewModel>();
+        }
     }
 }

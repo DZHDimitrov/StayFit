@@ -14,9 +14,6 @@ const _componentsReducer = createReducer(
             ? state.innerNavBar.navItems
             : action.navBar.navItems,
       },
-      // action.hasChildren !== undefined && action.hasChildren === false
-      //   ? state.innerNavBar
-      //   : action.navBar,
     };
   }),
   on(setFoodsIntroTitle, (state, action) => {

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CloudinaryDotNet;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using NickBuhro.Translit;
@@ -84,7 +83,7 @@ namespace StayFit.Services.StayFit.Services.Data
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ReadingCategoryPreviewsModel> LoadReadingsBySubCategory(string mainCategory, string subCategory)
+        public async Task<ReadingCategoryPreviewsModel> LoadPreviewsBySubCategory(string mainCategory, string subCategory)
         {
             mainCategory = mainCategory?.ToLower();
             subCategory = subCategory?.ToLower();
@@ -185,7 +184,7 @@ namespace StayFit.Services.StayFit.Services.Data
             return result;
         }
 
-        public async Task<ReadingModel> LoadReadingBySearchNameInMainCategory(string category, string searchName)
+        public async Task<ReadingModel> LoadReadingByMainCategory(string category, string searchName)
         {
             category = category.ToLower();
             if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == category))

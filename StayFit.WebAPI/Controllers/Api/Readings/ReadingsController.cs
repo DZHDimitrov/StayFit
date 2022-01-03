@@ -40,7 +40,7 @@ namespace StayFit.WebAPI.Controllers.Api.Readings
 
         [HttpGet]
         [Route("{category}")]
-        public async Task<ApiResponse<ReadingCategoryPreviewsModel>> LoadByMainCategory(string category)
+        public async Task<ApiResponse<ReadingCategoryPreviewsModel>> LoadPreviewsByMainCategory(string category)
         {
             var response = await this.readingService.LoadPreviewsByMainCategory(category);
             return response.ToApiResponse();
@@ -48,9 +48,9 @@ namespace StayFit.WebAPI.Controllers.Api.Readings
 
         [HttpGet]
         [Route("{category}/{subcategory}")]
-        public async Task<ApiResponse<ReadingCategoryPreviewsModel>> LoadReadingsBySubCategory(string category,string subcategory)
+        public async Task<ApiResponse<ReadingCategoryPreviewsModel>> LoadPreviewsBySubCategory(string category,string subcategory)
         {
-            var response = await this.readingService.LoadReadingsBySubCategory(category, subcategory);
+            var response = await this.readingService.LoadPreviewsBySubCategory(category, subcategory);
             return response.ToApiResponse();
         }
 
@@ -71,10 +71,11 @@ namespace StayFit.WebAPI.Controllers.Api.Readings
             return response.ToApiResponse();
         }
 
+        [HttpGet]
         [Route("single/{category}/{searchName}")]
         public async Task<ApiResponse<ReadingModel>> LoadReadingByMainCategory(string category,string searchName)
         {
-            var response = await this.readingService.LoadReadingBySearchNameInMainCategory(category, searchName);
+            var response = await this.readingService.LoadReadingByMainCategory(category, searchName);
             return response.ToApiResponse();
         }
 

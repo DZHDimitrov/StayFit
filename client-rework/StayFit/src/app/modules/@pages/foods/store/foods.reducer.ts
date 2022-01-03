@@ -3,7 +3,8 @@ import {
   loadFoodByIdSuccess,
   loadFoodsByCategorySuccess,
   loadFoodsCategoriesSuccess,
-  loadAutocompleteSearchedFoodSuccess,
+  loadAutocompleteKeywordsSuccess,
+  loadSearchedFoodSuccess,
 } from './foods.actions';
 import { initialState } from './foods.state';
 
@@ -15,10 +16,10 @@ export const _foodsReducer = createReducer(
       foodsCategories: action.foodCategories,
     };
   }),
-  on(loadAutocompleteSearchedFoodSuccess, (state, action) => {
+  on(loadAutocompleteKeywordsSuccess, (state, action) => {
     return {
       ...state,
-      searchedFood: action.foods,
+      autocompleteKeywords: action.foods,
     };
   }),
   on(loadFoodsByCategorySuccess, (state, action) => {
@@ -32,6 +33,12 @@ export const _foodsReducer = createReducer(
       ...state,
       foodDetails: action.food,
     };
+  }),
+  on(loadSearchedFoodSuccess,(state,action) => {
+    return {
+      ...state,
+      searchedFood: action.foods
+    }
   })
 );
 

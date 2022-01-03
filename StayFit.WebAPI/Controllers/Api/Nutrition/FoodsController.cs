@@ -30,7 +30,7 @@
         [HttpGet]
         [Route("categories")]
         [AllowAnonymous]
-        public async Task<ApiResponse<IEnumerable<FoodCategoryModel>>> LoadCategories()
+        public async Task<ApiResponse<IEnumerable<FoodCategoryPreviewModel>>> LoadCategories()
         {
             var response =  await this.foodService.LoadFoodCategories();
             return response.ToApiResponse();
@@ -38,9 +38,18 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ApiResponse<IEnumerable<object>>> LoadSearchedFoods([FromQuery] string food)
+        public async Task<ApiResponse<IEnumerable<FoodKeywordModel>>> LoadFoodKeywords([FromQuery] string food)
         {
-            var response = await this.foodService.LoadSearchedFood(food);
+            var response = await this.foodService.LoadFoodKeywords(food);
+            return response.ToApiResponse();
+        }
+
+        [HttpGet]
+        [Route("search")]
+        [AllowAnonymous]
+        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> Search([FromQuery] string text)
+        {
+            var response = await this.foodService.Search(text);
             return response.ToApiResponse();
         }
 
@@ -61,7 +70,7 @@
         [HttpGet]
         [AllowAnonymous]
         [Route("{categoryName}")]
-        public async Task<ApiResponse<IEnumerable<CategoryFoodModel>>> LoadFoodByCategoryId(string categoryName)
+        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> LoadFoodByCategoryId(string categoryName)
         {
             var response =  await this.foodService.LoadFoodByCategory(categoryName);
             return response.ToApiResponse();
@@ -70,15 +79,15 @@
         [HttpGet]
         [AllowAnonymous]
         [Route("id/{foodId}")]
-        public async Task<ApiResponse<FoodModel>> LoadFood(int categoryId, int foodId)
+        public async Task<ApiResponse<FoodModel>> LoadFood(int foodId)
         {
-            var response = await this.foodService.GetSingleFood(categoryId, foodId);
+            var response = await this.foodService.LoadFoodById(foodId);
             return response.ToApiResponse();
         }
 
         [HttpGet]
         [Route("nutrients")]
-        public async Task<ApiResponse<LoadNutrientsResponse>> LoadNutrients()
+        public async Task<ApiResponse<IEnumerable<NutrientModel>>> LoadNutrients()
         {
             var response = await this.foodService.LoadNutrients();
             return response.ToApiResponse();

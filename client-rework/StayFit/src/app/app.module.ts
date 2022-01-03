@@ -25,6 +25,7 @@ import { HomeComponent } from './home/home.component';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { CustomSerializer } from './state/router/custome-serializer';
 import { ComponentsModule } from './modules/@components/components.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -51,6 +52,7 @@ import { ComponentsModule } from './modules/@components/components.module';
     StoreRouterConnectingModule.forRoot({
       serializer: CustomSerializer,
     }),
+    FormsModule,
   ],
   providers: [
     {

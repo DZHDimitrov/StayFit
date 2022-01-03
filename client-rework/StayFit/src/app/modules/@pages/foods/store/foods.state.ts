@@ -6,14 +6,16 @@ import {
 
 export interface IFoodsState {
   foodsCategories: IFoodCategoryData[];
-  searchedFood: IFoodPreviewData[];
+  autocompleteKeywords: IFoodPreviewData[];
   foodsByCategory: IFoodPreviewData[];
+  searchedFood:IFoodPreviewData[];
   foodDetails: IFoodData | {};
 }
 
 export const initialState: IFoodsState = {
   foodsCategories: [],
-  searchedFood: [],
+  autocompleteKeywords: [],
   foodsByCategory: [],
+  searchedFood: [],
   foodDetails: {},
 };

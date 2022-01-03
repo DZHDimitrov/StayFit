@@ -5,8 +5,4 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './send-question.component.html',
   styleUrls: ['./send-question.component.scss'],
 })
-export class SendQuestionComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-}
+export class SendQuestionComponent {}
