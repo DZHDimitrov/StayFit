@@ -1,0 +1,15 @@
+.page-container {
+  width: 50%;
+  margin: 0 auto;
+
+  mat-card-header {
+    justify-content: center;
+  }
+  mat-form-field {
+      width: 100%;
+  }
+  .form-content {
+    width: 60%;
+    margin:0 auto;
+  }
+}

@@ -13,3 +13,19 @@ export const getMainCategories = createSelector(getAdminState, (state) => {
 export const getSubCategories = createSelector(getAdminState, (state) => {
   return state.subCategories;
 });
+
+export const getFoodCategories = createSelector(getAdminState, (state) => {
+  return state.food.categories;
+});
+
+export const getFoodsByCategory = createSelector(getAdminState, (state) => {
+  return state.food.byCategory;
+});
+
+export const getNutrients = createSelector(getAdminState, (state) => {
+  return state.food.nutrients;
+});
+
+export const getChosenNutrients = createSelector(getAdminState, (state) => {
+  return state.food.chosenNutrients;
+});

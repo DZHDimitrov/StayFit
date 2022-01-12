@@ -41,7 +41,7 @@ export class FoodsService {
     return this.api.add(data);
   }
 
-  getNutrients(): Observable<any> {
-    return this.api.getNutrients();
+  listNutrients(): Observable<any> {
+    return this.api.listNutrients();
   }
 }

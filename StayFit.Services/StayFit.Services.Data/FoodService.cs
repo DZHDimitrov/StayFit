@@ -85,11 +85,13 @@ namespace StayFit.Services.StayFit.Services.Data
             var nutrients = await this.dbContext.BaseNutrients
                 .Select(nutrient => new NutrientModel
                 {
+                    Id = nutrient.Id,
                     Name = nutrient.Name.ToString(),
                     SubNutrients = nutrient.SubNutrients
                         .Where(foodSn => foodSn.BaseNutrient.Name == nutrient.Name)
                         .Select(foodSn => new SubNutrientModel
                         {
+                            Id = foodSn.Id,
                             Name = foodSn.Name,
                         })
                         .ToList(),
@@ -103,13 +105,13 @@ namespace StayFit.Services.StayFit.Services.Data
         {
             var food = new Food
             {
-                FoodName = await this.dbContext.FoodNames.Where(x => x.Id == model.FoodNameId).FirstOrDefaultAsync(),
+                FoodNameId = model.FoodNameId,
                 Description = model.Description,
                 ImageUrl = model.ImageUrl,
                 Calories = model.Calories,
                 CreatedOn = DateTime.UtcNow,
                 ModifiedOn = DateTime.UtcNow,
-                FoodCategory = await this.dbContext.FoodCategories.Where(x => x.Id == model.FoodCategoryId).FirstOrDefaultAsync(),
+                FoodCategoryId = model.FoodCategoryId,
                 IsDeleted = false,
             };
 

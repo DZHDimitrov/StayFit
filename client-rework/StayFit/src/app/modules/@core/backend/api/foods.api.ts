@@ -35,7 +35,7 @@ export class FoodsApi {
     return this.api.get(`${this.apiController}/id/${id}`);
   }
 
-  search(text:string):Observable<IApiResponse<any>> {
+  search(text: string): Observable<IApiResponse<any>> {
     return this.api.get(`${this.apiController}/search?text=${text}`);
   }
 
@@ -43,7 +43,7 @@ export class FoodsApi {
     return this.api.post(`${this.apiController}`, data);
   }
 
-  getNutrients(): Observable<any> {
+  listNutrients(): Observable<any> {
     return this.api.get(`${this.apiController}/nutrients`);
   }
 }
