@@ -1,4 +1,5 @@
 import {
+  FoodDetailsMode,
   IFoodCategoryData,
   IFoodData,
   IFoodPreviewData,
@@ -9,7 +10,11 @@ export interface IFoodsState {
   autocompleteKeywords: IFoodPreviewData[];
   foodsByCategory: IFoodPreviewData[];
   searchedFood:IFoodPreviewData[];
-  foodDetails: IFoodData | {};
+  foodDetails: IFoodData | any;
+  categories: { id: number; name: string }[];
+  byCategory: any[];
+  nutrients: any[];
+  chosenNutrients: any;
 }
 
 export const initialState: IFoodsState = {
@@ -17,5 +22,9 @@ export const initialState: IFoodsState = {
   autocompleteKeywords: [],
   foodsByCategory: [],
   searchedFood: [],
-  foodDetails: {},
+  foodDetails: {mode:FoodDetailsMode.VIEW},
+  byCategory:[],
+  categories:[],
+  chosenNutrients:[],
+  nutrients:[]
 };

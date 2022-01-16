@@ -1,0 +1,26 @@
+.page-container {
+  width: 80%;
+  margin: 0 auto;
+
+  mat-card-header {
+    justify-content: center;
+  }
+
+  mat-card {
+    margin: 2rem;
+  }
+
+  .content {
+    display: flex;
+    flex-flow: column;
+
+    & > *:first-child {
+      margin-bottom: 0.5rem;
+    }
+  }
+  mat-card-actions {
+    margin: 0;
+    display:flex;
+    justify-content: space-between;
+  }
+}

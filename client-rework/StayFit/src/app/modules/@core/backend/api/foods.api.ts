@@ -26,9 +26,13 @@ export class FoodsApi {
   }
 
   listFoodsByCategory(
-    category: string
+    category: string | number
   ): Observable<IApiResponse<IFoodPreview[]>> {
     return this.api.get(`${this.apiController}/${category}`);
+  }
+
+  listFoodNamesByCategoryId(categoryId):Observable<any> {
+    return this.api.get(`${this.apiController}/${categoryId}/food-types`)
   }
 
   loadFoodById(id: number): Observable<IApiResponse<IFood>> {
@@ -41,6 +45,10 @@ export class FoodsApi {
 
   add(data: any): Observable<IAddFoodRes> {
     return this.api.post(`${this.apiController}`, data);
+  }
+
+  edit(foodId:number,data:any): Observable<any> {
+    return this.api.put(`${this.apiController}/id/${foodId}`,data);
   }
 
   listNutrients(): Observable<any> {

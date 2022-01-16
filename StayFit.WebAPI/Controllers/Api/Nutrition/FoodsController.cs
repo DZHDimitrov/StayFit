@@ -11,6 +11,7 @@
     using StayFit.Shared.Nutritions;
     using StayFit.Shared.Nutritions.Food;
     using StayFit.Shared.Nutritions.Food.PostModels;
+    using StayFit.Shared.Nutritions.Food.Requests;
     using StayFit.Shared.Nutritions.Food.Responses;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -38,23 +39,24 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ApiResponse<IEnumerable<FoodKeywordModel>>> LoadFoodKeywords([FromQuery] string food)
+        [Route("{category}")]
+        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> LoadFoodsByCategory(string category)
         {
-            var response = await this.foodService.LoadFoodKeywords(food);
+            var response = await this.foodService.LoadFoodsByCategory(category);
             return response.ToApiResponse();
         }
 
         [HttpGet]
-        [Route("search")]
-        [AllowAnonymous]
-        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> Search([FromQuery] string text)
+        [Route("{categoryId}/food-types")]
+        public async Task<ApiResponse<IEnumerable<FoodNameModel>>> LoadFoodTypesByCategoryId(string categoryId)
         {
-            var response = await this.foodService.Search(text);
+            var response = await this.foodService.LoadFoodTypesByCategoryId(categoryId);
             return response.ToApiResponse();
         }
 
+
         [HttpPost]
-        public async Task<ApiResponse<AddFoodResponse>> CreateFood(CreateFoodModel model)
+        public async Task<ApiResponse<AddFoodResponse>> CreateFood([FromForm]CreateFoodModel model)
         {
             //if (Enum.IsDefined(typeof(SubNutrientType),model.SubNutrientId))
             //{
@@ -63,25 +65,43 @@
             //SubNutrientType value = (SubNutrientType)model.SubNutrientId;
             //GetDisplayValue<SubNutrientType>(value);
             //return null;
-            var response = await this.foodService.CreateNewFood(model);
+            var response = await this.foodService.CreateFood(model);
             return response.ToApiResponse();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("{categoryName}")]
-        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> LoadFoodByCategoryId(string categoryName)
-        {
-            var response =  await this.foodService.LoadFoodByCategory(categoryName);
-            return response.ToApiResponse();
-        }
 
         [HttpGet]
         [AllowAnonymous]
         [Route("id/{foodId}")]
-        public async Task<ApiResponse<FoodModel>> LoadFood(int foodId)
+        public async Task<ApiResponse<FoodModel>> LoadFoodById(int foodId)
         {
             var response = await this.foodService.LoadFoodById(foodId);
+            return response.ToApiResponse();
+        }
+
+        [HttpPut]
+        [AllowAnonymous]
+        [Route("id/{foodId}")]
+        public async Task<ApiResponse<object>> EditFoodById(int foodId,EditFoodModel model)
+        {
+            var response = await this.foodService.EditFoodById(foodId, model);
+            return response.ToApiResponse();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ApiResponse<IEnumerable<FoodKeywordModel>>> LoadSearchKeywords([FromQuery] string food)
+        {
+            var response = await this.foodService.LoadSearchKeywords(food);
+            return response.ToApiResponse();
+        }
+
+        [HttpGet]
+        [Route("search")]
+        [AllowAnonymous]
+        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> FoodSearch([FromQuery] string text)
+        {
+            var response = await this.foodService.Search(text);
             return response.ToApiResponse();
         }
 

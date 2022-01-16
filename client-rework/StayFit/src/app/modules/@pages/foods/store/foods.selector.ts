@@ -27,3 +27,23 @@ export const getFoodDetails = createSelector(getFoodsState, (state) => {
 export const getSearchedFood = createSelector(getFoodsState, (state) => {
   return state.searchedFood;
 });
+
+export const getFoodCategories = createSelector(getFoodsState, (state) => {
+  return state.categories;
+});
+
+export const getFoodTypesByCategory = createSelector(getFoodsState, (state) => {
+  return state.byCategory;
+});
+
+export const getNutrients = createSelector(getFoodsState, (state) => {
+  return state.nutrients;
+});
+
+export const getChosenNutrients = createSelector(getFoodsState, (state) => {
+  return state.chosenNutrients;
+});
+
+export const getFoodDetailsMode = createSelector(getFoodsState,(state) => {
+  return state.foodDetails.mode;
+})

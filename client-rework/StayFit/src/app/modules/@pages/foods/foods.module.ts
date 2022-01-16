@@ -8,6 +8,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { FoodsEffects } from './store/foods.effects';
 import { CatalogueComponent } from './catalogue/catalogue.component';
 import { FoodDetailsComponent } from './food-details/food-details.component';
+import { NewFoodComponent } from './new-food/new-food.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { EditFoodComponent } from './edit-food/edit-food.component';
 
 
 
@@ -15,14 +18,21 @@ import { FoodDetailsComponent } from './food-details/food-details.component';
   declarations: [
     CategoriesComponent,
     CatalogueComponent,
-    FoodDetailsComponent
+    FoodDetailsComponent,
+    NewFoodComponent,
+    EditFoodComponent,
+    EditFoodComponent,
   ],
   imports: [
     CommonModule,
     FoodsRoutingModule,
     MaterialModule,
     ComponentsModule,
+    ReactiveFormsModule,
     EffectsModule.forFeature([FoodsEffects])
+  ],
+  exports: [
+    NewFoodComponent,
   ]
 })
 export class FoodsModule { }

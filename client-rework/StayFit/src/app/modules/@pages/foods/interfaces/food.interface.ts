@@ -14,4 +14,10 @@ export interface IFoodPreviewData extends IFoodPreview {
 
 export interface IFoodData extends IFood {
   coreNutrients: { name: string; quantity: any }[];
+  mode?: FoodDetailsMode,
+}
+
+export enum FoodDetailsMode {
+  EDIT = 'edit',
+  VIEW = 'view'
 }

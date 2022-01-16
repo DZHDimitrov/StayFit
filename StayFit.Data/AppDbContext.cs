@@ -58,6 +58,8 @@
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<CategoryFoodName> CategoryFoodNames { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=StayFit;Trusted_Connection=True;MultipleActiveResultSets=true");
@@ -72,17 +74,7 @@
             builder.Entity<UsersChosenComments>().HasKey(c => new { c.ApplicationUserId, c.CommentId });
             builder.Entity<Message>().HasOne(c => c.Sender).WithMany(c => c.Messages).HasForeignKey(c => c.SenderId);
             builder.Entity<Message>().HasOne(c => c.Receiver).WithMany(c => c.RecievedMessages).HasForeignKey(c => c.ReceieverId);
-
-            builder.Entity<ReadingSubCategory>((entity) =>
-            {
-                entity.HasKey(x => x.Id);
-                entity.Property(x => x.Name);
-                entity.HasOne(x => x.Parent)
-                    .WithMany(x => x.ReadingSubCategories)
-                    .HasForeignKey(x => x.ParentId)
-                    .IsRequired(false)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
+            builder.Entity<CategoryFoodName>(c => c.HasKey(x => new { x.FoodNameId,x.FoodCategoryId }));
             base.OnModelCreating(builder);
         }
     }

@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import {
+  FoodDetailsMode,
   IFoodCategoryData,
   IFoodData,
   IFoodPreviewData,
@@ -23,6 +24,22 @@ export const LOAD_FOODS_BY_CATEGORY_SUCCESS =
 
 export const LOAD_FOOD_BY_ID = '[foods] load food by id';
 export const LOAD_FOOD_BY_ID_SUCCESS = '[food] load food by id success';
+
+export const LOAD_FOOD_CATEGORIES = '[foods] load food categories';
+export const LOAD_FOOD_CATEGORIES_SUCCESS =
+  '[foods] load food categories success';
+
+export const LOAD_FOOD_TYPES_BY_CATEGORY = '[foods] load food types by category';
+export const LOAD_FOOD_TYPES_BY_CATEGORY_SUCCESS =
+  '[foods] load food types by category success';
+
+export const LOAD_NUTRIENTS = '[foods] load nutrients';
+export const LOAD_NUTRIENTS_SUCCESS = '[foods] load nutrients success';
+
+export const SET_CHOSEN_NUTRIENTS = '[foods] set chosen nutrients';
+
+export const SET_FOOD_DETAILS_MODE = '[foods] set food details mode';
+
 
 export const loadFoodsCategories = createAction(LOAD_CATEGORIES_ACTION);
 export const loadFoodsCategoriesSuccess = createAction(
@@ -69,3 +86,37 @@ export const loadFoodByIdSuccess = createAction(
   LOAD_FOOD_BY_ID_SUCCESS,
   props<{ food: IFoodData }>()
 );
+
+export const loadFoodCategories = createAction(LOAD_FOOD_CATEGORIES);
+export const loadFoodCategoriesSuccess = createAction(
+  LOAD_FOOD_CATEGORIES_SUCCESS,
+  props<{ categories: { id: number; name: string }[] }>()
+);
+
+export const loadFoodTypesByCategoryId = createAction(
+  LOAD_FOOD_TYPES_BY_CATEGORY,
+  props<{categoryId:number}>()
+)
+
+export const loadFoodTypesByCategoryIdSuccess = createAction(
+  LOAD_FOOD_TYPES_BY_CATEGORY_SUCCESS,
+  props<{foods:any[]}>()
+)
+
+export const loadNutrients = createAction(LOAD_NUTRIENTS);
+
+export const loadNutrientsSuccess = createAction(
+  LOAD_NUTRIENTS_SUCCESS,
+  props<{ nutrients: any[] }>()
+);
+
+export const setChosenNutrients = createAction(
+  SET_CHOSEN_NUTRIENTS,
+  props<{ nutrient: any }>()
+);
+
+export const setFoodDetailsMode = createAction(
+  SET_FOOD_DETAILS_MODE,
+  props<{mode:FoodDetailsMode}>()
+)
+

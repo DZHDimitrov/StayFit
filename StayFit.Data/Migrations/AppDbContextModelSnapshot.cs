@@ -331,6 +331,21 @@ namespace StayFit.Data.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodName", b =>
+                {
+                    b.Property<int>("FoodNameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FoodCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FoodNameId", "FoodCategoryId");
+
+                    b.HasIndex("FoodCategoryId");
+
+                    b.ToTable("CategoryFoodNames");
+                });
+
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
                 {
                     b.Property<int>("Id")
@@ -797,9 +812,6 @@ namespace StayFit.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ReadingMainCategoryId")
                         .HasColumnType("int");
 
@@ -807,8 +819,6 @@ namespace StayFit.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.HasIndex("ReadingMainCategoryId");
 
@@ -925,6 +935,25 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodName", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.FoodModels.FoodCategory", "FoodCategory")
+                        .WithMany("CategoryNames")
+                        .HasForeignKey("FoodCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StayFit.Data.Models.FoodModels.FoodName", "FoodName")
+                        .WithMany("CategoryNames")
+                        .HasForeignKey("FoodNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FoodCategory");
+
+                    b.Navigation("FoodName");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
@@ -1105,18 +1134,11 @@ namespace StayFit.Data.Migrations
 
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingSubCategory", b =>
                 {
-                    b.HasOne("StayFit.Data.Models.ReadingModels.ReadingSubCategory", "Parent")
-                        .WithMany("ReadingSubCategories")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("StayFit.Data.Models.ReadingModels.ReadingMainCategory", "ReadingMainCategory")
                         .WithMany("ReadingSubCategories")
                         .HasForeignKey("ReadingMainCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Parent");
 
                     b.Navigation("ReadingMainCategory");
                 });
@@ -1177,11 +1199,15 @@ namespace StayFit.Data.Migrations
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodCategory", b =>
                 {
+                    b.Navigation("CategoryNames");
+
                     b.Navigation("Foods");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodName", b =>
                 {
+                    b.Navigation("CategoryNames");
+
                     b.Navigation("Foods");
                 });
 
@@ -1234,8 +1260,6 @@ namespace StayFit.Data.Migrations
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.ReadingSubCategory", b =>
                 {
                     b.Navigation("Readings");
-
-                    b.Navigation("ReadingSubCategories");
                 });
 #pragma warning restore 612, 618
         }

@@ -38,7 +38,7 @@ import { FormsModule } from '@angular/forms';
     }),
     CoreModule.forRoot(),
     HttpClientModule,
-    NoopAnimationsModule,
+    // NoopAnimationsModule,
     ThemeModule,
     SharedModule,
     ComponentsModule,

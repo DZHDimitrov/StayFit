@@ -1,11 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import {
+  filter,
+  shareReplay,
+  switchMap,
+  take,
+  takeLast,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { getRouterState } from 'src/app/state/router/router.selector';
-import { loadFoodById } from '../store/foods.actions';
-import { getFoodDetails } from '../store/foods.selector';
+import { FoodDetailsMode } from '../interfaces/food.interface';
+import { loadFoodById, setFoodDetailsMode } from '../store/foods.actions';
+import { getFoodDetails, getFoodDetailsMode } from '../store/foods.selector';
 
 @Component({
   selector: 'app-food-details',
@@ -14,10 +23,16 @@ import { getFoodDetails } from '../store/foods.selector';
 })
 export class FoodDetailsComponent implements OnInit {
   constructor(private store: Store<IAppState>) {}
+  // ngOnDestroy(): void {
+  //   this.store.dispatch(setFoodDetailsMode({mode:FoodDetailsMode.VIEW}));
+  // }
   foodDetails!: any;
   unsubscribe$: Subject<void> = new Subject();
+  mode$!: Observable<FoodDetailsMode>;
 
   ngOnInit(): void {
+    this.mode$ = this.store.select(getFoodDetailsMode).pipe(filter(mode => mode !== undefined));
+    
     this.store
       .select(getRouterState)
       .pipe(
@@ -33,5 +48,11 @@ export class FoodDetailsComponent implements OnInit {
           this.foodDetails = foodDetails;
         },
       });
+  }
+
+  switchMode(mode:string) {
+    if (mode === FoodDetailsMode.EDIT) {
+      this.store.dispatch(setFoodDetailsMode({mode:FoodDetailsMode.EDIT}))
+    }
   }
 }

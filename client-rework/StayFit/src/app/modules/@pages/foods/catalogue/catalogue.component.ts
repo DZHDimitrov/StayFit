@@ -6,8 +6,8 @@ import { setFoodsIntroTitle } from 'src/app/modules/@components/state/components
 import { latinToCyrillic } from 'src/app/modules/@core/utility/text-transilerator';
 import { IAppState } from 'src/app/state/app.state';
 import { getRouterState } from 'src/app/state/router/router.selector';
-import { loadFoodsByCategory } from '../store/foods.actions';
-import { getFoodsByCategory } from '../store/foods.selector';
+import { loadFoodCategories, loadFoodsByCategory, loadFoodsCategories } from '../store/foods.actions';
+import { getFoodsByCategory, getFoodTypesByCategory } from '../store/foods.selector';
 
 @Component({
   selector: 'app-catalogue',
@@ -21,6 +21,7 @@ export class CatalogueComponent implements OnInit, OnDestroy {
   unsubscribe$: Subject<void> = new Subject();
 
   ngOnInit(): void {
+    //TODO: Remove admin module. Dispatch food only here.
     this.foods$ = this.store.select(getRouterState).pipe(
       takeUntil(this.unsubscribe$),
       filter((route) => {
@@ -30,7 +31,6 @@ export class CatalogueComponent implements OnInit, OnDestroy {
         const category = latinToCyrillic(
           route.state.params['category']
         ).replace(/-/g, ' ');
-        console.log(category);
         this.store.dispatch(loadFoodsByCategory({ category }));
         this.store.dispatch(setFoodsIntroTitle({ title: category }));
         return this.store.select(getFoodsByCategory);

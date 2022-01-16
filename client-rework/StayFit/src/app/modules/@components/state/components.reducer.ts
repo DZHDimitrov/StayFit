@@ -5,6 +5,7 @@ import { initialState } from './components.state';
 const _componentsReducer = createReducer(
   initialState,
   on(setInnerNav, (state, action) => {
+    console.log(action.navBar.navItems)
     return {
       ...state,
       innerNavBar: {

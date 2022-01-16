@@ -4,6 +4,7 @@ import { CommonBackendModule } from './backend/common-backend.module';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 
 export const NB_CORE_PROVIDERS = [
+  //@ts-ignore
   ...CommonBackendModule.forRoot().providers 
 ];
 

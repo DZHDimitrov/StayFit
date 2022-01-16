@@ -1,0 +1,21 @@
+<div class="panel-container">
+    <mat-card>
+        <mat-card-content>
+            <mat-tab-group mat-stretch-tabs dynamicHeight>
+                <mat-tab label="Ново четиво">
+                    <ng-template matTabContent>
+                        <app-new-reading></app-new-reading>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab label="Нова храна">
+                    <ng-template matTabContent>
+                        <app-new-food></app-new-food>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab label="Настройки">
+                    <ng-template matTabContent>Настройки</ng-template>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -12,6 +12,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete'
+import {MatTabsModule} from '@angular/material/tabs'
 
 export const MAT_MODULES = [
   MatButtonModule,
@@ -26,6 +27,8 @@ export const MAT_MODULES = [
   MatSidenavModule,
   MatSelectModule,
   MatAutocompleteModule,
+  MatTabsModule,
+
 ]
 
 @NgModule({

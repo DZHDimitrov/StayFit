@@ -28,6 +28,7 @@ export interface IFood {
 }
 
 interface INutrient {
+  id:number;
   name:string;
   quantity?:number;
   subNutrients:ISubNutrient[]

@@ -22,7 +22,7 @@ export const GUEST_NAV_ITEMS: INavItem[] = [
   },
   {
     title: 'Знание',
-    link: ['pages', 'knowledge'],
+    link: ['pages', 'readings'],
   },
 ];
 
@@ -45,6 +45,6 @@ export const USER_NAV_ITEMS: INavItem[] = [
   },
   {
     title: 'Знание',
-    link: ['pages', 'knowledge'],
+    link: ['pages', 'readings'],
   },
 ];

@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 using StayFit.Data;
 using StayFit.Data.Models.FoodModels;
 using StayFit.Data.Models.FoodModels.Nutrients;
+using StayFit.Services.Common;
 using StayFit.Services.Helpers;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.Shared.Nutritions;
 using StayFit.Shared.Nutritions.Food;
 using StayFit.Shared.Nutritions.Food.PostModels;
+using StayFit.Shared.Nutritions.Food.Requests;
 using StayFit.Shared.Nutritions.Food.Responses;
 using System;
 using System.Collections.Generic;
@@ -21,11 +24,13 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private readonly AppDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly Cloudinary cloudinary;
 
-        public FoodService(AppDbContext dbContext, IMapper mapper)
+        public FoodService(AppDbContext dbContext, IMapper mapper, Cloudinary cloudinary)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.cloudinary = cloudinary;
         }
 
         public async Task<IEnumerable<FoodCategoryPreviewModel>> LoadFoodCategories()
@@ -38,12 +43,11 @@ namespace StayFit.Services.StayFit.Services.Data
             return categories;
         }
 
-        public async Task<IEnumerable<FoodPreviewModel>> LoadFoodByCategory(string categoryName)
+        public async Task<IEnumerable<FoodPreviewModel>> LoadFoodsByCategory(string category)
         {
-            categoryName = categoryName.ToLower();
-
+            category = category.ToLower();
             var foods = await this.dbContext.Foods
-                .Where(x => x.FoodCategory.Category.ToLower() == categoryName)
+                .Where(x => x.FoodCategory.Category.ToLower() == category)
                 .ProjectTo<FoodPreviewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -64,15 +68,17 @@ namespace StayFit.Services.StayFit.Services.Data
                     Nutrients = food.FoodBaseNutrients
                     .Select(nutrient => new NutrientModel
                     {
+                        Id = nutrient.BaseNutrientId,
                         Name = nutrient.BaseNutrient.Name,
                         Quantity = nutrient.Quantity,
-                        SubNutrients = nutrient.Food.FoodSubNutrients
-                        .Where(foodSn => foodSn.SubNutrient.BaseNutrient.Name == nutrient.BaseNutrient.Name)
-                        .Select(foodSn => new SubNutrientModel
+                        SubNutrients = this.dbContext.SubNutrients
+                        .Where(foodSn => foodSn.BaseNutrient.Name == nutrient.BaseNutrient.Name)
+                        .Select(sn => new SubNutrientModel
                         {
-                            Name = foodSn.SubNutrient.Name,
-                            Quantity = foodSn.Quantity
-                        }).ToList(),
+                            Id = sn.Id,
+                            Name = sn.Name,
+                            Quantity = this.dbContext.FoodSubNutrients.FirstOrDefault(x => x.FoodId == foodId && x.SubNutrientId == sn.Id).Quantity ?? null
+                        })
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();
@@ -101,13 +107,13 @@ namespace StayFit.Services.StayFit.Services.Data
             return nutrients;
         }
 
-        public async Task<AddFoodResponse> CreateNewFood(CreateFoodModel model)
+        public async Task<AddFoodResponse> CreateFood(CreateFoodModel model)
         {
             var food = new Food
             {
                 FoodNameId = model.FoodNameId,
                 Description = model.Description,
-                ImageUrl = model.ImageUrl,
+                //ImageUrl = model.ImageUrl,
                 Calories = model.Calories,
                 CreatedOn = DateTime.UtcNow,
                 ModifiedOn = DateTime.UtcNow,
@@ -115,60 +121,91 @@ namespace StayFit.Services.StayFit.Services.Data
                 IsDeleted = false,
             };
 
-            ICollection<FoodBaseNutrient> baseNutrients = new List<FoodBaseNutrient>();
+            var imageUrl = await ApplicationCloudinary.UploadImage(this.cloudinary, model.Image, "Food");
 
-            foreach (var fnb in model.FoodNutrientModels)
+            food.ImageUrl = imageUrl;
+
+            foreach (var baseNutrient in this.dbContext.BaseNutrients)
             {
-                BaseNutrient baseNutrient = await this.dbContext.BaseNutrients
-                    .FirstOrDefaultAsync(bn => bn.Name.Split().Length > 1 ?
-                    EnumValueFinder.GetDisplayValue(fnb.Name) == bn.Name 
-                    : bn.Name == fnb.Name);
-
-                ICollection<FoodSubNutrient> subNutrients = new List<FoodSubNutrient>();
-                foreach (var sn in fnb.SubNutrients)
-                {
-                    SubNutrient subNutrient = await this.dbContext
-                        .SubNutrients
-                        .Where(sn => sn.BaseNutrient.Name == fnb.Name)
-                        .FirstOrDefaultAsync(sn => sn.Name == sn.Name);
-
-                    FoodSubNutrient fsn = new FoodSubNutrient
-                    {
-                        Food = food,
-                        Quantity = sn.Quantity,
-                        SubNutrient = subNutrient
-                    };
-                    subNutrients.Add(fsn);
-                }
-                await this.dbContext.FoodSubNutrients.AddRangeAsync(subNutrients);
-
-                FoodBaseNutrient fbn = new FoodBaseNutrient
-                {
-                    Food = food,
-                    Quantity = fnb.Quantity,
-                    BaseNutrient = baseNutrient
-                };
-                baseNutrients.Add(fbn);
+                food.FoodBaseNutrients.Add(new FoodBaseNutrient { BaseNutrientId = baseNutrient.Id, FoodId = food.Id });
             }
 
-            await this.dbContext.FoodBaseNutrients.AddRangeAsync(baseNutrients);
+            //foreach (var item in this.dbContext.BaseNutrients)
+            //{
+            //    food.FoodBaseNutrients.Add(new FoodBaseNutrient { BaseNutrientId = item.Id, FoodId = food.Id, });
+            //}
+
+            //foreach(var item in model.SubNutrients)
+            //{
+            //    food.FoodSubNutrients.Add(new FoodSubNutrient { FoodId = food.Id, Quantity = item.Quantity, SubNutrientId = item.Id });
+            //}
+
+            //ICollection<FoodBaseNutrient> baseNutrients = new List<FoodBaseNutrient>();
+
+            //foreach (var fnb in model.FoodNutrientModels)
+            //{
+            //    BaseNutrient baseNutrient = await this.dbContext.BaseNutrients
+            //        .FirstOrDefaultAsync(bn => bn.Name.Split().Length > 1 ?
+            //        EnumValueFinder.GetDisplayValue(fnb.Name) == bn.Name
+            //        : bn.Name == fnb.Name);
+            //    //BaseNutrient baseNutrient = await this.dbContext.basnu
+
+            //    ICollection<FoodSubNutrient> subNutrients = new List<FoodSubNutrient>();
+            //    foreach (var sn in fnb.SubNutrients)
+            //    {
+            //        SubNutrient subNutrient = await this.dbContext
+            //            .SubNutrients
+            //            .Where(sn => sn.BaseNutrient.Name == fnb.Name)
+            //            .FirstOrDefaultAsync(sn => sn.Name == sn.Name);
+
+            //        FoodSubNutrient fsn = new FoodSubNutrient
+            //        {
+            //            Food = food,
+            //            Quantity = sn.Quantity,
+            //            SubNutrient = subNutrient
+            //        };
+            //        subNutrients.Add(fsn);
+            //    }
+            //    await this.dbContext.FoodSubNutrients.AddRangeAsync(subNutrients);
+
+            //    FoodBaseNutrient fbn = new FoodBaseNutrient
+            //    {
+            //        Food = food,
+            //        Quantity = fnb.Quantity,
+            //        BaseNutrient = baseNutrient
+            //    };
+            //    baseNutrients.Add(fbn);
+            //}
+
+            //await this.dbContext.FoodBaseNutrients.AddRangeAsync(baseNutrients);
             await this.dbContext.Foods.AddAsync(food);
             await this.dbContext.SaveChangesAsync();
 
             return new AddFoodResponse
             {
                 Id = food.Id,
-                FoodName = food.FoodName.Name,
             };
         }
 
-        public async Task<IEnumerable<FoodKeywordModel>> LoadFoodKeywords(string searchedFood)
+        public async Task<IEnumerable<FoodKeywordModel>> LoadSearchKeywords(string searchedFood)
         {
             searchedFood = searchedFood?.ToLower();
 
             return await this.dbContext.Foods
                 .Where(food => food.FoodName.Name.ToLower().Contains(searchedFood) || searchedFood.Contains(food.FoodName.Name.ToLower()))
                 .ProjectTo<FoodKeywordModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<FoodNameModel>> LoadFoodTypesByCategoryId(string categoryId)
+        {
+            return await this.dbContext.CategoryFoodNames
+                .Where(c => c.FoodCategoryId.ToString() == categoryId)
+                .Select(x => new FoodNameModel
+                {
+                    Id = x.FoodNameId,
+                    Name = x.FoodName.Name
+                })
                 .ToListAsync();
         }
 
@@ -247,6 +284,42 @@ namespace StayFit.Services.StayFit.Services.Data
                     .ToListAsync();
             }
             return new List<FoodPreviewModel>();
+        }
+
+        public async Task<object> EditFoodById(int foodId, EditFoodModel model)
+        {
+            var food = await this.dbContext.Foods
+                .Include(food => food.FoodBaseNutrients)
+                .Include(food => food.FoodSubNutrients)
+                .FirstOrDefaultAsync(food => food.Id == foodId);
+
+            //if (model.Calories != null)
+            //{
+            //    food.Calories = (double)model.Calories;
+            //}
+
+            foreach (var baseNutrient in model.Nutrients)
+            {
+                var foodBaseNutrient = food.FoodBaseNutrients.FirstOrDefault(fbn => fbn.BaseNutrientId == baseNutrient.Id);
+                foodBaseNutrient.Quantity = baseNutrient.Quantity;
+            }
+
+            foreach (var subNutrient in model.SubNutrients)
+            {
+                var foodSubNutrient = food.FoodSubNutrients.FirstOrDefault(fsn => fsn.SubNutrientId == subNutrient.Id);
+                if (foodSubNutrient == null)
+                {
+                    foodSubNutrient = new FoodSubNutrient { FoodId = food.Id,SubNutrientId = subNutrient.Id,Quantity=subNutrient.Quantity };
+                    this.dbContext.FoodSubNutrients.Add(foodSubNutrient);
+                }
+                else
+                {
+                foodSubNutrient.Quantity = subNutrient.Quantity;
+                }
+            }
+
+            await this.dbContext.SaveChangesAsync();
+            return null;
         }
     }
 }

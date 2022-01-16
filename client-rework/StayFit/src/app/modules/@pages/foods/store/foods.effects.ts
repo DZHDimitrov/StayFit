@@ -7,7 +7,6 @@ import { IFoodData } from '../interfaces/food.interface';
 import {
   loadFoodById,
   loadFoodByIdSuccess,
-  loadFoodsByCategory,
   loadFoodsByCategorySuccess,
   loadFoodsCategories,
   loadFoodsCategoriesSuccess,
@@ -15,6 +14,13 @@ import {
   loadAutocompleteKeywordsSuccess,
   loadSearchedFood,
   loadSearchedFoodSuccess,
+  loadFoodsByCategory,
+  loadFoodTypesByCategoryId,
+  loadFoodTypesByCategoryIdSuccess,
+  loadNutrients,
+  loadNutrientsSuccess,
+  loadFoodCategories,
+  loadFoodCategoriesSuccess,
 } from './foods.actions';
 
 @Injectable()
@@ -74,7 +80,7 @@ export class FoodsEffects {
     );
   });
 
-  loadFoodByCategoryId$ = createEffect(() => {
+  loadFoodByCategory$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadFoodsByCategory),
       switchMap((action) => {
@@ -104,6 +110,7 @@ export class FoodsEffects {
                 )
                 .map((nutrient) => {
                   return {
+                    id: nutrient.id,
                     name: nutrient.name,
                     quantity: nutrient.quantity?.toFixed(2) ?? '0.00',
                   };
@@ -140,6 +147,68 @@ export class FoodsEffects {
                 return {
                   ...p,
                   name: p.category.split(' ')[0] + ' ' + p.name.toLowerCase(),
+                };
+              }),
+            });
+          })
+        );
+      })
+    );
+  });
+
+  loadFoodTypesByCategoryId$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadFoodTypesByCategoryId),
+      switchMap((action) => {
+        return this.service.listFoodNamesByCategoryId(action.categoryId).pipe(
+          map((res) => {
+            return loadFoodTypesByCategoryIdSuccess({ foods: res.data });
+          })
+        );
+      })
+    );
+  });
+
+  loadNutrients$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadNutrients),
+      switchMap((action) => {
+        return this.service.listNutrients().pipe(
+          map((res) => {
+            console.log(res);
+            return loadNutrientsSuccess({
+              nutrients: res.data
+                .filter((n) => n.name !== 'Протеин')
+                .map((n) => {
+                  return {
+                    id: n.id,
+                    name: n.name,
+                    subNutrients: n.subNutrients.map((sn) => {
+                      return {
+                        id: sn.id,
+                        name: sn.name,
+                      };
+                    }),
+                  };
+                }),
+            });
+          })
+        );
+      })
+    );
+  });
+    loadFoodCategories$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadFoodCategories),
+      switchMap((action) => {
+        console.log('asdasdasd')
+        return this.service.listCategories().pipe(
+          map((res) => {
+            return loadFoodCategoriesSuccess({
+              categories: res.data.map((c) => {
+                return {
+                  id: c.id,
+                  name: c.name,
                 };
               }),
             });

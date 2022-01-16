@@ -1,0 +1,11 @@
+﻿using System.Collections.Generic;
+
+namespace StayFit.Shared.Nutritions.Food.Requests
+{
+    public class EditNutrientModel
+    {
+        public int Id { get; set; }
+
+        public double Quantity { get; set; }
+    }
+}

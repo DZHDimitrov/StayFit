@@ -30,6 +30,10 @@
       display: flex;
       flex-flow: row wrap;
       justify-content: space-between;
+      align-items: center;
+      .edit-button {
+        height: 3rem;
+      }
     }
   }
   .food-details {

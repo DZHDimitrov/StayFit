@@ -25,7 +25,7 @@ export class FoodsService {
     return this.api.listAutocompleteKeywords(searchedFood);
   }
 
-  listFoodsByCategory(category: string): Observable<IApiResponse<IFoodPreview[]>> {
+  listFoodsByCategory(category: string | number): Observable<IApiResponse<IFoodPreview[]>> {
     return this.api.listFoodsByCategory(category);
   }
 
@@ -41,7 +41,15 @@ export class FoodsService {
     return this.api.add(data);
   }
 
+  edit(foodId:number,data:any): Observable<any> {
+    return this.api.edit(foodId,data);
+  }
+
   listNutrients(): Observable<any> {
     return this.api.listNutrients();
+  }
+
+  listFoodNamesByCategoryId(categoryId):Observable<any> {
+    return this.api.listFoodNamesByCategoryId(categoryId);
   }
 }
