@@ -2,10 +2,7 @@
 using StayFit.Shared.Readings;
 using StayFit.Shared.SharedModels;
 using StayFit.Shared.SharedModels.Responses;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StayFit.Services.StayFit.Services.Data.Interfaces
@@ -14,9 +11,7 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
     {
         public Task<AddReadingResponse> CreateReading(AddReadingRequest model);
 
-        public Task<IEnumerable<ReadingMainCategoryModel>> LoadMainCategories();
-
-        public Task<IEnumerable<ReadingSubCategoryModel>> LoadSubCategories(int id);
+        public Task<IEnumerable<ReadingCategoryModel>> LoadCategories(int? mainId);
 
         public void EditArticle();
 

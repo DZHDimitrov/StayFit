@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { IReadingCategory } from 'src/app/modules/@core/interfaces/responses/readings/readings.interface';
 import { GlobalConstants } from 'src/app/settings/global-constants';
 import { IAppState } from 'src/app/state/app.state';
-import { IMainCategory, ISubCategory } from '../../../@core/interfaces/responses/readings/readings.interface';
-import { addReading, loadReadingMainCategories, loadReadingSubCategories, resetReadingSubCategories } from '../store/readings.actions';
+import { addReading, loadReadingCategories, /*loadReadingMainCategories, loadReadingSubCategories,*/ resetReadingSubCategories } from '../store/readings.actions';
 import { getMainCategories, getSubCategories } from '../store/readings.selector';
 
 
@@ -16,8 +16,8 @@ import { getMainCategories, getSubCategories } from '../store/readings.selector'
 })
 export class NewReadingComponent implements OnInit {
   constructor(private store: Store<IAppState>, private fb: FormBuilder) {}
-  mainCategories$!: Observable<IMainCategory[]>;
-  subCategories$!: Observable<ISubCategory[]>;
+  mainCategories$!: Observable<IReadingCategory[]>;
+  subCategories$!: Observable<IReadingCategory[]>;
   formGroup!: FormGroup;
 
   requiredField:string = GlobalConstants.REQUIRED_FIELD;
@@ -32,14 +32,14 @@ export class NewReadingComponent implements OnInit {
       image: ['',[Validators.required]],
       // bodyPart: [''],
     });
-    this.store.dispatch(loadReadingMainCategories());
+    this.store.dispatch(loadReadingCategories({}));
     this.mainCategories$ = this.store.select(getMainCategories);
   }
 
   loadSubCategories(value: { id: number; hasChildren: boolean }) {
     if (value.hasChildren) {
       this.store.dispatch(
-        loadReadingSubCategories({ mainCategoryId: value.id })
+        loadReadingCategories({ mainId:value.id })
       );
       this.subCategories$ = this.store.select(getSubCategories);
     }

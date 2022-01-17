@@ -24,17 +24,11 @@ namespace StayFit.WebAPI.Controllers.Api.Readings
         }
 
         [HttpGet]
-        public async Task<ApiResponse<IEnumerable<ReadingMainCategoryModel>>> LoadMainCategories()
+        [Route("categories")]
+        [AllowAnonymous]
+        public async Task<ApiResponse<IEnumerable<ReadingCategoryModel>>> LoadCategories([FromQuery] int? mainId)
         {
-            var response = await this.readingService.LoadMainCategories();
-            return response.ToApiResponse();
-        }
-
-        [HttpGet]
-        [Route("subcategories")]
-        public async Task<ApiResponse<IEnumerable<ReadingSubCategoryModel>>> LoadSubCategories([FromQuery] int mainId)
-        {
-            var response = await this.readingService.LoadSubCategories(mainId);
+            var response = await this.readingService.LoadCategories(mainId);
             return response.ToApiResponse();
         }
 

@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { IReadingCategory } from 'src/app/modules/@core/interfaces/responses/readings/readings.interface';
 import { IInnerNavBar } from '../../../@components/interfaces/navbar.interface';
 import {
   ReadingCategory,
@@ -21,16 +22,9 @@ export const LOAD_CONTENT_BY_SC_SUCCESS =
 export const LOAD_READING = '[readings] load reading';
 export const LOAD_READING_SUCCESS = '[readings] load reading success';
 
-export const LOAD_READING_MAIN_CATEGORIES =
-  '[readings] load reading main categories';
-export const LOAD_READING_MAIN_CATEGORIES_SUCCESS =
-  '[readings] load reading main categories success';
-
-export const LOAD_READING_SUB_CATEGORIES =
-  '[readings] load reading sub categories';
-
-export const LOAD_READING_SUB_CATEGORIES_SUCCESS =
-  '[readings] load reading sub categories success';
+export const LOAD_READING_CATEGORIES = '[readings] load reading categories';
+export const LOAD_READING_CATEGORIES_SUCCESS =
+  '[readings] load reading categories success';
 
 export const RESET_READING_SUB_CATEGORIES =
   '[readings] reset reading sub-categories';
@@ -84,23 +78,14 @@ export const loadReadingByIdSuccess = createAction(
   props<{ currentReading: any }>()
 );
 
-export const loadReadingMainCategories = createAction(
-  LOAD_READING_MAIN_CATEGORIES
+export const loadReadingCategories = createAction( //Fixed
+  LOAD_READING_CATEGORIES,
+  props<{ mainId?: number }>()
 );
 
-export const loadReadingMainCategoriesSuccess = createAction(
-  LOAD_READING_MAIN_CATEGORIES_SUCCESS,
-  props<{ mainCategories: any }>()
-);
-
-export const loadReadingSubCategories = createAction(
-  LOAD_READING_SUB_CATEGORIES,
-  props<{ mainCategoryId: number }>()
-);
-
-export const loadReadingSubCategoriesSuccess = createAction(
-  LOAD_READING_SUB_CATEGORIES_SUCCESS,
-  props<{ subCategories: any[] }>()
+export const loadReadingCategoriesSuccess = createAction(
+  LOAD_READING_CATEGORIES_SUCCESS,
+  props<{ mainId?: number; categories: IReadingCategory[] }>()
 );
 
 export const resetReadingSubCategories = createAction(

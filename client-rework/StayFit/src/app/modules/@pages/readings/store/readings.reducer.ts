@@ -4,9 +4,10 @@ import {
   loadCatalogueByMainCategorySuccess,
   loadCatalogueBySubCategorySuccess,
   loadReadingByIdSuccess,
-  loadReadingMainCategoriesSuccess,
-  loadReadingSubCategoriesSuccess,
+  // loadReadingMainCategoriesSuccess,
+  // loadReadingSubCategoriesSuccess,
   resetReadingSubCategories,
+  loadReadingCategoriesSuccess,
 } from './readings.actions';
 import { initialState } from './readings.state';
 
@@ -36,16 +37,11 @@ export const _readingsReducer = createReducer(
       currentReading: action.currentReading,
     };
   }),
-  on(loadReadingMainCategoriesSuccess, (state, action) => {
+  on(loadReadingCategoriesSuccess, (state, action) => {
     return {
       ...state,
-      mainCategories: action.mainCategories,
-    };
-  }),
-  on(loadReadingSubCategoriesSuccess, (state, action) => {
-    return {
-      ...state,
-      subCategories: action.subCategories,
+      mainCategories: action.mainId ? state.mainCategories : action.categories,
+      subCategories: action.mainId ? action.categories : state.subCategories
     };
   }),
   on(resetReadingSubCategories, (state, action) => {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, shareReplay, tap } from 'rxjs/operators';
+import {  shareReplay} from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { FoodsService } from '../../../@core/backend/services/foods.service';
 import { loadFoodCategories, loadFoodsCategories, loadFoodTypesByCategoryId, loadNutrients, setChosenNutrients } from '../store/foods.actions';
@@ -74,22 +74,4 @@ export class NewFoodComponent implements OnInit {
     })
     return formData;
   }
-
-  // selectNutrient(
-  //   baseId: number,
-  //   baseName: string,
-  //   subNutrientId: number,
-  //   subNutrientName: string
-  // ) {
-  //   this.store.dispatch(
-  //     setChosenNutrients({
-  //       nutrient: {
-  //         id: baseId,
-  //         name: baseName,
-  //         subNutrientId,
-  //         subNutrientName,
-  //       },
-  //     })
-  //   );
-  // }
 }

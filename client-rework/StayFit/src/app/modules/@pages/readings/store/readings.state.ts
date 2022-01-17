@@ -1,10 +1,10 @@
-import { IReading } from '../../../@core/interfaces/responses/readings/readings.interface';
+import { IReading, IReadingCategory } from '../../../@core/interfaces/responses/readings/readings.interface';
 import { ICategoryReadingPreviewData } from '../interfaces/reading.interface';
 
 export interface IReadingsState {
+  mainCategories: IReadingCategory[];
+  subCategories: IReadingCategory[];
   latestPreviews: ICategoryReadingPreviewData[];
-  mainCategories: any[];
-  subCategories: any[];
   readings: any[];
   catalogue: {
     previews: any[];

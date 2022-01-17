@@ -11,9 +11,7 @@ import {
   ICategoryReadingPreview,
   ICreateReadingRes,
   IDeleteReading,
-  IMainCategory,
   IReading,
-  ISubCategory,
 } from '../../interfaces/responses/readings/readings.interface';
 import { ReadingsApi } from '../api/readings.api';
 
@@ -23,19 +21,19 @@ import { ReadingsApi } from '../api/readings.api';
 export class ReadingsService {
   constructor(private api: ReadingsApi) {}
 
-  listByMainCategory(
+  loadPreviewsByMainCategory(
     category: ReadingCategory
   ): Observable<IApiResponse<ICategoryReadingPreview>> {
     return this.api
-      .listByMainCategory(category)
+      .loadPreviewsByMainCategory(category)
       .pipe(filter((x) => x.data !== undefined));
   }
 
-  listBySubCategory(
+  loadPreviewsBySubCategory(
     category: ReadingCategory,
     subcategory: string
   ): Observable<IApiResponse<ICategoryReadingPreview>> {
-    return this.api.listBySubCategory(category, subcategory);
+    return this.api.loadPreviewsBySubCategory(category, subcategory);
   }
 
   loadCategoriesLatestPreviews(): Observable<
@@ -59,12 +57,16 @@ export class ReadingsService {
     return this.api.loadOneByIdInSubCategory(category, subCategory, id);
   }
 
-  loadMainCategories(): Observable<IApiResponse<IMainCategory[]>> {
-    return this.api.loadMainCategories();
-  }
+  // loadMainCategories(): Observable<IApiResponse<IMainCategory[]>> {
+  //   return this.api.loadMainCategories();
+  // }
 
-  loadSubCategories(mainId: number): Observable<IApiResponse<ISubCategory[]>> {
-    return this.api.loadSubCategories(mainId);
+  // loadSubCategories(mainId: number): Observable<IApiResponse<ISubCategory[]>> {
+  //   return this.api.loadSubCategories(mainId);
+  // }
+
+  loadCategories(mainId?:number):Observable<any> {
+    return this.api.loadCategories(mainId);
   }
 
   add(

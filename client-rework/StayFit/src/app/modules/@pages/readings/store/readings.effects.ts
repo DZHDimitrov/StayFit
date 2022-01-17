@@ -18,10 +18,12 @@ import {
   loadCategoriesLatestPreviewsSuccess,
   loadReadingById,
   loadReadingByIdSuccess,
-  loadReadingMainCategories,
-  loadReadingMainCategoriesSuccess,
-  loadReadingSubCategories,
-  loadReadingSubCategoriesSuccess,
+  loadReadingCategories,
+  loadReadingCategoriesSuccess,
+  // loadReadingMainCategories,
+  // loadReadingMainCategoriesSuccess,
+  // loadReadingSubCategories,
+  // loadReadingSubCategoriesSuccess,
 } from './readings.actions';
 
 @Injectable()
@@ -72,7 +74,7 @@ export class PagesEffects {
     return this.actions$.pipe(
       ofType(loadCatalogueByMainCategory),
       mergeMap((action) => {
-        return this.readingService.listByMainCategory(action.category).pipe(
+        return this.readingService.loadPreviewsByMainCategory(action.category).pipe(
           map((res) => {
             res.data.previews = res.data.previews.map((p) => {
               if (p.name.includes('начинаещи')) {
@@ -129,7 +131,7 @@ export class PagesEffects {
       ofType(loadCatalogueBySubCategory),
       mergeMap((action) => {
         return this.readingService
-          .listBySubCategory(action.mainCategory, action.subCategory)
+          .loadPreviewsBySubCategory(action.mainCategory, action.subCategory)
           .pipe(
             map((res) => {
               return loadCatalogueBySubCategorySuccess({
@@ -192,30 +194,15 @@ export class PagesEffects {
     );
   });
 
-  loadMainCategories$ = createEffect(() => {
+  loadReadingCategories$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadReadingMainCategories),
+      ofType(loadReadingCategories),
       switchMap((action) => {
-        return this.readingService.loadMainCategories().pipe(
-          map((x) => {
-            return loadReadingMainCategoriesSuccess({ mainCategories: x.data });
+        return this.readingService.loadCategories(action.mainId).pipe(
+          map((res) => {
+            return loadReadingCategoriesSuccess({mainId:action.mainId,categories:res.data });
           })
         );
-      })
-    );
-  });
-
-  loadSubCategories$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(loadReadingSubCategories),
-      switchMap((action) => {
-        return this.readingService
-          .loadSubCategories(action.mainCategoryId)
-          .pipe(
-            map((x) => {
-              return loadReadingSubCategoriesSuccess({ subCategories: x.data });
-            })
-          );
       })
     );
   });

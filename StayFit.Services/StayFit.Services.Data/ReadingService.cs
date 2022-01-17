@@ -30,7 +30,7 @@ namespace StayFit.Services.StayFit.Services.Data
         private readonly IMapper mapper;
         private readonly Cloudinary cloudinary;
 
-        public ReadingService(AppDbContext dbContext, IMapper mapper,Cloudinary cloudinary)
+        public ReadingService(AppDbContext dbContext, IMapper mapper, Cloudinary cloudinary)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
@@ -305,30 +305,31 @@ namespace StayFit.Services.StayFit.Services.Data
                 .FirstOrDefault().Id + 1 + "_" + String.Join("_", Transliteration.CyrillicToLatin(input).ToLower().Split(" "));
         }
 
-        public async Task<IEnumerable<ReadingMainCategoryModel>> LoadMainCategories()
+        public async Task<IEnumerable<ReadingCategoryModel>> LoadCategories(int? mainId)
         {
-            return await this.dbContext.ReadingMainCategories
-                .Select(mc => new ReadingMainCategoryModel
-                {
-                    Id = mc.Id,
-                    Name = mc.Name,
-                    HasChildren = mc.ReadingSubCategories.Any(),
-                    SearchName = mc.SearchName,
-                }).ToListAsync();
-        }
+            if (mainId == null)
+            {
+                return await this.dbContext.ReadingMainCategories
+                       .Select(mc => new ReadingCategoryModel
+                       {
+                           Id = mc.Id,
+                           Name = mc.Name,
+                           HasChildren = mc.ReadingSubCategories.Any(),
+                           SearchName = mc.SearchName,
+                       }).ToListAsync();
+            }
 
-        public async Task<IEnumerable<ReadingSubCategoryModel>> LoadSubCategories(int id)
-        {
             return await this.dbContext.ReadingSubCategories
-                 .Where(sc => sc.ReadingMainCategory.Id == id)
-                 .Select(sc => new ReadingSubCategoryModel
-                 {
-                     Id = sc.Id,
-                     Name = sc.Name,
-                     ImageUrl = sc.ImageUrl,
-                     SearchName = sc.SearchName
-                 })
-                 .ToListAsync();
+                .Where(sc => sc.ReadingMainCategory.Id == (int)mainId)
+                .Select(sc => new ReadingCategoryModel
+                {
+                    Id = sc.Id,
+                    Name = sc.Name,
+                    ImageUrl = sc.ImageUrl,
+                    HasChildren = false,
+                    SearchName = sc.SearchName,
+                })
+                .ToListAsync();
         }
     }
 }
