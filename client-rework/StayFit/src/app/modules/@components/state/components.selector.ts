@@ -1,18 +1,30 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 import { IComponentState } from './components.state';
 
 export const COMPONENTS_STATE_NAME = 'components';
 
-export const getComponentsSelector = createFeatureSelector<IComponentState>(
+export const getComponenetsState = createFeatureSelector<IComponentState>(
   COMPONENTS_STATE_NAME
 );
 
-export const getInnerNav = createSelector(getComponentsSelector, (state) => {
-  return state.innerNavBar;
+export const getInnerNav = createSelector(getComponenetsState, (state) => {
+  const miniNavBar = JSON.parse(JSON.stringify(state.innerNavBar));
+  if (miniNavBar) {
+    miniNavBar.navItems = miniNavBar?.navItems?.map((i) => {
+      return i.includes('Ръководство')
+        ? 'Ръководство'
+        : i.includes('Статии')
+        ? 'Статии'
+        : i;
+    });
+  }
+
+  return miniNavBar;
 });
 
 export const getFoodsIntroTitle = createSelector(
-  getComponentsSelector,
+  getComponenetsState,
   (state) => {
     return state.foodsIntro.title;
   }

@@ -18,10 +18,10 @@
 
         public string Description { get; set; }
 
-        [ForeignKey(nameof(FoodNameId))]
-        public int FoodNameId { get; set; }
+        [ForeignKey(nameof(FoodType))]
+        public int FoodTypeId { get; set; }
 
-        public FoodName FoodName { get; set; }
+        public FoodType FoodType { get; set; }
 
         [ForeignKey(nameof(FoodCategory))]
         public int FoodCategoryId { get; set; }

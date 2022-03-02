@@ -12,8 +12,6 @@
             this.ReadingSubCategories = new HashSet<ReadingSubCategory>();
         }
 
-        public string SearchName { get; set; }
-
         public string Name { get; set; }
 
         public ICollection<Reading> Readings { get; set; }

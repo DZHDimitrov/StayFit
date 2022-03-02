@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { FoodsService } from 'src/app/modules/@core/backend/services/foods.service';
+import { FoodDetailsMode } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
+import { INutrient } from 'src/app/modules/@core/interfaces/foods/foods-nutrients.interface';
 import { IAppState } from 'src/app/state/app.state';
 import { getRouterState } from 'src/app/state/router/router.selector';
-import { loadFoodById } from '../store/foods.actions';
-import { getFoodDetails } from '../store/foods.selector';
+import {
+  editFoodById,
+  setFoodDetailsMode,
+} from '../store/foods.actions';
 
 @Component({
   selector: 'app-edit-food',
@@ -14,21 +16,92 @@ import { getFoodDetails } from '../store/foods.selector';
   styleUrls: ['./edit-food.component.scss'],
 })
 export class EditFoodComponent implements OnInit {
+  @Input() coreNutrients!: INutrient[];
+  @Input() allNutrients!: INutrient[];
   @Input() foodDetails!: any;
-  editDetails!: any;
+
+  constructor(private fb: FormBuilder, private store: Store<IAppState>) {}
 
   editFoodForm!: FormGroup;
-  chosenNutrients!: Observable<any>;
-  foodId!:number;
 
-  constructor(private fb: FormBuilder, private store: Store<IAppState>,private service:FoodsService) {}
-
+  editDetails!: any;
+  foodId!: number;
+  
   ngOnInit(): void {
-    this.store.select(getRouterState).subscribe(route => {
+    this.store.select(getRouterState).subscribe((route) => {
       const foodId = route.state.params['id'];
       this.foodId = foodId;
-    })
+    });
 
+    this.filterEmptyInputs();
+    this.initEditForm();
+  }
+
+  save() {
+    if (this.editFoodForm.pristine) {
+      this.store.dispatch(setFoodDetailsMode({mode:FoodDetailsMode.VIEW}));
+      return;
+    }
+
+    const data: any = this.gatherEditFormData();
+
+    this.store.dispatch(editFoodById({ foodId: this.foodId, data }));
+  }
+
+  gatherEditFormData() {
+    const nutrients: any = this.editFoodForm.get('nutrients')?.value;
+    const subNutrients: any = this.editFoodForm.get('subNutrients')?.value;
+
+    return {
+      calories: this.editFoodForm.get('calories')?.value,
+      nutrients: Object.keys(nutrients)
+        .filter((key) => nutrients[key] !== '')
+        .map((key) => {
+          return {
+            id: key,
+            quantity: nutrients[key] ?? null,
+          };
+        }),
+      subNutrients: Object.keys(subNutrients)
+        .filter((key) => subNutrients[key] !== '')
+        .map((key) => {
+          return {
+            id: key,
+            quantity: subNutrients[key] ?? null,
+          };
+        }),
+    };
+  }
+
+  back() {
+    this.store.dispatch(setFoodDetailsMode({ mode: FoodDetailsMode.VIEW }));
+  }
+
+  initEditForm() {
+    this.editFoodForm = this.fb.group({
+      calories: [this.editDetails.calories],
+      nutrients: this.fb.group(
+        this.coreNutrients.reduce((acc, curr) => {
+          acc[curr.id] = [curr.quantity];
+          return acc;
+        }, {})
+      ),
+      subNutrients: this.fb.group(
+        this.allNutrients
+          .map((x) => x.subNutrients)
+          .reduce((acc, curr) => {
+            acc.push(...curr);
+            return acc;
+          }, [])
+          .reduce((acc, curr) => {
+            acc[curr.id] = [curr.quantity];
+            return acc;
+          }, {})
+      ),
+    });
+  }
+
+  filterEmptyInputs() {
     this.editDetails = {
       ...this.foodDetails,
       nutrients: this.foodDetails.nutrients.map((nutrient) => {
@@ -45,58 +118,6 @@ export class EditFoodComponent implements OnInit {
           }),
         };
       }),
-    };
-
-    this.editFoodForm = this.fb.group({
-      calories: [this.editDetails.calories],
-      nutrients: this.fb.group(
-        this.editDetails.coreNutrients.reduce((acc, curr) => {
-          acc[curr.id] = [curr.quantity];
-          return acc;
-        }, {})
-      ),
-      subNutrients: this.fb.group(
-        this.editDetails.nutrients
-          .map((x) => x.subNutrients)
-          .reduce((acc, curr) => {
-            acc.push(...curr);
-            return acc;
-          }, [])
-          .reduce((acc, curr) => {
-            acc[curr.id] = [curr.quantity];
-            return acc;
-          }, {})
-      ),
-    });
-  }
-
-  save() {
-    const data = this.gatherData();
-    console.log(data);
-    this.service.edit(this.foodId,data).subscribe();
-  }
-
-  gatherData() {
-    const nutrients: any = this.editFoodForm.get('nutrients')?.value;
-    const subNutrients: any = this.editFoodForm.get('subNutrients')?.value;
-    return {
-      calories: this.editFoodForm.get('calories')?.value,
-      nutrients: Object.keys(nutrients)
-        .filter((key) => nutrients[key] !== '')
-        .map((key) => {
-          return {
-            id: key,
-            quantity: +nutrients[key],
-          };
-        }),
-      subNutrients: Object.keys(subNutrients)
-        .filter((key) => subNutrients[key] !== '')
-        .map((key) => {
-          return {
-            id: key,
-            quantity: +subNutrients[key],
-          };
-        }),
     };
   }
 }

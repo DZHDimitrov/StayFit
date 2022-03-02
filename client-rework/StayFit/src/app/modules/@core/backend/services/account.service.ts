@@ -7,7 +7,7 @@ import { IAppState } from 'src/app/state/app.state';
 import {
   IAuthResponseData,
   IRegisterResponseData,
-} from '../../interfaces/responses/auth/user.res';
+} from '../../interfaces/auth/user.interface';
 import { AccountApi } from '../api/account.api';
 
 @Injectable({

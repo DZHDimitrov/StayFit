@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InnerNavbarComponent } from './inner-navbar/inner-navbar.component';
+import { MiniNavbarComponent } from './mini-navbar/mini-navbar.component';
 import { ReadingBlockComponent } from './reading-preview/reading-preview.component';
 import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../material/material.module';
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    InnerNavbarComponent,
+    MiniNavbarComponent,
     ReadingBlockComponent,
     SearchBarComponent,
     SearchBarComponent,
@@ -26,7 +26,7 @@ import { FormsModule } from '@angular/forms';
     EffectsModule.forFeature(),
   ],
   exports: [
-    InnerNavbarComponent,
+    MiniNavbarComponent,
     ReadingBlockComponent,
     SearchBarComponent,
     FoodsIntroComponent,

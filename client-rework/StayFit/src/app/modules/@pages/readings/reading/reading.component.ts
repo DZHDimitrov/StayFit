@@ -1,12 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+
 import { Store } from '@ngrx/store';
+
 import { Observable, Subject } from 'rxjs';
-import { shareReplay, takeUntil } from 'rxjs/operators';
+
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
+
+import { IReading } from 'src/app/modules/@core/interfaces/readings/readings-reading.interface';
+
+import { latinToCyrillic } from 'src/app/modules/@core/utility/text-transilerator';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { getRouterState } from 'src/app/state/router/router.selector';
-import { ReadingCategory } from '../../../@core/enums/reading.category';
-import { IReading } from '../../../@core/interfaces/responses/readings/readings.interface';
-import { loadReadingById } from '../store/readings.actions';
+
+import { loadReading } from '../store/readings.actions';
+
 import { getReadingById } from '../store/readings.selector';
 
 @Component({
@@ -16,34 +25,19 @@ import { getReadingById } from '../store/readings.selector';
 })
 export class ReadingComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>) {}
+
   currentReading$!: Observable<IReading | null>;
   unsubscribe$: Subject<void> = new Subject();
-  routeInit:string | undefined;
 
   ngOnInit(): void {
-    console.log('test')
     this.store
       .select(getRouterState)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((route) => {
-        const urlSegments = route.state.url
-          .split('/')
-          .filter((r) => r !== undefined);
-        const { mainCategory, subCategory, id } = route.state.params;
-        console.log(mainCategory,subCategory,id)
-        if (urlSegments.includes('articles')) {
-          this.store.dispatch(
-            loadReadingById({
-              mainCategory: ReadingCategory.Articles,
-              subCategory: subCategory,
-            })
-          );
-        } else if (mainCategory && subCategory && id){
-          console.log('dispatching...')
-          this.store.dispatch(
-            loadReadingById({ mainCategory, subCategory, id })
-          );
-        }
+        const [mainCategory, subCategory, id] = this.findParts(route.state.url);
+
+        this.store.dispatch(loadReading({ mainCategory, subCategory, id }));
+
         this.currentReading$ = this.store
           .select(getReadingById)
           .pipe(shareReplay());
@@ -53,5 +47,25 @@ export class ReadingComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  findParts(url: string): string[] {
+    const urlParts = url
+      .split('/')
+      .filter((r) => r !== undefined && r !== '')
+      .slice(2);
+
+    let mainCategory: string = latinToCyrillic(urlParts[0]);
+    let subCategory: string = '';
+    let id: string = '';
+
+    if (urlParts.length == 2) {
+      id = urlParts[1];
+    } else if (urlParts.length == 3) {
+      subCategory = urlParts[1];
+      id = urlParts[2];
+    }
+
+    return [mainCategory, subCategory, id];
   }
 }

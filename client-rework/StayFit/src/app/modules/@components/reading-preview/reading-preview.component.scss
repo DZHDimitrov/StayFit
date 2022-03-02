@@ -1,5 +1,7 @@
 .card-block {
   padding: 0;
+  // height:fit-content;
+  height: 100%;
   img {
     object-fit: cover;
     width: 100%;
@@ -9,14 +11,20 @@
   div {
     h2 {
       text-align: center;
+      margin:0;
     }
     p {
       text-align: center;
       font-size: 17px;
       color: #9C9DA6;
+      margin:0;
     }
   }
   .mat-subheading-2 {
-    font-weight: 500;
+    font-weight: 400;
+    padding: 0.5rem;
   }
+}
+.card-block-container {
+  height: 100%;
 }

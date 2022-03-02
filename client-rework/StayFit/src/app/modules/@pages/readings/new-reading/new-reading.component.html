@@ -6,17 +6,17 @@
       </mat-card-header>
       <mat-card-content>
         <div class="content">
-              <mat-form-field class="title" appearance="outline">
-                <mat-label>Заглавие</mat-label>
-                <input matInput type="text" placeholder="Тренировки на открито" formControlName="title" />
-                <mat-error *ngIf="this.formGroup.get('title')?.hasError('required')">{{requiredField}}</mat-error>
-                <mat-error *ngIf="this.formGroup.get('title')?.hasError('minlength')">{{fieldMinLength(5)}}</mat-error>
-              </mat-form-field>
+          <mat-form-field class="title" appearance="outline">
+            <mat-label>Заглавие</mat-label>
+            <input matInput type="text" placeholder="Тренировки на открито" formControlName="title" />
+            <mat-error *ngIf="this.formGroup.get('title')?.hasError('required')">{{requiredField}}</mat-error>
+            <mat-error *ngIf="this.formGroup.get('title')?.hasError('minlength')">{{fieldMinLength(5)}}</mat-error>
+          </mat-form-field>
           <mat-form-field appearance="fill" class="main-category" appearance="outline">
             <mat-label>Избор на основна категория</mat-label>
             <mat-select formControlName="readingMainCategoryId" (valueChange)="loadSubCategories($event)">
               <mat-option *ngFor="let category of this.mainCategories$ | async"
-                [value]="{ id: category.id, hasChildren: category.hasChildren }">
+                [value]="{ id: category.id}">
                 {{ category.name }}
               </mat-option>
             </mat-select>

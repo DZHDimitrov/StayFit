@@ -6,7 +6,6 @@
 
     public class UserReading : BaseDeletableModel<int>
     {
-
         public string ApplicationUserId { get; set; }
 
         public ApplicationUser User { get; set; }

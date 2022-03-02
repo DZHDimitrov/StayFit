@@ -6,7 +6,7 @@ import {
   ICommentsRes,
   ICreateCommentRes,
   IDeleteCommentRes,
-} from '../../interfaces/responses/forum/comments.res';
+} from '../../interfaces/forum/forum-comments.interface';
 import { HttpService } from './http.service';
 
 @Injectable()

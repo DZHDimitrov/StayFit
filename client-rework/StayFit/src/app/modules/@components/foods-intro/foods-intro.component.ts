@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { IAppState } from 'src/app/state/app.state';
 import { getFoodsIntroTitle } from '../state/components.selector';
 
@@ -16,15 +15,6 @@ export class FoodsIntroComponent implements OnInit {
   constructor(private store: Store<IAppState>) {}
 
   ngOnInit(): void {
-    this.title$ = this.store.select(getFoodsIntroTitle).pipe(
-      switchMap((food) => {
-        return food
-          ? of(food)
-          : new Observable<string>((observer) => {
-              observer.next('храни и продукти');
-              observer.complete();
-            });
-      })
-    );
+    this.title$ = this.store.select(getFoodsIntroTitle);
   }
 }

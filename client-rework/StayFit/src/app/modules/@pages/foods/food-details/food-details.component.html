@@ -14,7 +14,7 @@
                     <span class="mat-headline">{{foodDetails.calories}}</span>
                     <p class="mat-subheading-1">калории</p>
                 </div>
-                <div *ngFor="let nutrient of foodDetails.coreNutrients">
+                <div *ngFor="let nutrient of coreNutrients">
                     <span class="mat-headline">{{nutrient.quantity}}</span>
                     <p class="mat-subheading-1">{{nutrient.name}}</p>
                 </div>
@@ -25,7 +25,7 @@
         </div>
     </section>
     <section class="food-details">
-        <mat-card *ngFor="let nutrient of foodDetails.nutrients" class="food-details-table">
+        <mat-card *ngFor="let nutrient of allNutrients" class="food-details-table">
             <mat-card-header>
                 <h1 class="mat-heading-2">{{nutrient.name}}</h1>
             </mat-card-header>
@@ -41,6 +41,6 @@
     </section>
 </div>
 <div *ngIf="(this.mode$ | async) === 'edit'">
-    <app-edit-food [foodDetails]="this.foodDetails"></app-edit-food>
+    <app-edit-food [allNutrients]="allNutrients" [coreNutrients]="coreNutrients" [foodDetails]="foodDetails"></app-edit-food>
 </div>
 <app-send-question></app-send-question>

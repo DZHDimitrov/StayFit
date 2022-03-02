@@ -1,49 +1,62 @@
 import { createReducer, on } from '@ngrx/store';
+
 import {
-  loadCategoriesLatestPreviewsSuccess,
-  loadCatalogueByMainCategorySuccess,
-  loadCatalogueBySubCategorySuccess,
-  loadReadingByIdSuccess,
-  // loadReadingMainCategoriesSuccess,
-  // loadReadingSubCategoriesSuccess,
+  loadKnowledgeSuccess,
+  loadSubCategoryWithPreviewsSuccess,
+  loadReadingSuccess,
   resetReadingSubCategories,
-  loadReadingCategoriesSuccess,
+  loadReadingMainCategoriesSuccess,
+  loadMainCategoryWithPreviewsSuccess,
+  loadReadingSubCategoriesSuccess,
 } from './readings.actions';
+
 import { initialState } from './readings.state';
 
 export const _readingsReducer = createReducer(
   initialState,
-  on(loadCategoriesLatestPreviewsSuccess, (state, action) => {
+
+  on(loadKnowledgeSuccess, (state, {payload}) => {
     return {
       ...state,
-      latestPreviews: action.latestPreviews,
+      knowledge:payload.knowledge
     };
   }),
-  on(loadCatalogueByMainCategorySuccess, (state, action) => {
+
+  on(loadMainCategoryWithPreviewsSuccess, (state, {payload}) => {
     return {
       ...state,
-      catalogue: { previews: action.previews },
+      mainCategoryWithPreviews: payload.mainCategoryWithPreviews,
     };
   }),
-  on(loadCatalogueBySubCategorySuccess, (state, action) => {
+
+  on(loadSubCategoryWithPreviewsSuccess, (state, {payload}) => {
     return {
       ...state,
-      catalogue: { previews: action.previews },
+      subCategoryWithPreviews: payload.subCategoryWithPreviews,
     };
   }),
-  on(loadReadingByIdSuccess, (state, action) => {
+
+  on(loadReadingSuccess, (state, {payload}) => {
     return {
       ...state,
-      currentReading: action.currentReading,
+      currentReading: payload.currentReading,
     };
   }),
-  on(loadReadingCategoriesSuccess, (state, action) => {
+
+  on(loadReadingMainCategoriesSuccess, (state, {payload}) => {
     return {
       ...state,
-      mainCategories: action.mainId ? state.mainCategories : action.categories,
-      subCategories: action.mainId ? action.categories : state.subCategories
+      mainCategories:payload.categories,
     };
   }),
+
+  on(loadReadingSubCategoriesSuccess, (state, {payload}) => {
+    return {
+      ...state,
+      subCategories:payload.categories,
+    };
+  }),
+  
   on(resetReadingSubCategories, (state, action) => {
     return {
       ...state,

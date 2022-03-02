@@ -3,7 +3,7 @@
     using StayFit.Data.Common.Models;
 
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class Reading : BaseDeletableModel<int>
@@ -13,12 +13,15 @@
             this.UserReadings = new HashSet<UserReading>();
         }
 
-        public string SearchTitle { get; set; }
+        [Required]
+        [StringLength(5)]
+        public string Name { get; set; }
 
-        public string Title { get; set; }
-
+        [Required]
+        [StringLength(20)]
         public string Content { get; set; }
 
+        [Required]
         public string ImageUrl { get; set; }
 
         [ForeignKey(nameof(ReadingMainCategory))]
@@ -31,10 +34,8 @@
 
         public ReadingSubCategory ReadingSubCategory { get; set; }
 
-        [ForeignKey(nameof(BodyPart))]
-        public int? BodyPartId { get; set; }
-        public BodyPart BodyPart {get;set;}
-
+        //Creator
+        [Required]
         [ForeignKey(nameof(ApplicationUser))]
         public string ApplicationUserId { get; set; }
 

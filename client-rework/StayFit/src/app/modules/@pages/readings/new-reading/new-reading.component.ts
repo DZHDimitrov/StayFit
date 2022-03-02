@@ -1,13 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { IReadingCategory } from 'src/app/modules/@core/interfaces/responses/readings/readings.interface';
-import { GlobalConstants } from 'src/app/settings/global-constants';
-import { IAppState } from 'src/app/state/app.state';
-import { addReading, loadReadingCategories, /*loadReadingMainCategories, loadReadingSubCategories,*/ resetReadingSubCategories } from '../store/readings.actions';
-import { getMainCategories, getSubCategories } from '../store/readings.selector';
 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { Store } from '@ngrx/store';
+
+import { Observable } from 'rxjs';
+
+import { shareReplay } from 'rxjs/operators';
+
+import { IReadingCategory } from 'src/app/modules/@core/interfaces/readings/readings-category.interface';
+
+import { GlobalConstants } from 'src/app/settings/global-constants';
+
+import { IAppState } from 'src/app/state/app.state';
+
+import { addReading, loadReadingMainCategories, loadReadingSubCategories, resetReadingSubCategories } from '../store/readings.actions';
+
+import { getMainCategories, getSubCategories } from '../store/readings.selector';
 
 @Component({
   selector: 'app-new-reading',
@@ -15,34 +24,27 @@ import { getMainCategories, getSubCategories } from '../store/readings.selector'
   styleUrls: ['./new-reading.component.scss'],
 })
 export class NewReadingComponent implements OnInit {
-  constructor(private store: Store<IAppState>, private fb: FormBuilder) {}
+  constructor(private store: Store<IAppState>, private fb: FormBuilder) {
+    this.initForm();
+  }
+
   mainCategories$!: Observable<IReadingCategory[]>;
   subCategories$!: Observable<IReadingCategory[]>;
+
   formGroup!: FormGroup;
 
   requiredField:string = GlobalConstants.REQUIRED_FIELD;
   fieldMinLength: Function = GlobalConstants.FIELD_MIN_LENGTH;
 
   ngOnInit(): void {
-    this.formGroup = this.fb.group({
-      readingMainCategoryId: [''],
-      readingSubCategoryId: [''],
-      title: ['', [Validators.required,Validators.minLength(5)]],
-      content: ['', [Validators.required, Validators.minLength(10)]],
-      image: ['',[Validators.required]],
-      // bodyPart: [''],
-    });
-    this.store.dispatch(loadReadingCategories({}));
+    this.store.dispatch(loadReadingMainCategories({}));
+
     this.mainCategories$ = this.store.select(getMainCategories);
+    this.subCategories$ = this.store.select(getSubCategories).pipe(shareReplay(1));
   }
 
-  loadSubCategories(value: { id: number; hasChildren: boolean }) {
-    if (value.hasChildren) {
-      this.store.dispatch(
-        loadReadingCategories({ mainId:value.id })
-      );
-      this.subCategories$ = this.store.select(getSubCategories);
-    }
+  loadSubCategories(value: { id: number; }) {
+    this.store.dispatch(loadReadingSubCategories({mainId:value.id}))
     this.store.dispatch(resetReadingSubCategories());
   }
 
@@ -67,6 +69,7 @@ export class NewReadingComponent implements OnInit {
     const formModel = this.formGroup.value;
 
     let formData = new FormData();
+    
     Object.keys(formModel).forEach((key:any) => {
       let valueToAppend = this.formGroup.get(key)?.value;
       if(key === 'readingMainCategoryId'){
@@ -75,5 +78,16 @@ export class NewReadingComponent implements OnInit {
       formData.append(key,valueToAppend);
     })
     return formData;
+  }
+
+  private initForm() {
+    this.formGroup = this.fb.group({
+      readingMainCategoryId: [''],
+      readingSubCategoryId: [''],
+      title: ['', [Validators.required,Validators.minLength(5)]],
+      content: ['', [Validators.required, Validators.minLength(10)]],
+      image: ['',[Validators.required]],
+      // bodyPart: [''],
+    });
   }
 }

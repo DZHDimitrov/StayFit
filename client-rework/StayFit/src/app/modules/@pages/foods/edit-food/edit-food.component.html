@@ -5,24 +5,24 @@
         <div class="food-description">
             <img src="https://bbteamcdn.com/img/food/251193_130.jpg" alt="">
             <div class="title">
-                <h1 class="mat-display-2">{{editDetails.name}}</h1>
-                <p class="mat-headline">{{editDetails.description}}</p>
+                <h1 class="mat-display-2">{{foodDetails.name}}</h1>
+                <p class="mat-headline">{{foodDetails.description}}</p>
             </div>
         </div>
         <div>
             <p class="mat-subheading-2"><span class="mat-title">100 г</span> съдържат:</p>
             <div class="core-nutrients">
                 <div>
-                    <input formControlName="calories" type="text" [value]="editDetails.calories">
+                    <input formControlName="calories" type="text" [value]="foodDetails.calories">
                     <p class="mat-subheading-1">калории</p>
                 </div>
-                <div formGroupName="nutrients" *ngFor="let nutrient of editDetails.coreNutrients">
+                <div formGroupName="nutrients" *ngFor="let nutrient of coreNutrients">
                     <input [formControlName]="nutrient.id" type="text" [value]="nutrient.quantity">
                     <p class="mat-subheading-1">{{nutrient.name}}</p>
                 </div>
             </div>
             <div class="buttons-container">
-                <button mat-flat-button color="warn">
+                <button (click)="back()" mat-flat-button color="warn">
                     Назад
                 </button>
                 <button (click)="save()" mat-flat-button color="primary" class="save-button">
@@ -32,7 +32,7 @@
         </div>
     </section>
     <section class="food-details">
-        <mat-card formGroupName="subNutrients" *ngFor="let nutrient of editDetails.nutrients" class="food-details-table">
+        <mat-card formGroupName="subNutrients" *ngFor="let nutrient of allNutrients" class="food-details-table">
             <mat-card-header>
                 <h1 class="mat-heading-2">{{nutrient.name}}</h1>
             </mat-card-header>
@@ -41,7 +41,6 @@
                     <li *ngFor="let subnutrient of nutrient.subNutrients">
                         <span>{{subnutrient.name}}</span>
                         <input [formControlName]="subnutrient.id" type="text" [value]="subnutrient.quantity">
-                        <!-- <span>{{subnutrient.quantity}}</span> -->
                     </li>
                 </ul>
             </mat-card-content>

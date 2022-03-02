@@ -1,30 +1,38 @@
-import {
-  FoodDetailsMode,
-  IFoodCategoryData,
-  IFoodData,
-  IFoodPreviewData,
-} from '../interfaces/food.interface';
+import { IFoodCategory } from 'src/app/modules/@core/interfaces/foods/foods-category.interface';
+
+import { FoodDetailsMode, IFood, IFoodPreview } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
+
+import { IFoodKeyword } from 'src/app/modules/@core/interfaces/foods/foods-keywords.interface';
 
 export interface IFoodsState {
-  foodsCategories: IFoodCategoryData[];
-  autocompleteKeywords: IFoodPreviewData[];
-  foodsByCategory: IFoodPreviewData[];
-  searchedFood:IFoodPreviewData[];
-  foodDetails: IFoodData | any;
-  categories: { id: number; name: string }[];
-  byCategory: any[];
-  nutrients: any[];
-  chosenNutrients: any;
+
+  foodsCategories: IFoodCategory[];
+
+  foodsByCategory: IFoodPreview[];
+  
+  searchKeywords: IFoodKeyword[];
+
+  searchedFood: IFoodPreview[];
+  
+  foodDetails: IFood | any;
+
+  foodTypesByCategory: any[];
+  
+  editMode: FoodDetailsMode,
 }
 
 export const initialState: IFoodsState = {
   foodsCategories: [],
-  autocompleteKeywords: [],
+
+  editMode: FoodDetailsMode.VIEW,
+
+  searchKeywords: [],
+
   foodsByCategory: [],
+
   searchedFood: [],
-  foodDetails: {mode:FoodDetailsMode.VIEW},
-  byCategory:[],
-  categories:[],
-  chosenNutrients:[],
-  nutrients:[]
+
+  foodDetails: {},
+
+  foodTypesByCategory: [],
 };

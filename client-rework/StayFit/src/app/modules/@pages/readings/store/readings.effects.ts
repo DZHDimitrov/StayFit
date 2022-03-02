@@ -1,29 +1,32 @@
 import { Injectable } from '@angular/core';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+
 import { Store } from '@ngrx/store';
+
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+
 import { exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+
 import { IAppState } from 'src/app/state/app.state';
-import { setInnerNav } from '../../../@components/state/components.actions';
+
 import { ReadingsService } from '../../../@core/backend/services/readings.service';
+
 import {
   addReading,
   addReadingSuccess,
-  loadCatalogueByMainCategory,
-  loadCatalogueByMainCategorySuccess,
-  loadCatalogueBySubCategory,
-  loadCatalogueBySubCategorySuccess,
-  loadCategoriesLatestPreviews,
-  loadCategoriesLatestPreviewsSuccess,
-  loadReadingById,
-  loadReadingByIdSuccess,
-  loadReadingCategories,
-  loadReadingCategoriesSuccess,
-  // loadReadingMainCategories,
-  // loadReadingMainCategoriesSuccess,
-  // loadReadingSubCategories,
-  // loadReadingSubCategoriesSuccess,
+  loadSubCategoryWithPreviews,
+  loadSubCategoryWithPreviewsSuccess,
+  loadKnowledge,
+  loadKnowledgeSuccess,
+  loadMainCategoryWithPreviews,
+  loadMainCategoryWithPreviewsSuccess,
+  loadReading,
+  loadReadingSuccess,
+  loadReadingMainCategories,
+  loadReadingMainCategoriesSuccess,
+  loadReadingSubCategories,
+  loadReadingSubCategoriesSuccess,
 } from './readings.actions';
 
 @Injectable()
@@ -32,123 +35,32 @@ export class PagesEffects {
     private readingService: ReadingsService,
     private actions$: Actions,
     private store: Store<IAppState>,
-    private toastr:ToastrService,
+    private toastr: ToastrService
   ) {}
 
-  loadCategoriesLatestPreviews$ = createEffect(() => {
+  loadKnowledge$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadCategoriesLatestPreviews),
-      mergeMap((action) => {
-        return this.readingService.loadCategoriesLatestPreviews().pipe(
+      ofType(loadKnowledge),
+      switchMap((action) => {
+        return this.readingService.loadKnowledge().pipe(
           map((res) => {
-            console.log(res);
-            return loadCategoriesLatestPreviewsSuccess({
-              latestPreviews: res.data,
-              navBar: {
-                title: 'Знание',
-                navItems: res.data.map((category) => {
-                  const { previews, ...navItems } = category;
-                  return navItems;
-                }),
-              },
-            });
+            return loadKnowledgeSuccess({ knowledge: res.data });
           })
         );
       })
     );
   });
 
-  loadCategoriesLatestPreviewsSuccess$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(loadCategoriesLatestPreviewsSuccess),
-        tap((action) => {
-          this.store.dispatch(setInnerNav({ navBar: action.navBar }));
-        })
-      );
-    },
-    { dispatch: false }
-  );
-
-  setContentByMainCategory$ = createEffect(() => {
+  loadMainCategoryWithPreviews$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadCatalogueByMainCategory),
-      mergeMap((action) => {
-        return this.readingService.loadPreviewsByMainCategory(action.category).pipe(
-          map((res) => {
-            res.data.previews = res.data.previews.map((p) => {
-              if (p.name.includes('начинаещи')) {
-                return {
-                  ...p,
-                  name: 'За начинаещи',
-                };
-              } else if (p.name.includes('Статии')) {
-                return {
-                  ...p,
-                  name: 'Статии',
-                };
-              } else if (p.name.includes('Още')) {
-                return {
-                  ...p,
-                  name: 'Още статии',
-                };
-              }
-              return p;
-            });
-            return loadCatalogueByMainCategorySuccess({
-              navBar: {
-                navItems: res.data.previews,
-                title: res.data.name,
-              },
-              previews: res.data.previews,
-              hasChildren: res.data.hasChildren,
-            });
-          })
-        );
-      })
-    );
-  });
-
-  setContentByMainCategorySuccess$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(loadCatalogueByMainCategorySuccess),
-        tap((action) => {
-          this.store.dispatch(
-            setInnerNav({
-              navBar: action.navBar,
-              hasChildren: action.hasChildren,
-            })
-          );
-        })
-      );
-    },
-    { dispatch: false }
-  );
-
-  setContentBySubCategory$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(loadCatalogueBySubCategory),
-      mergeMap((action) => {
+      ofType(loadMainCategoryWithPreviews),
+      mergeMap(({ payload }) => {
         return this.readingService
-          .loadPreviewsBySubCategory(action.mainCategory, action.subCategory)
+          .loadMainCategoryWithPreviews(payload.category)
           .pipe(
             map((res) => {
-              return loadCatalogueBySubCategorySuccess({
-                navBar: {
-                  title: res.data?.name,
-                  navItems: res.data?.categories.map((c) => {
-                    return {
-                      ...c,
-                      name: c.name.includes('начинаещи')
-                        ? 'За начинаещи'
-                        : c.name.includes('Статии')
-                        ? 'Статии'
-                        : c.name,
-                    };
-                  }),
-                },
-                previews: res.data?.previews,
+              return loadMainCategoryWithPreviewsSuccess({
+                mainCategoryWithPreviews: res.data,
               });
             })
           );
@@ -156,53 +68,69 @@ export class PagesEffects {
     );
   });
 
-  setContentBySubCategorySuccess$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(loadCatalogueBySubCategorySuccess),
-        tap((action) => {
-          this.store.dispatch(setInnerNav({ navBar: action.navBar }));
-        })
-      );
-    },
-    { dispatch: false }
-  );
+  loadSubCategoryWithPreviews$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadSubCategoryWithPreviews),
+      mergeMap(({ payload }) => {
+        return this.readingService
+          .loadSubCategoryWithPreviews(
+            payload.mainCategory,
+            payload.subCategory
+          )
+          .pipe(
+            map((res) => {
+              return loadSubCategoryWithPreviewsSuccess({
+                subCategoryWithPreviews: res.data,
+              });
+            })
+          );
+      })
+    );
+  });
 
   loadReading$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadReadingById),
-      switchMap((action) => {
-        let reading$: Observable<any> = new Observable();
-        if (action.id) {
-          reading$ = this.readingService.loadOneByIdInSubGroup(
-            action.mainCategory,
-            action.subCategory,
-            action.id
+      ofType(loadReading),
+      switchMap(({ payload }) => {
+        return this.readingService
+          .loadReading(payload.mainCategory, payload.subCategory, payload.id)
+          .pipe(
+            map((r) => {
+              return loadReadingSuccess({ currentReading: r.data });
+            })
           );
-        } else {
-          reading$ = this.readingService.loadOneByMainCategory(
-            action.mainCategory,
-            action.subCategory
-          );
-        }
-        return reading$.pipe(
-          map((r) => {
-            return loadReadingByIdSuccess({ currentReading: r.data });
+      })
+    );
+  });
+
+  loadReadingMainCategories$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadReadingMainCategories),
+      switchMap(({ payload }) => {
+        return this.readingService.loadReadingMainCategories().pipe(
+          map((res) => {
+            return loadReadingMainCategoriesSuccess({
+              categories: res.data,
+            });
           })
         );
       })
     );
   });
 
-  loadReadingCategories$ = createEffect(() => {
+  loadReadingSubCategories$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadReadingCategories),
-      switchMap((action) => {
-        return this.readingService.loadCategories(action.mainId).pipe(
-          map((res) => {
-            return loadReadingCategoriesSuccess({mainId:action.mainId,categories:res.data });
-          })
-        );
+      ofType(loadReadingSubCategories),
+      switchMap(({ payload }) => {
+        return this.readingService
+          .loadReadingSubCategories(payload.mainId)
+          .pipe(
+            map((res) => {
+              return loadReadingSubCategoriesSuccess({
+                categories: res.data,
+              });
+            })
+          );
       })
     );
   });
@@ -210,8 +138,8 @@ export class PagesEffects {
   addReading$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(addReading),
-      exhaustMap((action) => {
-        return this.readingService.add(action.data).pipe(
+      exhaustMap(({ payload }) => {
+        return this.readingService.add(payload.data).pipe(
           map((x) => {
             return addReadingSuccess();
           })

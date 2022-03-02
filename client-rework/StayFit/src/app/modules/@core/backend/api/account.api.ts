@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { IAuthResponseData, IRegisterResponseData } from "../../interfaces/responses/auth/user.res";
+import { IAuthResponseData, IRegisterResponseData } from "../../interfaces/auth/user.interface";
 import { HttpService } from "./http.service";
 
 @Injectable({

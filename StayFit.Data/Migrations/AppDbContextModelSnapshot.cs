@@ -263,39 +263,6 @@ namespace StayFit.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.BodyPart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SearchName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BodyParts");
-                });
-
             modelBuilder.Entity("StayFit.Data.Models.ConversationModels.Message", b =>
                 {
                     b.Property<string>("Id")
@@ -331,19 +298,19 @@ namespace StayFit.Data.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodName", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodType", b =>
                 {
-                    b.Property<int>("FoodNameId")
+                    b.Property<int>("FoodTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("FoodCategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("FoodNameId", "FoodCategoryId");
+                    b.HasKey("FoodTypeId", "FoodCategoryId");
 
                     b.HasIndex("FoodCategoryId");
 
-                    b.ToTable("CategoryFoodNames");
+                    b.ToTable("CategoryFoodTypes");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
@@ -368,7 +335,7 @@ namespace StayFit.Data.Migrations
                     b.Property<int>("FoodCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FoodNameId")
+                    b.Property<int>("FoodTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -384,7 +351,7 @@ namespace StayFit.Data.Migrations
 
                     b.HasIndex("FoodCategoryId");
 
-                    b.HasIndex("FoodNameId");
+                    b.HasIndex("FoodTypeId");
 
                     b.ToTable("Foods");
                 });
@@ -419,7 +386,7 @@ namespace StayFit.Data.Migrations
                     b.ToTable("FoodCategories");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodName", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -443,7 +410,7 @@ namespace StayFit.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FoodNames");
+                    b.ToTable("FoodTypes");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.BaseNutrient", b =>
@@ -711,9 +678,6 @@ namespace StayFit.Data.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("BodyPartId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -732,23 +696,18 @@ namespace StayFit.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ReadingMainCategoryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ReadingSubCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SearchTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("BodyPartId");
 
                     b.HasIndex("ReadingMainCategoryId");
 
@@ -777,9 +736,6 @@ namespace StayFit.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SearchName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -814,9 +770,6 @@ namespace StayFit.Data.Migrations
 
                     b.Property<int>("ReadingMainCategoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("SearchName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -937,7 +890,7 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodName", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodType", b =>
                 {
                     b.HasOne("StayFit.Data.Models.FoodModels.FoodCategory", "FoodCategory")
                         .WithMany("CategoryNames")
@@ -945,15 +898,15 @@ namespace StayFit.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.FoodModels.FoodName", "FoodName")
+                    b.HasOne("StayFit.Data.Models.FoodModels.FoodType", "FoodType")
                         .WithMany("CategoryNames")
-                        .HasForeignKey("FoodNameId")
+                        .HasForeignKey("FoodTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FoodCategory");
 
-                    b.Navigation("FoodName");
+                    b.Navigation("FoodType");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
@@ -964,15 +917,15 @@ namespace StayFit.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StayFit.Data.Models.FoodModels.FoodName", "FoodName")
+                    b.HasOne("StayFit.Data.Models.FoodModels.FoodType", "FoodType")
                         .WithMany("Foods")
-                        .HasForeignKey("FoodNameId")
+                        .HasForeignKey("FoodTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FoodCategory");
 
-                    b.Navigation("FoodName");
+                    b.Navigation("FoodType");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Nutrients.FoodBaseNutrient", b =>
@@ -1109,10 +1062,6 @@ namespace StayFit.Data.Migrations
                         .WithMany("Readings")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("StayFit.Data.Models.BodyPart", "BodyPart")
-                        .WithMany("Articles")
-                        .HasForeignKey("BodyPartId");
-
                     b.HasOne("StayFit.Data.Models.ReadingModels.ReadingMainCategory", "ReadingMainCategory")
                         .WithMany("Readings")
                         .HasForeignKey("ReadingMainCategoryId")
@@ -1124,8 +1073,6 @@ namespace StayFit.Data.Migrations
                         .HasForeignKey("ReadingSubCategoryId");
 
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("BodyPart");
 
                     b.Navigation("ReadingMainCategory");
 
@@ -1185,11 +1132,6 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.BodyPart", b =>
-                {
-                    b.Navigation("Articles");
-                });
-
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>
                 {
                     b.Navigation("FoodBaseNutrients");
@@ -1204,7 +1146,7 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Foods");
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodName", b =>
+            modelBuilder.Entity("StayFit.Data.Models.FoodModels.FoodType", b =>
                 {
                     b.Navigation("CategoryNames");
 

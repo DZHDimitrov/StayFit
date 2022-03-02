@@ -40,9 +40,9 @@
 
         public DbSet<UserReading> UserReadings { get; set; }
 
-        public DbSet<FoodName> FoodNames { get; set; }
+        public DbSet<FoodType> FoodTypes { get; set; }
 
-        public DbSet<BodyPart> BodyParts { get; set; }
+        //public DbSet<BodyPart> BodyParts { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
 
@@ -58,7 +58,7 @@
 
         public DbSet<Message> Messages { get; set; }
 
-        public DbSet<CategoryFoodName> CategoryFoodNames { get; set; }
+        public DbSet<CategoryFoodType> CategoryFoodTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -70,11 +70,17 @@
         {
 
             builder.Entity<FoodBaseNutrient>().HasKey(c => new { c.FoodId, c.BaseNutrientId });
+
             builder.Entity<FoodSubNutrient>().HasKey(c => new { c.FoodId, c.SubNutrientId });
+
             builder.Entity<UsersChosenComments>().HasKey(c => new { c.ApplicationUserId, c.CommentId });
+
             builder.Entity<Message>().HasOne(c => c.Sender).WithMany(c => c.Messages).HasForeignKey(c => c.SenderId);
+
             builder.Entity<Message>().HasOne(c => c.Receiver).WithMany(c => c.RecievedMessages).HasForeignKey(c => c.ReceieverId);
-            builder.Entity<CategoryFoodName>(c => c.HasKey(x => new { x.FoodNameId,x.FoodCategoryId }));
+
+            builder.Entity<CategoryFoodType>(c => c.HasKey(x => new { x.FoodTypeId,x.FoodCategoryId }));
+
             base.OnModelCreating(builder);
         }
     }

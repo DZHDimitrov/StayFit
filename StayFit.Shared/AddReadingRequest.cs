@@ -14,7 +14,5 @@
         public string Content { get; set; }
 
         public int? ReadingSubCategoryId { get; set; }
-
-        public int? BodyPartId { get; set; }
     }
 }

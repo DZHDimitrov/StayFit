@@ -1,16 +1,14 @@
 import { createAction, props } from '@ngrx/store';
-import { IInnerNavBar } from '../interfaces/navbar.interface';
 
-export const SET_INNER_NAV_ITEMS = '[components] inner nav items';
-export const SET_INNER_NAV_ITEMS_SUCCESS =
-  '[components] set inner nav items success';
-export const SET_INNER_NAV_TITLE = '[components] inner nav title';
+export const SET_MINI_NAVBAR = '[components] set mini navbar';
+export const SET_MINI_NAVBAR_SUCCESS =
+  '[components] set mini navbar success';
 
 export const SET_FOODS_INTRO_TITLE = '[components] set foods INTRO title';
 
-export const setInnerNav = createAction(
-  SET_INNER_NAV_ITEMS,
-  props<{ navBar: IInnerNavBar; hasChildren?: boolean }>()
+export const setMiniNavbar = createAction(
+  SET_MINI_NAVBAR,
+  props<{title:string,navItems:string[]}>()
 );
 
 export const setFoodsIntroTitle = createAction(

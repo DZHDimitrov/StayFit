@@ -1,50 +1,44 @@
 import { NgModule } from '@angular/core';
+
 import { RouterModule, Routes } from '@angular/router';
-import { CatalogueComponent } from './catalogue/catalogue.component';
+
 import { ReadingsComponent } from './readings.component';
+
 import { ReadingComponent } from './reading/reading.component';
 
-const routes:Routes = [
+import { MainCategoriesComponent } from './main-categories/main-categories.component';
+
+import { KnowledgeComponent } from './knowledge/knowledge.component';
+
+import { SubCategoriesComponent } from './sub-categories/sub-categories.component';
+
+const routes: Routes = [
   {
-    path: 'articles/:subCategory',
-    component: ReadingComponent,
-  },
-  // {
-  //   //TODO: Admin only!
-  //   path:'create',
-  //   component:NewReadingComponent
-  // },
-  {
-    path: ':mainCategory',
-    component:CatalogueComponent,
-    // children: [
-    //   {
-    //     path:':subCategory',
-    //     component:CatalogueComponent,
-    //     // children: [
-    //     //   {
-    //     //     path:':id',
-    //     //     component: ReadingComponent
-    //     //   }
-    //     // ]
-    //   },
-    //   {
-    //     path:':subCategory/:id',
-    //     component:ReadingComponent
-    //   }
-    // ]
-  },
-  {
-    path: ':mainCategory/:subCategory',
-    component:CatalogueComponent,
-  },
-  {
-    path:':mainCategory/:subCategory/:id',
-    component:ReadingComponent,
-  },
-  {
-    path:'',
-    component:ReadingsComponent,
+    path: '',
+    component: ReadingsComponent,
+
+    children: [
+      {
+        path: 'statii/:id',
+        component: ReadingComponent,
+      },
+      {
+        path: ':mainCategory',
+        component: MainCategoriesComponent,
+      },
+      {
+        path: ':mainCategory/:subCategory',
+        component: SubCategoriesComponent,
+      },
+      {
+        path: ':mainCategory/:subCategory/:id',
+        component: ReadingComponent,
+      },
+      {
+        path: '',
+        component: KnowledgeComponent,
+      },
+    ],
   },
 ];
 

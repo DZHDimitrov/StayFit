@@ -6,27 +6,36 @@
     using StayFit.Data.Models.ReadingModels;
     using StayFit.Shared;
     using StayFit.Shared.Forum;
-    using StayFit.Shared.Nutritions;
-    using StayFit.Shared.Nutritions.Food;
-    using StayFit.Shared.SharedModels;
+    using StayFit.Shared.Nutritions.Food.Responses;
+    using StayFit.Shared.Readings;
 
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            this.CreateMap<FoodCategory, FoodCategoryPreviewModel>().ForMember(c => c.Name, cfg => cfg.MapFrom(c=> c.Category));
+            //Food
+            this.CreateMap<FoodCategory, FoodCategoryModel>().ForMember(c => c.Name, cfg => cfg.MapFrom(c=> c.Category));
+
             this.CreateMap<Food, FoodPreviewModel>()
-                .ForMember(f => f.Name, cfg => cfg.MapFrom(f => f.FoodName.Name))
-                .ForMember(f => f.Category, cfg => cfg.MapFrom(f => f.FoodCategory.Category));
+                .ForMember(f => f.Name, cfg => cfg.MapFrom(f => f.FoodType.Name));
+
             this.CreateMap<Food, FoodKeywordModel>()
-                .ForMember(f => f.Name, cfg => cfg.MapFrom(f => f.FoodName.Name))
+                .ForMember(f => f.Name, cfg => cfg.MapFrom(f => f.FoodType.Name))
                 .ForMember(f => f.Category, cfg => cfg.MapFrom(f => f.FoodCategory.Category));
 
+            //Forum
             this.CreateMap<PostMainCategory, PostMainCategoryModel>();
+
             this.CreateMap<PostSubCategory, PostSubCategoryModel>();
 
+            //Readings
             this.CreateMap<Reading, ReadingModel>();
+
             this.CreateMap<AddReadingRequest, Reading>();
+
+            this.CreateMap<Reading, ReadingPreviewModel>();
+
+            this.CreateMap<ReadingSubCategory, ReadingPreviewModel>();
         }
     }
 }

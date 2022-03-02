@@ -8,7 +8,7 @@ import {
   IPostPreviewRes,
   IPostRes,
   IUpdatePostRes,
-} from '../../interfaces/responses/forum/post.res';
+} from '../../interfaces/forum/forum-post.interface';
 import { HttpService } from './http.service';
 
 @Injectable()

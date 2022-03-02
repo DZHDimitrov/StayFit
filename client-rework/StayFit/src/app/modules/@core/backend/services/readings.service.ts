@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import {
-  ReadingCategory,
-  ReadingSubCategory,
-} from '../../enums/reading.category';
+
 import { IApiResponse } from '../../interfaces/api.response';
+
 import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
-import {
-  ICategoryReadingPreview,
-  ICreateReadingRes,
-  IDeleteReading,
-  IReading,
-} from '../../interfaces/responses/readings/readings.interface';
+
 import { ReadingsApi } from '../api/readings.api';
+
+import {IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from '../../interfaces/readings/readings-previews.interface';
+
+import { ICreateReadingRes, IDeleteReading, IReading } from '../../interfaces/readings/readings-reading.interface';
+
+import { IReadingCategory } from '../../interfaces/readings/readings-category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,57 +20,31 @@ import { ReadingsApi } from '../api/readings.api';
 export class ReadingsService {
   constructor(private api: ReadingsApi) {}
 
-  loadPreviewsByMainCategory(
-    category: ReadingCategory
-  ): Observable<IApiResponse<ICategoryReadingPreview>> {
-    return this.api
-      .loadPreviewsByMainCategory(category)
-      .pipe(filter((x) => x.data !== undefined));
+  loadKnowledge(): Observable<IApiResponse<IKnowledge>> {
+    return this.api.loadKnowledge();
   }
 
-  loadPreviewsBySubCategory(
-    category: ReadingCategory,
-    subcategory: string
-  ): Observable<IApiResponse<ICategoryReadingPreview>> {
-    return this.api.loadPreviewsBySubCategory(category, subcategory);
+  loadMainCategoryWithPreviews(category: string): Observable<IApiResponse<IMainCategoryWithPreviews>> {
+    return this.api.loadMainCategoryWithPreviews(category);
   }
 
-  loadCategoriesLatestPreviews(): Observable<
-    IApiResponse<ICategoryReadingPreview[]>
-  > {
-    return this.api.loadCategoriesLatestPreviews();
+  loadSubCategoryWithPreviews(category: string,subcategory: string): Observable<IApiResponse<ISubCategoryWithPreviews>> {
+    return this.api.loadSubCategoryWithPreviews(category, subcategory);
   }
 
-  loadOneByMainCategory(
-    category: ReadingCategory | string,
-    searchName: string
-  ): Observable<IApiResponse<IReading>> {
-    return this.api.loadOneByMainCategory(category, searchName);
+  loadReadingMainCategories():Observable<IApiResponse<IReadingCategory[]>> {
+    return this.api.loadReadingMainCategories();
   }
 
-  loadOneByIdInSubGroup(
-    category: ReadingCategory | string,
-    subCategory: ReadingSubCategory | string,
-    id: number
-  ): Observable<IApiResponse<IReading>> {
-    return this.api.loadOneByIdInSubCategory(category, subCategory, id);
+  loadReadingSubCategories(mainId:number):Observable<IApiResponse<IReadingCategory[]>> {
+    return this.api.loadReadingSubCategories(mainId);
   }
 
-  // loadMainCategories(): Observable<IApiResponse<IMainCategory[]>> {
-  //   return this.api.loadMainCategories();
-  // }
-
-  // loadSubCategories(mainId: number): Observable<IApiResponse<ISubCategory[]>> {
-  //   return this.api.loadSubCategories(mainId);
-  // }
-
-  loadCategories(mainId?:number):Observable<any> {
-    return this.api.loadCategories(mainId);
+  loadReading(category:string,subCategory?:string,id?:string):Observable<IApiResponse<IReading>> {
+    return this.api.loadReading(category,subCategory,id);
   }
 
-  add(
-    data: ICreateReadingRequest
-  ): Observable<IApiResponse<ICreateReadingRes>> {
+  add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingRes>> {
     return this.api.add(data);
   }
 

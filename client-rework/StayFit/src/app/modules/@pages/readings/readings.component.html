@@ -1,20 +1,5 @@
-<div class="knowledge-container">
-  <br />
-  <app-inner-navbar></app-inner-navbar>
-  <div class="categories-container">
-    <section
-      class="category"
-      *ngFor="let category of readingsByMainCategory$ | async"
-    >
-      <span [routerLink]="['/','pages','knowledge',category.searchName]" class="mat-title">{{ category.name }}</span>
-      <div class="block-row">
-        <app-reading-block
-          (click)="navigate(preview)"
-          [title]="preview.name"
-          [imageUrl]="preview.imageUrl"
-          *ngFor="let preview of category.previews"
-        ></app-reading-block>
-      </div>
-    </section>
+<div class="readings-container">
+  <div class="content-wrapper">
+    <router-outlet></router-outlet>
   </div>
 </div>

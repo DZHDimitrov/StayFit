@@ -1,6 +1,6 @@
 <div class="page-container">
   <mat-card>
-    <form [formGroup]="foodForm" (ngSubmit)="test()">
+    <form [formGroup]="foodForm" (ngSubmit)="createFood()">
       <mat-card-header>
         <h2 class="mat-display-1 title">Добави храна</h2>
       </mat-card-header>
@@ -15,7 +15,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Избор на храна</mat-label>
-          <mat-select formControlName="foodNameId" (selectionChange)="loadNutrients()">
+          <mat-select formControlName="foodTypeId">
             <mat-option [value]="food.id" *ngFor="let food of this.foodTypes$ | async">{{ food.name }}
             </mat-option>
           </mat-select>

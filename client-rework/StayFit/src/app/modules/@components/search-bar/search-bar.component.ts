@@ -5,7 +5,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { IAppState } from 'src/app/state/app.state';
 import { FoodsService } from '../../@core/backend/services/foods.service';
-import { IFoodPreviewData } from '../../@pages/foods/interfaces/food.interface';
+import { IFoodKeywordAutocomplete } from '../../@core/interfaces/foods/foods-keywords.interface';
 import { loadAutocompleteKeywords } from '../../@pages/foods/store/foods.actions';
 import { getAutocompleteKeywords } from '../../@pages/foods/store/foods.selector';
 
@@ -17,7 +17,7 @@ import { getAutocompleteKeywords } from '../../@pages/foods/store/foods.selector
 export class SearchBarComponent implements OnInit {
   constructor(private store: Store<IAppState>,private service:FoodsService,private router:Router) {}
 
-  searchedFood$!: Observable<IFoodPreviewData[]>;
+  searchedFood$!: Observable<IFoodKeywordAutocomplete[]>;
   searchText!: string;
   search$: Subject<string> = new Subject();
 
@@ -40,6 +40,7 @@ export class SearchBarComponent implements OnInit {
     );
   }
   autocomplete(ev:any) {
+    console.log(ev);
     this.searchText = ev.option.value;
   }
 

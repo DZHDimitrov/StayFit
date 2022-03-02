@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
+
 import { IApiResponse } from '../../interfaces/api.response';
+
 import {
   ICommentPreviewRes,
   ICommentsRes,
   ICreateCommentRes,
   IDeleteCommentRes,
-} from '../../interfaces/responses/forum/comments.res';
+} from '../../interfaces/forum/forum-comments.interface';
+
 import { CommentsApi } from '../api/comments.api';
 
 @Injectable({

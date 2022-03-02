@@ -10,10 +10,10 @@ export const cyrillicToLatin = function (text) {
     .replace(/\u043D/g, 'n')
     .replace(/\u0433/g, 'g')
     .replace(/\u0448/g, 'sh')
-    .replace(/\u0449/g, 'sch')
+    .replace(/\u0449/g, 'sht')
     .replace(/\u0437/g, 'z')
     .replace(/\u0445/g, 'h')
-    .replace(/\u044A/g, "'")
+    .replace(/\u044A/g, "'u")
     .replace(/\u0410/g, 'a')
     .replace(/\u0444/g, 'f')
     .replace(/\u044B/g, 'i')
@@ -26,31 +26,32 @@ export const cyrillicToLatin = function (text) {
     .replace(/\u0434/g, 'd')
     .replace(/\u0436/g, 'zh')
     .replace(/\u044D/g, 'e')
-    .replace(/\u042C/g, "'")
     .replace(/\u044F/g, 'ya')
     .replace(/\u0447/g, 'ch')
     .replace(/\u0441/g, 's')
     .replace(/\u043C/g, 'm')
     .replace(/\u0438/g, 'i')
     .replace(/\u0442/g, 't')
-    .replace(/\u044C/g, "'")
-    .replace(/\u0431/g, 'b')
-    .replace(/\u044E/g, 'yu');
+    // .replace(/\u044C/g, "ь")
+    .replace(/\u044E/g, 'yu')
+    .split(" ")
+    .join("_");
 
   return text;
 };
 
 export const latinToCyrillic = (text: string) => {
-  text = text.toLowerCase()
+  text = text?.toLowerCase()
     .replace(/yo/g, 'йо')
     .replace(/zh/g, 'ж')
     .replace(/ts/g, 'ц')
+    .replace(/sht/g, 'щ')
     .replace(/sh/g, 'ш')
-    .replace(/sch/g, 'щ')
     .replace(/ya/g, 'я')
     .replace(/ch/g, 'ч')
     .replace(/yu/g, 'ю')
     .replace(/i/g, 'и')
+    .replace(/'u/g, 'ъ')
     .replace(/u/g, 'у')
     .replace(/k/g, 'к')
     .replace(/e/g, 'е')
@@ -73,6 +74,8 @@ export const latinToCyrillic = (text: string) => {
     .replace(/m/g, 'м')
     .replace(/i/g, 'и')
     .replace(/t/g, 'т')
-    .replace(/b/g, 'б');
+    .replace(/b/g, 'б')
+    .split(" ")
+    .join("_");
   return text;
 };

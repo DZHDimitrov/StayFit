@@ -9,7 +9,7 @@
         public FoodCategory()
         {
             this.Foods = new HashSet<Food>();
-            this.CategoryNames = new HashSet<CategoryFoodName>();
+            this.CategoryNames = new HashSet<CategoryFoodType>();
         }
 
         public string Category { get; set; }
@@ -18,6 +18,6 @@
 
         public ICollection<Food> Foods { get; set; }
 
-        public ICollection<CategoryFoodName> CategoryNames { get; set; }
+        public ICollection<CategoryFoodType> CategoryNames { get; set; }
     }
 }

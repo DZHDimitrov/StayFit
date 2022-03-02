@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
+
 import { IApiResponse } from '../../interfaces/api.response';
-import {
-  IAddFoodRes,
-  IFoodPreview,
-  IFoodCategory,
-  IFood,
-} from '../../interfaces/responses/foods/foods.res';
+
+import { IAddFood } from '../../interfaces/requests/foods.req';
+
+import { IFoodCategory } from '../../interfaces/foods/foods-category.interface';
+
+import { IFood, IFoodPreview } from '../../interfaces/foods/foods-food.interface';
+
+import { IFoodKeyword } from '../../interfaces/foods/foods-keywords.interface';
+
+import { IFoodType } from '../../interfaces/foods/foods-types.interface';
+
 import { FoodsApi } from '../api/foods.api';
 
 @Injectable({
@@ -15,41 +22,35 @@ import { FoodsApi } from '../api/foods.api';
 export class FoodsService {
   constructor(private api: FoodsApi) {}
 
-  listCategories(): Observable<IApiResponse<IFoodCategory[]>> {
-    return this.api.listCategories();
+  loadCategories(): Observable<IApiResponse<IFoodCategory[]>> {
+    return this.api.loadCategories();
   }
 
-  listAutocompleteKeywords(
-    searchedFood: string
-  ): Observable<IApiResponse<IFoodPreview[]>> {
-    return this.api.listAutocompleteKeywords(searchedFood);
+  loadAutocompleteKeywords(searchedFood: string): Observable<IApiResponse<IFoodKeyword[]>> {
+    return this.api.loadAutocompleteKeywords(searchedFood);
   }
 
-  listFoodsByCategory(category: string | number): Observable<IApiResponse<IFoodPreview[]>> {
-    return this.api.listFoodsByCategory(category);
+  loadFoodsByCategory(category: string | number): Observable<IApiResponse<IFoodPreview[]>> {
+    return this.api.loadFoodsByCategory(category);
   }
 
   loadFoodById(id: number): Observable<IApiResponse<IFood>> {
     return this.api.loadFoodById(id);
   }
 
-  search(text:string):Observable<IApiResponse<any>> {
+  search(text: string): Observable<IApiResponse<IFoodPreview>> {
     return this.api.search(text);
   }
 
-  add(data: any): Observable<IAddFoodRes> {
+  add(data: IAddFood): Observable<void> {
     return this.api.add(data);
   }
 
-  edit(foodId:number,data:any): Observable<any> {
-    return this.api.edit(foodId,data);
+  edit(foodId: number, data: any): Observable<any> {
+    return this.api.edit(foodId, data);
   }
 
-  listNutrients(): Observable<any> {
-    return this.api.listNutrients();
-  }
-
-  listFoodNamesByCategoryId(categoryId):Observable<any> {
-    return this.api.listFoodNamesByCategoryId(categoryId);
+  loadFoodTypesByCategoryId(categoryId): Observable<IApiResponse<IFoodType[]>> {
+    return this.api.loadFoodTypesByCategoryId(categoryId);
   }
 }

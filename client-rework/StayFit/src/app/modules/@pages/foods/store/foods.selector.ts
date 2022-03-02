@@ -1,18 +1,51 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+
+import { cyrillicToLatin } from 'src/app/modules/@core/utility/text-transilerator';
+
 import { IFoodsState } from './foods.state';
 
 export const FOODS_STATE_NAME = 'foods';
 
 const getFoodsState = createFeatureSelector<IFoodsState>(FOODS_STATE_NAME);
 
-export const getFoodsCategories = createSelector(getFoodsState, (state) => {
-  return state.foodsCategories;
+export const getFoodsCategoriesWithNavigation = createSelector(getFoodsState, (state) => {
+  return state.foodsCategories.map(c => {
+    return {
+      ...c,
+      searchName: c.name
+      .split(' ')
+      .map((word) => {
+        return cyrillicToLatin(word.toLowerCase());
+      })
+      .join('-'),
+    }
+  });
+});
+
+export const getFoodCategoriesSelection = createSelector(getFoodsState, (state) => {
+  return state.foodsCategories.map(x=> {
+    return {
+      id:x.id,
+      name:x.name,
+    }
+  });
 });
 
 export const getAutocompleteKeywords = createSelector(
   getFoodsState,
   (state) => {
-    return state.autocompleteKeywords;
+    return state.searchKeywords.map(keyword => {
+      return {
+        ...keyword,
+        searchName: [
+          keyword.category?.split(' ')[0].toLowerCase(),
+          '-',
+          keyword.name?.toLocaleLowerCase(),
+          '-',
+          keyword.description?.toLowerCase(),
+        ].join(' '),
+      }
+    });
   }
 );
 
@@ -24,26 +57,22 @@ export const getFoodDetails = createSelector(getFoodsState, (state) => {
   return state.foodDetails;
 });
 
+export const getCoreNutrients = createSelector(getFoodsState,(state) => {
+  return state.foodDetails.nutrients?.filter(n => n.name === 'Въглехидрати' || n.name === 'Мазнини' || n.name === 'Протеин');
+})
+
+export const getAllNutrients = createSelector(getFoodsState,(state) => {
+  return state.foodDetails.nutrients?.filter(n=>n.name !== 'Протеин');
+})
+
 export const getSearchedFood = createSelector(getFoodsState, (state) => {
   return state.searchedFood;
 });
 
-export const getFoodCategories = createSelector(getFoodsState, (state) => {
-  return state.categories;
-});
-
 export const getFoodTypesByCategory = createSelector(getFoodsState, (state) => {
-  return state.byCategory;
-});
-
-export const getNutrients = createSelector(getFoodsState, (state) => {
-  return state.nutrients;
-});
-
-export const getChosenNutrients = createSelector(getFoodsState, (state) => {
-  return state.chosenNutrients;
+  return state.foodTypesByCategory;
 });
 
 export const getFoodDetailsMode = createSelector(getFoodsState,(state) => {
-  return state.foodDetails.mode;
+  return state.editMode;
 })

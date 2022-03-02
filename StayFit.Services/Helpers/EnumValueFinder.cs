@@ -1,6 +1,4 @@
-﻿using StayFit.Shared.Enums;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace StayFit.Services.Helpers

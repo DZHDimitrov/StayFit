@@ -1,24 +1,33 @@
-import { IReading, IReadingCategory } from '../../../@core/interfaces/responses/readings/readings.interface';
-import { ICategoryReadingPreviewData } from '../interfaces/reading.interface';
+import { IReadingCategory } from 'src/app/modules/@core/interfaces/readings/readings-category.interface';
+
+import {IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from 'src/app/modules/@core/interfaces/readings/readings-previews.interface';
+
+import { IReading } from 'src/app/modules/@core/interfaces/readings/readings-reading.interface';
 
 export interface IReadingsState {
+  knowledge: IKnowledge | null;
+
   mainCategories: IReadingCategory[];
+
   subCategories: IReadingCategory[];
-  latestPreviews: ICategoryReadingPreviewData[];
-  readings: any[];
-  catalogue: {
-    previews: any[];
-  };
-  currentReading:IReading | null;
+
+  mainCategoryWithPreviews:IMainCategoryWithPreviews | null,
+
+  subCategoryWithPreviews:ISubCategoryWithPreviews | null,
+
+  currentReading: IReading | null;
 }
 
 export const initialState: IReadingsState = {
-  mainCategories: [],
-  subCategories: [],
-  readings: [],
-  latestPreviews: [],
-  catalogue: {
-    previews: [],
-  },
+  knowledge: null,
+
+  mainCategoryWithPreviews: null,
+
+  subCategoryWithPreviews: null,
+
+  mainCategories:[],
+
+  subCategories:[],
+
   currentReading: null,
 };

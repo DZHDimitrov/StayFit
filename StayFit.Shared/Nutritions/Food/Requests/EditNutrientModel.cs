@@ -6,6 +6,6 @@ namespace StayFit.Shared.Nutritions.Food.Requests
     {
         public int Id { get; set; }
 
-        public double Quantity { get; set; }
+        public string Quantity { get; set; }
     }
 }

@@ -3,20 +3,16 @@ using AutoMapper.QueryableExtensions;
 using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 
-using NickBuhro.Translit;
-
 using StayFit.Common;
 
-using StayFit.Data;
+using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models.ReadingModels;
 using StayFit.Services.Common;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 
 using StayFit.Shared;
 using StayFit.Shared.Readings;
-using StayFit.Shared.SharedModels;
-using StayFit.Shared.SharedModels.Responses;
-
+using StayFit.Shared.Readings.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,229 +22,198 @@ namespace StayFit.Services.StayFit.Services.Data
 {
     public class ReadingService : IReadingService
     {
-        private readonly AppDbContext dbContext;
+        private readonly IRepository<ReadingMainCategory> mainCategories;
+        private readonly IRepository<ReadingSubCategory> subCategories;
+        private readonly IRepository<Reading> readings;
+
         private readonly IMapper mapper;
         private readonly Cloudinary cloudinary;
 
-        public ReadingService(AppDbContext dbContext, IMapper mapper, Cloudinary cloudinary)
+        public ReadingService(
+            IRepository<ReadingMainCategory> mainCategories,
+            IRepository<ReadingSubCategory> subCategories,
+            IRepository<Reading> readings,
+            IMapper mapper, 
+            Cloudinary cloudinary)
         {
-            this.dbContext = dbContext;
+            this.mainCategories = mainCategories;
+            this.subCategories = subCategories;
+            this.readings = readings;
             this.mapper = mapper;
             this.cloudinary = cloudinary;
         }
 
-
-        public async Task<ReadingCategoryPreviewsModel> LoadPreviewsByMainCategory(string mainCategory)
+        public async Task<KnowledgeModel> LoadKnowledge()
         {
-            mainCategory = mainCategory?.ToLower();
+            var knowledgeModel = new KnowledgeModel();
 
-            if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == mainCategory))
+            knowledgeModel.Title = "Знание";
+
+            knowledgeModel.CategoryNames = this.mainCategories
+                .All()
+                .Select(mc => mc.Name.ToString())
+                .ToList();
+
+            knowledgeModel.ReadingPreviewsWithCategory = await this.mainCategories
+                .All()
+                .Select(mc => new ReadingPreviewsWithCategoryModel
+                {
+                    CategoryId = mc.Id,
+                    Name = mc.Name,
+                    Previews = mc.ReadingSubCategories.Any() ?
+                               mc.ReadingSubCategories
+                                 .OrderByDescending(sc => sc.CreatedOn)
+                                 .Select(sc => new ReadingPreviewModel
+                                 {
+                                     Id = sc.Id,
+                                     Name = sc.Name,
+                                     ImageUrl = sc.ImageUrl,
+                                 })
+                                 .Take(4)
+                                 .ToList() :
+                               mc.Readings
+                                 .OrderByDescending(r => r.CreatedOn)
+                                 .Select(r => new ReadingPreviewModel
+                                 {
+                                     Id = r.Id,
+                                     Name = r.Name,
+                                     ImageUrl = r.ImageUrl,
+                                 })
+                                 .Take(4)
+                                 .ToList()
+                })
+                .ToListAsync();
+
+            return knowledgeModel;
+        }
+
+
+        public async Task<MainCategoryWithPreviewsModel> LoadMainCategoryWithPreviews(string mainCategory)
+        {
+            mainCategory = string.Join(" ", mainCategory?.Split("_", StringSplitOptions.RemoveEmptyEntries)).ToLower();
+
+            var existingCategory = await this.mainCategories.All().Where(mc => mc.Name.ToLower() == mainCategory).FirstOrDefaultAsync();
+
+            if (existingCategory == null)
             {
                 throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
             }
 
-            return await this.dbContext.ReadingMainCategories
-                .Where(mc => mc.SearchName == mainCategory)
-                .Select(mc => new ReadingCategoryPreviewsModel
-                {
-                    Id = mc.Id,
-                    Name = mc.Name,
-                    SearchName = mc.SearchName.ToLower(),
-                    HasChildren = mc.ReadingSubCategories.Any(),
-                    IsRoot = true,
-                    Previews = mc.ReadingSubCategories.Any() ?
-                    mc.ReadingSubCategories.Select(sc =>
-                    new ReadingPreviewModel
-                    {
-                        Id = sc.Id,
-                        Name = sc.Name,
-                        SearchName = sc.SearchName.ToLower(),
-                        ImageUrl = sc.ImageUrl,
-                        MainCategoryName = sc.ReadingMainCategory.SearchName.ToLower(),
-                        HasChildren = true,
-                    })
-                    .ToList() :
-                    mc.Readings.Select(r =>
-                    new ReadingPreviewModel
-                    {
-                        Id = r.Id,
-                        Name = r.Title,
-                        SearchName = r.SearchTitle.ToLower(),
-                        ImageUrl = r.ImageUrl,
-                        MainCategoryName = r.ReadingMainCategory.SearchName.ToLower(),
-                        HasChildren = false
-                    })
-                    .ToList()
-                })
+            var currentMainCategory = await this.mainCategories
+                .All()
+                .Include(mc => mc.ReadingSubCategories)
+                .Include(mc => mc.Readings)
+                .Where(mc => mc.Name.ToLower() == mainCategory)
                 .FirstOrDefaultAsync();
+
+            var mainCategoryWithPreviewsModel = new MainCategoryWithPreviewsModel();
+
+            mainCategoryWithPreviewsModel.Title = currentMainCategory.Name;
+
+            if (!currentMainCategory.ReadingSubCategories.Any())
+            {
+                mainCategoryWithPreviewsModel.CategoryNames = await this.mainCategories
+                    .All()
+                    .Select(c => c.Name)
+                    .ToListAsync();
+
+                mainCategoryWithPreviewsModel.Previews = currentMainCategory.Readings
+                    .AsQueryable()
+                    .ProjectTo<ReadingPreviewModel>(this.mapper.ConfigurationProvider)
+                    .ToList();
+
+                mainCategoryWithPreviewsModel.HasSubGroups = false;
+            }
+            else
+            {
+                mainCategoryWithPreviewsModel.CategoryNames = currentMainCategory.ReadingSubCategories.Select(rsb => rsb.Name).ToList();
+
+                mainCategoryWithPreviewsModel.Previews = currentMainCategory.ReadingSubCategories
+                    .AsQueryable()
+                    .ProjectTo<ReadingPreviewModel>(this.mapper.ConfigurationProvider)
+                    .ToList();
+
+                mainCategoryWithPreviewsModel.HasSubGroups = true;
+            }
+
+            return mainCategoryWithPreviewsModel;
         }
 
-        public async Task<ReadingCategoryPreviewsModel> LoadPreviewsBySubCategory(string mainCategory, string subCategory)
+        public async Task<SubCategoryWithPreviewsModel> LoadSubCategoryWithPreviews(string mainCategory, string subCategory)
         {
-            mainCategory = mainCategory?.ToLower();
-            subCategory = subCategory?.ToLower();
+            mainCategory = string.Join(" ", mainCategory?.Split("_")).ToLower();
+            subCategory = string.Join(" ", subCategory?.Split("_")).ToLower();
 
-            if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == mainCategory))
+
+            var existingCategory = await this.mainCategories.All().Where(mc => mc.Name.ToLower() == mainCategory).FirstOrDefaultAsync();
+
+            if (existingCategory == null)
             {
                 throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
             }
 
-            var subCategories = await this.dbContext.ReadingSubCategories
-                .Where(sc => sc.ReadingMainCategory.SearchName.ToLower() == mainCategory)
+            var subCategories = await this.subCategories.All()
+                .Where(sc => sc.ReadingMainCategory.Name.ToLower() == mainCategory)
                 .ToListAsync();
 
-            if (subCategories.Count == 0)
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND), "sub-groups");
-            }
+            //if (subCategories.Count == 0)
+            //{
+            //    throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND), "sub-groups");
+            //}
 
-            var currentSubCategory = await this.dbContext.ReadingSubCategories
-                .FirstOrDefaultAsync(sc => sc.ReadingMainCategory.SearchName.ToLower() == mainCategory && sc.SearchName.ToLower() == subCategory);
-
-            if (currentSubCategory == null)
-            {
-                throw new ArgumentException($"{mainCategory} does not contain {subCategory}");
-            }
-
-            var readings = await this.dbContext.ReadingSubCategories
-                .Where(sc => sc.SearchName.ToLower() == subCategory)
-                .Select(sc => new ReadingCategoryPreviewsModel
-                {
-                    Name = sc.Name,
-                    SearchName = sc.SearchName.ToLower(),
-                    HasChildren = false,
-                    Previews = sc.Readings.Select(r => new ReadingPreviewModel
-                    {
-                        Id = r.Id,
-                        Name = r.Title,
-                        SearchName = r.SearchTitle,
-                        ImageUrl = r.ImageUrl,
-                        HasChildren = false,
-                        MainCategoryName = sc.ReadingMainCategory.SearchName
-                    })
-                    .ToList()
-                })
+            var currentMainCategory = await this.mainCategories
+                .All()
+                .Include(mc => mc.ReadingSubCategories)
+                .ThenInclude(rsb => rsb.Readings)
+                .Where(mc => mc.Name == mainCategory)
                 .FirstOrDefaultAsync();
 
-            readings.Categories = this.dbContext.ReadingSubCategories
-                .Where(x => x.ReadingMainCategory.SearchName == mainCategory)
-                .Select(x => new
+            var currentSubCategory = currentMainCategory.ReadingSubCategories
+                .Where(sc => sc.Name.ToLower() == subCategory || sc.Name.ToLower().Contains(subCategory))
+                .FirstOrDefault();
+
+            //if (currentSubCategory == null)
+            //{
+            //    throw new ArgumentException($"{mainCategory} does not contain {subCategory}");
+            //}
+
+            var subCategoryWithPreviewsModel = new SubCategoryWithPreviewsModel
+            {
+                Title = currentSubCategory?.Name ?? "Групата не съществува",
+                CategoryNames = currentMainCategory.ReadingSubCategories.Select(rsb => rsb.Name).ToList(),
+                Previews = currentSubCategory?.Readings.Count > 0 ? currentSubCategory.Readings.Select(r => new ReadingPreviewModel
                 {
-                    Name = x.Name,
-                    SearchName = x.SearchName.ToLower()
-                })
-                .ToArray();
+                    Id = r.Id,
+                    Name = r.Name,
+                    ImageUrl = r.ImageUrl,
+                }).ToList() : new List<ReadingPreviewModel>()
+            };
 
-            return readings;
-        }
-
-        public async Task<IEnumerable<ReadingCategoryPreviewsModel>> LoadLatest()
-        {
-            var result = await this.dbContext.ReadingMainCategories
-                .Select(mc => new ReadingCategoryPreviewsModel
-                {
-                    Id = mc.Id,
-                    Name = mc.Name,
-                    SearchName = mc.SearchName.ToLower(),
-                    HasChildren = mc.ReadingSubCategories.Any(),
-                    IsRoot = true,
-                    Previews = mc.ReadingSubCategories.Any() ?
-                    mc.ReadingSubCategories
-                    .OrderByDescending(sc => sc.CreatedOn)
-                    .Select(sc => new ReadingPreviewModel
-                    {
-                        Id = sc.Id,
-                        Name = sc.Name,
-                        SearchName = sc.SearchName.ToLower(),
-                        ImageUrl = sc.ImageUrl,
-                        MainCategoryName = sc.ReadingMainCategory.SearchName.ToLower(),
-                        HasChildren = true
-                    })
-                    .Take(4)
-                    .ToList() :
-                    mc.Readings
-                    .OrderByDescending(r => r.CreatedOn)
-                    .Select(r => new ReadingPreviewModel
-                    {
-                        Id = r.Id,
-                        Name = r.Title,
-                        ImageUrl = r.ImageUrl,
-                        SearchName = r.SearchTitle.ToLower(),
-                        MainCategoryName = r.ReadingMainCategory.SearchName.ToLower(),
-                        HasChildren = false,
-                    })
-                    .Take(4)
-                    .ToList()
-                })
-                .ToListAsync();
-            return result;
-        }
-
-        public async Task<ReadingModel> LoadReadingByMainCategory(string category, string searchName)
-        {
-            category = category.ToLower();
-            if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == category))
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, category));
-            }
-            var reading = await this.dbContext.Readings
-                .Where(reading => reading.ReadingMainCategory.SearchName.ToLower() == category && reading.SearchTitle.ToLower() == searchName.ToLower())
-                .ProjectTo<ReadingModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
-
-            if (reading == null)
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "reading"));
-            }
-
-            return reading;
-        }
-
-        public async Task<ReadingModel> LoadReadingByIdInSubGroup(string category, string subCategory, int readingId)
-        {
-            category = category?.ToLower();
-            subCategory = subCategory?.ToLower();
-
-            if (!this.dbContext.ReadingMainCategories.Any(mc => mc.SearchName.ToLower() == category))
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, category));
-            }
-
-            var reading = await this.dbContext.Readings
-                .Where(reading => reading.Id == readingId &&
-                reading.ReadingMainCategory.SearchName.ToLower() == category &&
-                reading.ReadingSubCategory.SearchName.ToLower() == subCategory)
-                .ProjectTo<ReadingModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
-
-            if (reading == null)
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "reading"));
-            }
-
-            return reading;
+            return subCategoryWithPreviewsModel;
         }
 
         public async Task<AddReadingResponse> CreateReading(AddReadingRequest model)
         {
+            var mainCategory = await this.mainCategories
+                .All()
+                .Where(mc => mc.Id == model.ReadingMainCategoryId)
+                .FirstOrDefaultAsync();
 
-            if (!this.dbContext.ReadingMainCategories.Any(mc => mc.Id == model.ReadingMainCategoryId))
+            if (mainCategory == null)
             {
                 throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
             }
 
-            if (!this.dbContext.ReadingSubCategories.Any(sc => sc.ReadingMainCategoryId == model.ReadingMainCategoryId) && (model.ReadingSubCategoryId != null || model.BodyPartId != null))
+            var subCategory = await this.subCategories
+                .All()
+                .Where(sc => sc.ReadingMainCategoryId == model.ReadingMainCategoryId)
+                .FirstOrDefaultAsync();
+
+            if (subCategory == null && model.ReadingSubCategoryId != null)
             {
                 throw new ArgumentException($"This group cannot have sub-categories!");
             }
 
-            var currentSubGroup = await this.dbContext.ReadingSubCategories.FirstOrDefaultAsync(sc => sc.Id == model.ReadingSubCategoryId);
-
-            if (currentSubGroup?.SearchName == "Exercises" && model.BodyPartId == null)
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.NOT_SPECIFIED_ERROR_MSG, "exercise", "bodypart"));
-            }
-            //var reading = this.mapper.Map<Reading>(model);
             var imageUrl = await ApplicationCloudinary.UploadImage(this.cloudinary, model.Image, model.Title);
 
             var reading = new Reading
@@ -256,32 +221,31 @@ namespace StayFit.Services.StayFit.Services.Data
                 ReadingMainCategoryId = model.ReadingMainCategoryId,
                 ReadingSubCategoryId = model.ReadingSubCategoryId ?? null,
                 CreatedOn = DateTime.UtcNow,
-                Title = model.Title,
-                BodyPartId = model.BodyPartId ?? null,
+                Name = model.Title,
                 Content = model.Content,
-                SearchTitle = TransformNameToLatin(model.Title),
                 ImageUrl = imageUrl
             };
 
-            await this.dbContext.Readings.AddAsync(reading);
-            await this.dbContext.SaveChangesAsync();
+            await this.readings.AddAsync(reading);
+            await this.readings.SaveChangesAsync();
 
             return new AddReadingResponse
             {
                 Id = reading.Id,
-                Title = reading.Title,
+                Title = reading.Name,
             };
         }
 
         public async Task<ReadingDeleteResponse> DeleteReading(int id)
         {
-            var article = await this.dbContext.Readings.Where(r => r.Id == id).FirstOrDefaultAsync();
-            this.dbContext.Readings.Remove(article);
-            this.dbContext.SaveChanges();
+            var article = await this.readings.All().Where(r => r.Id == id).FirstOrDefaultAsync();
+            //this.dbContext.Readings.Remove(article);
+            //this.dbContext.SaveChanges();
+
             return new ReadingDeleteResponse
             {
                 Id = article.Id,
-                Title = article.Title
+                Title = article.Name
             };
         }
 
@@ -290,46 +254,76 @@ namespace StayFit.Services.StayFit.Services.Data
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<ReadingModel>> LoadExerciseByBodyPart(string bodyPart)
-        {
-            return await this.dbContext.Readings
-                .Where(x => x.BodyPart != null && x.BodyPart.SearchName.ToLower() == bodyPart.ToLower())
-                .ProjectTo<ReadingModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
-        public string TransformNameToLatin(string input)
-        {
-            return this.dbContext.Readings
-                .OrderByDescending(x => x.Id)
-                .FirstOrDefault().Id + 1 + "_" + String.Join("_", Transliteration.CyrillicToLatin(input).ToLower().Split(" "));
-        }
-
         public async Task<IEnumerable<ReadingCategoryModel>> LoadCategories(int? mainId)
         {
             if (mainId == null)
             {
-                return await this.dbContext.ReadingMainCategories
-                       .Select(mc => new ReadingCategoryModel
-                       {
-                           Id = mc.Id,
-                           Name = mc.Name,
-                           HasChildren = mc.ReadingSubCategories.Any(),
-                           SearchName = mc.SearchName,
-                       }).ToListAsync();
+                return await this.mainCategories.All()
+                    .Select(mc => new ReadingCategoryModel
+                    {
+                        Id = mc.Id,
+                        Name = mc.Name,
+                    }).ToListAsync();
             }
 
-            return await this.dbContext.ReadingSubCategories
-                .Where(sc => sc.ReadingMainCategory.Id == (int)mainId)
+            return await this.subCategories.All()
+                .Where(sc => sc.ReadingMainCategoryId == (int)mainId)
                 .Select(sc => new ReadingCategoryModel
                 {
                     Id = sc.Id,
-                    Name = sc.Name,
-                    ImageUrl = sc.ImageUrl,
-                    HasChildren = false,
-                    SearchName = sc.SearchName,
+                    Name = sc.Name
                 })
                 .ToListAsync();
+        }
+
+        public async Task<ReadingModel> LoadReading(string mainCategory, string subCategory, int? readingId)
+        {
+            var currentMainCategory = await this.mainCategories
+                .All()
+                .Include(rmc => rmc.ReadingSubCategories)
+                .ThenInclude(rmc => rmc.Readings)
+                .Include(rmc => rmc.Readings)
+                .Where(rmc => rmc.Name.ToLower() == mainCategory)
+                .FirstOrDefaultAsync();
+
+            ReadingModel readingModel = null;
+
+            if (currentMainCategory == null)
+            {
+                throw new ArgumentException("Not found");
+            }
+
+            var currentSubCategory = currentMainCategory.ReadingSubCategories
+                .FirstOrDefault(rsb => rsb.Name == subCategory);
+
+            if (currentSubCategory == null)
+            {
+                readingModel = currentMainCategory.Readings
+                    .Where(r => r.Id == readingId)
+                    .Select(r => new ReadingModel
+                    {
+                        Id = r.Id,
+                        ImageUrl = r.ImageUrl,
+                        Title = r.Name,
+                        Content = r.Content,
+                    })
+                    .FirstOrDefault();
+            }
+            else
+            {
+                readingModel = currentSubCategory.Readings
+                    .Where(r => r.Id == readingId)
+                    .Select(r => new ReadingModel
+                    {
+                        Id = r.Id,
+                        ImageUrl = r.ImageUrl,
+                        Title = r.Name,
+                        Content = r.Content,
+                    })
+                    .FirstOrDefault();
+            }
+
+            return readingModel;
         }
     }
 }

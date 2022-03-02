@@ -16,8 +16,9 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StayFit.Data;
+using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models;
-
+using StayFit.Data.Repositories;
 using StayFit.Infrastructure;
 using StayFit.Infrastructure.Middlewares.Authorization;
 using StayFit.Services.StayFit.Services.Data;
@@ -38,7 +39,9 @@ namespace StayFit.WebAPI
     public class Startup
     {
         readonly string allowSpecificOrigins = "_myAllowSpecificOrigins";
+
         private readonly IConfiguration configuration;
+
         public Startup(IConfiguration configuration)
         {
             this.configuration = configuration;
@@ -85,7 +88,6 @@ namespace StayFit.WebAPI
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
-
             services
                 .AddAuthentication()
                 .AddJwtBearer(opts =>
@@ -101,6 +103,7 @@ namespace StayFit.WebAPI
                         ValidateLifetime = true
                     };
                 });
+
             services
                 .AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 
@@ -116,6 +119,7 @@ namespace StayFit.WebAPI
                      options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
 
                  });
+
             services
                 .AddSwaggerGen(c =>
                 {
@@ -143,6 +147,11 @@ namespace StayFit.WebAPI
 
             services.AddMvc();
 
+            //Data repositories
+            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+
+            //Application services
             services.AddTransient<IReadingService, ReadingService>();
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();

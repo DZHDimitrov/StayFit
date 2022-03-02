@@ -3,10 +3,8 @@
     using Microsoft.AspNetCore.Mvc;
 
     using StayFit.Services.StayFit.Services.Data.Interfaces;
-
-    using StayFit.Shared.Nutritions.Food;
-    using StayFit.Shared.Nutritions.Food.PostModels;
-
+    using StayFit.Shared.Nutritions.Food.Requests;
+    using StayFit.Shared.Nutritions.Food.Responses;
     using System.Collections.Generic;
 
     [Route("api/[controller]")]
@@ -22,7 +20,7 @@
 
         [HttpGet]
         [Route("new-food/{categoryId}")]
-        public IEnumerable<FoodNameModel> GetFoodTypesByCategory(int categoryId)
+        public IEnumerable<FoodTypeModel> GetFoodTypesByCategory(int categoryId)
         {
             //return this.foodService.GetFoodTypesByCategory(categoryId);
             return null;
