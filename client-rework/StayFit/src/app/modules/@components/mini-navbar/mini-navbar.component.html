@@ -1,0 +1,16 @@
+<div class="inner-navbar-container">
+  <div class="heading">
+    <h1>
+      {{navBar?.title}}
+    </h1>
+  </div>
+  <div class="inner-navbar">
+    <mat-toolbar class="toolbar">
+      <span
+      (click)="navigate(item)"
+        *ngFor="let item of navBar?.navItems"
+        >{{ item }}</span
+      >
+    </mat-toolbar>
+  </div>
+</div>

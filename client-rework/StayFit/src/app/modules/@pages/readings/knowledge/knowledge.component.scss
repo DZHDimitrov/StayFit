@@ -1,0 +1,21 @@
+.categories-container {
+    width: 90%;
+    margin: 0 auto;
+    .category {
+        width: fit-content;
+        margin: 0 auto;
+        &__row {
+            display:flex;
+            margin-top:0.8rem;
+            margin-bottom:1.5rem;
+        }
+        app-reading-block {
+            margin-right: 1.8rem;
+        }
+    }
+}
+
+.mini-navbar-wrapper {
+    margin-bottom: 1.5rem;
+}
+  

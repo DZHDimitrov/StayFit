@@ -1,0 +1,16 @@
+.main-categories-container {
+    display:flex;
+    flex-flow:row wrap;
+    width:87%;
+    justify-content: center;
+    margin:0 auto;
+    app-reading-block {
+        margin-bottom: 1.8rem;
+        &:not(:nth-child(3)) {
+            margin-right: 1.8rem;
+        }
+    }
+}
+.mini-navbar-wrapper {
+    margin-bottom: 1.5rem;
+}

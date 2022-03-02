@@ -1,0 +1,7 @@
+<div class="mini-navbar-wrapper">
+  <app-mini-navbar></app-mini-navbar>
+</div>
+<div class="sub-categories-container">
+  <app-reading-block [routerLink]="[reading.id]" [imageUrl]="reading.imageUrl" [title]="reading.name" [width]="300"
+    [height]="210" *ngFor="let reading of subCategoryWithPreviews"></app-reading-block>
+</div>
