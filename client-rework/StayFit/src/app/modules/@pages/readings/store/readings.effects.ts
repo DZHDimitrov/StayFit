@@ -54,7 +54,7 @@ export class PagesEffects {
   loadMainCategoryWithPreviews$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadMainCategoryWithPreviews),
-      mergeMap(({ payload }) => {
+      exhaustMap(({ payload }) => {
         return this.readingService
           .loadMainCategoryWithPreviews(payload.category)
           .pipe(

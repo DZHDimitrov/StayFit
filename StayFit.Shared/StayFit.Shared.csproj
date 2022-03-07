@@ -10,8 +10,4 @@
     <PackageReference Include="NickBuhro.Translit" Version="1.4.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="SharedModels\" />
-  </ItemGroup>
-
 </Project>

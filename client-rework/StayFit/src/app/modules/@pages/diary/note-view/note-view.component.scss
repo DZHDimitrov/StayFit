@@ -1,0 +1,52 @@
+@import "../../../../styles/colors/colors";
+@import "../../../../styles/mixins.scss";
+.note-view-container {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.note-content-container {
+  width: 100%;
+  margin-top:2rem;
+  & > * {
+    margin-bottom: 1rem;
+  }
+  .header {
+    margin-bottom: 1rem;
+    &__edit {
+      transform: scale(1.3);
+    }
+
+    &__mood {
+      transform: scale(1.8);
+      &--normal {
+        color:$orange-400;
+      }
+    }
+  }
+  .activity {
+    &__text {
+      font-size:16px;
+      line-height: 1.5;
+    }
+  }
+  .nutrition {
+    &__text {
+      font-size:16px;
+    }
+  }
+  .notes {
+    &__text {
+      font-size:16px;
+    }
+  }
+  .sleep {
+    &__text {
+      font-size:16px;
+    }
+  }
+}
+
+p {
+  margin: 0;
+}

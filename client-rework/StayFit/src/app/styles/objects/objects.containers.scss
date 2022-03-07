@@ -1,0 +1,38 @@
+.o-row-container {
+    display: flex; 
+    flex-flow: row wrap;
+    align-items: center;
+
+    &--content-c {
+        justify-content: center;
+    }
+    &--content-sb {
+        justify-content: space-between;
+    }
+}
+
+.o-column-container {
+    display:flex;
+    flex-flow:column;
+    align-items: center;
+
+    &--content-c {
+        justify-content: center;
+    }
+    &--content-sb {
+        justify-content: space-between;
+    }
+}
+
+.o-row-container--no-wrap {
+    display: flex; 
+    flex-flow: row;
+    align-items: center;
+
+    &--content-c {
+        justify-content: center;
+    }
+    &--content-sb {
+        justify-content: space-between;
+    }
+}

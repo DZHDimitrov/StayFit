@@ -1,21 +1,37 @@
 import { Injectable } from '@angular/core';
+
 import { Router } from '@angular/router';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+
 import { Store } from '@ngrx/store';
+
 import { ToastrService } from 'ngx-toastr';
+
 import { of } from 'rxjs';
-import { catchError, exhaustMap, map, mergeMap, tap } from 'rxjs/operators';
+
+import { catchError, debounceTime, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { AccountService } from '../../@core/backend/services/account.service';
+
 import {
   setErrorMessage,
   setLoadingSpinner,
 } from '../../shared/state/shared.actions';
+
+import { User } from '../user.model';
+
 import {
   autoLogin,
   autoLogout,
+  checkDiaryOnwer,
+  checkDiaryOwnerSuccess,
+  loginFailure,
   loginStart,
   loginSuccess,
+  registerFailure,
   registerStart,
   registerSuccess,
 } from './auth.actions';
@@ -33,22 +49,30 @@ export class AuthEffects {
   login$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loginStart),
+      tap(action => {
+        this.store.dispatch(setLoadingSpinner({ status: true }));
+      }),
+      debounceTime(1000),
       exhaustMap((action) => {
         const formData = new FormData();
         formData.set('username', action.username);
         formData.set('password', action.password);
+
         return this.accountService.login(formData).pipe(
           map((data) => {
-            this.store.dispatch(setLoadingSpinner({ status: false }));
-            const user = this.accountService.generateUser(data);
-            this.accountService.setUserInLocalStorage(user);
-            this.toastr.success('Влязохте успешно!', 'Success');
-            return loginSuccess({ user });
+            this.accountService.setTokenInLocalStorage(data.access_token);
+
+            const user:any = this.accountService.getUserFromLocalStorage();
+
+            return loginSuccess({ user:user as User });
           }),
           catchError((err) => {
             this.store.dispatch(setLoadingSpinner({ status: false }));
+
             this.toastr.error(err.error, 'Error');
-            return of(setErrorMessage({ message: err.error }));
+
+            // return of(setErrorMessage({ message: err.error }));
+            return of(loginFailure());
           })
         );
       })
@@ -60,7 +84,17 @@ export class AuthEffects {
       return this.actions$.pipe(
         ofType(loginSuccess),
         tap((action) => {
-          // this.router.navigate(['/']);
+          this.store.dispatch(setLoadingSpinner({ status: false }));
+
+          this.toastr.success('Влязохте успешно!', 'Success');
+
+          this.store.dispatch(checkDiaryOnwer());
+
+          const path = ['/',...this.accountService.redirectAfterLogin.split('/').filter(x=> x !=='')];
+
+          this.router.navigate(path);
+
+          this.accountService.redirectAfterLogin = '/';
         })
       );
     },
@@ -73,6 +107,8 @@ export class AuthEffects {
         ofType(registerSuccess),
         tap((action) => {
           this.router.navigate(['account', 'login']);
+
+          this.store.dispatch(setLoadingSpinner({ status: false }));
         })
       );
     },
@@ -82,43 +118,47 @@ export class AuthEffects {
   register$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(registerStart),
+      tap(action => {
+        this.store.dispatch(setLoadingSpinner({ status: true }));
+      }),
+      debounceTime(1000),
       exhaustMap((action) => {
-        const data = {
-          firstName: action.firstName,
-          lastName: action.lastName,
-          username: action.username,
-          email: action.email,
-          password: action.password,
-          gender: action.gender,
-        };
-        return this.accountService.register(data).pipe(
+
+        return this.accountService.register({...action}).pipe(
           map((data) => {
-            this.store.dispatch(setLoadingSpinner({ status: false }));
             return registerSuccess({ userId: data.id });
           }),
-          catchError((res) => {
+          catchError((err) => {
             this.store.dispatch(setLoadingSpinner({ status: false }));
-            const messages = this.accountService.generateErrorMessages(
-              res.error
-            );
-            setTimeout(() => {
-              this.store.dispatch(setErrorMessage({ message: '' }));
-            }, 3000);
-            return of(setErrorMessage({ message: messages[0] }));
+
+            this.toastr.error(err.error, 'Error');
+            // const messages = this.accountService.generateErrorMessages(res.error);
+
+            // setTimeout(() => {
+            //   this.store.dispatch(setErrorMessage({ message: '' }));
+            // }, 3000);
+
+            // return of(setErrorMessage({ message: messages[0] }));
+            return of(registerFailure())
           })
         );
       })
     );
   });
+
   autoLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(autoLogin),
       mergeMap((action) => {
         const user: any = this.accountService.getUserFromLocalStorage();
-        return of(loginSuccess({ user }));
+        if (user){
+          return of(loginSuccess({ user }));
+        }
+        return of(loginFailure())
       })
     );
   });
+
   logout$ = createEffect(
     () => {
       return this.actions$.pipe(
@@ -131,4 +171,19 @@ export class AuthEffects {
     },
     { dispatch: false }
   );
+
+  checkDiaryOwner$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(checkDiaryOnwer),
+        switchMap(({payload}) => {
+          return this.accountService.check('diary').pipe(
+            map(res => {
+              return checkDiaryOwnerSuccess({isDiaryOwner:res.data})
+            })
+          )
+        })
+      )
+    }
+  )
 }

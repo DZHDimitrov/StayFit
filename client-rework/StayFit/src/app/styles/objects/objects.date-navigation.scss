@@ -1,0 +1,36 @@
+@import '../colors/colors';
+
+.o-date-navigation-box {
+    background: white;
+    height:2.8rem;
+    border-radius: 4px;
+    -webkit-box-shadow: 1px 0px 10px 1px rgba(0,0,0,0.2); 
+    box-shadow: 1px 0px 10px 1px rgba(0,0,0,0.2);
+
+    .date-showcase__back-wrapper,
+    .date-showcase__forward-wrapper {
+        height: inherit;
+        &:hover {
+            background: $blue-100;
+            cursor: pointer;
+        }
+    }
+
+    .date-showcase__back {
+        color: $grey-300;
+        margin: 0.5rem 0.8rem;
+    }
+
+    .date-showcase__text {
+        font-size: 18px;
+        font-weight: 500;
+        color: $accent-color;
+        margin-bottom:0.25rem;
+    }
+    
+
+    .date-showcase__forward {
+        color:$grey-300;
+        margin: 0.5rem 0.8rem;
+    }
+}

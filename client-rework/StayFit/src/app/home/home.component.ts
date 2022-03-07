@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { IAppState } from '../state/app.state';
 
 @Component({
   selector: 'app-home',
@@ -6,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  constructor(private store:Store<IAppState>) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

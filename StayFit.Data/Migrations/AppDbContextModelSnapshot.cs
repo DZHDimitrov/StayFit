@@ -298,6 +298,68 @@ namespace StayFit.Data.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("StayFit.Data.Models.DiaryModels.Diary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Diaries");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.DiaryModels.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Activity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DiaryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Mood")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nutrition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Other")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("SleepHours")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiaryId");
+
+                    b.ToTable("Notes");
+                });
+
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodType", b =>
                 {
                     b.Property<int>("FoodTypeId")
@@ -679,6 +741,7 @@ namespace StayFit.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -688,6 +751,7 @@ namespace StayFit.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -697,6 +761,7 @@ namespace StayFit.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ReadingMainCategoryId")
@@ -888,6 +953,28 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.DiaryModels.Diary", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Diaries")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.DiaryModels.Note", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.DiaryModels.Diary", "Diary")
+                        .WithMany("Notes")
+                        .HasForeignKey("DiaryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diary");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.CategoryFoodType", b =>
@@ -1115,6 +1202,8 @@ namespace StayFit.Data.Migrations
 
                     b.Navigation("Comments");
 
+                    b.Navigation("Diaries");
+
                     b.Navigation("Logins");
 
                     b.Navigation("Messages");
@@ -1130,6 +1219,11 @@ namespace StayFit.Data.Migrations
                     b.Navigation("UserReadings");
 
                     b.Navigation("Votes");
+                });
+
+            modelBuilder.Entity("StayFit.Data.Models.DiaryModels.Diary", b =>
+                {
+                    b.Navigation("Notes");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.FoodModels.Food", b =>

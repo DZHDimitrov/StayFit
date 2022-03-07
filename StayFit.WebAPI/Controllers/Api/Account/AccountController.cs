@@ -6,21 +6,26 @@
 
     using StayFit.Data.Models;
     using StayFit.Infrastructure.Extensions;
+    using StayFit.Services.StayFit.Services.Data.Interfaces;
     using StayFit.Shared;
     using StayFit.Shared.Account;
 
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IAccountService accountService;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(UserManager<ApplicationUser> userManager,IAccountService accountService)
         {
             this.userManager = userManager;
+            this.accountService = accountService;
         }
 
         [HttpGet]
@@ -35,8 +40,18 @@
             return Ok();
         }
 
+        [HttpGet]
+        [Route("check")]
+        public async Task<ApiResponse<bool>> Check([FromQuery] string type)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var response = await this.accountService.Check(userId,type);
+
+            return response.ToApiResponse();
+        }
+
         [HttpPost]
-        [AllowAnonymous]
         [Route("register")]
         public async Task<ApiResponse<UserRegisterResponse>> Register(UserRegisterRequest model)
         {

@@ -1,0 +1,14 @@
+@mixin moodHint($bottom,$left) {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    border: 1px solid black;
+    padding: 0.5rem 1rem;
+    bottom:$bottom;
+    left:$left;
+    background: midnightblue;
+    color: white;
+    border-radius: 5px;
+    font-size: 17px;
+    white-space: nowrap;
+  }

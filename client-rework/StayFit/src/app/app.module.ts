@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './modules/@core/core.module';
 import {
   BrowserAnimationsModule,
-  NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
 import { ThemeModule } from './modules/@theme/theme.module';
 import { AuthInterceptor } from './modules/@core/interceptors/auth.interceptor';
@@ -26,6 +25,8 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { CustomSerializer } from './state/router/custome-serializer';
 import { ComponentsModule } from './modules/@components/components.module';
 import { FormsModule } from '@angular/forms';
+import { DashboardEffects } from './modules/@pages/dashboard/store/dashboard.effects';
+import { logoutClearState } from './modules/@auth/state/auth.reducer';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -42,8 +43,8 @@ import { FormsModule } from '@angular/forms';
     ThemeModule,
     SharedModule,
     ComponentsModule,
-    StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([AuthEffects, ThemeEffects]),
+    StoreModule.forRoot(appReducer,{metaReducers:[logoutClearState]}),
+    EffectsModule.forRoot([AuthEffects, ThemeEffects,DashboardEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,

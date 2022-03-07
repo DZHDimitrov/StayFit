@@ -1,5 +1,3 @@
-using AutoMapper;
-using CloudinaryDotNet;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -16,13 +14,8 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StayFit.Data;
-using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models;
-using StayFit.Data.Repositories;
-using StayFit.Infrastructure;
 using StayFit.Infrastructure.Middlewares.Authorization;
-using StayFit.Services.StayFit.Services.Data;
-using StayFit.Services.StayFit.Services.Data.Interfaces;
 
 using StayFit.Shared;
 
@@ -52,20 +45,10 @@ namespace StayFit.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //CORS configuration
-            services
-                .AddCors(options =>
-                {
-                    options.AddPolicy(allowSpecificOrigins,
-                    builder =>
-                        {
-                            builder.AllowAnyOrigin()
-                                .AllowAnyHeader()
-                                .AllowAnyMethod();
-                        });
-                });
+            services.ConfigureCors();
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JwtTokenValidation:Secret"]));
+
             services
                 .Configure<TokenProviderOptions>(opts =>
                 {
@@ -109,7 +92,7 @@ namespace StayFit.WebAPI
 
             //JSON serializer config
             services
-                .AddControllers()
+                 .AddControllers()
                  .AddNewtonsoftJson(options =>
                  {
                      options.SerializerSettings.ContractResolver = new DefaultContractResolver()
@@ -120,43 +103,20 @@ namespace StayFit.WebAPI
 
                  });
 
+            //swagger
             services
                 .AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new OpenApiInfo { Title = "StayFitAPI", Version = "v1" });
                 });
 
-            //JWToptions.GenerateJWTOptions(services, key);
+            services.ConfigureAutoMapper();
 
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
-            //Auto mapper
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-
-            //Cloudinary setup
-            var cloudinaryAccount = new CloudinaryDotNet.Account(
-            this.configuration["Authentication:Cloudinary:CloudName"],
-            this.configuration["Authentication:Cloudinary:ApiKey"],
-            this.configuration["Authentication:Cloudinary:ApiSecret"]);
-            var cloudinary = new Cloudinary(cloudinaryAccount);
-            services.AddSingleton(cloudinary);
+            services.ConfigureCloudinary(this.configuration);
 
             services.AddMvc();
 
-            //Data repositories
-            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
-            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-
-            //Application services
-            services.AddTransient<IReadingService, ReadingService>();
-            services.AddTransient<IPostService, PostService>();
-            services.AddTransient<ICommentService, CommentService>();
-            services.AddTransient<IFoodService, FoodService>();
-            services.AddTransient<IConversationService, ConversationService>();
+            services.ConfigureAppServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

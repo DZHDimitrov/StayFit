@@ -1,5 +1,3 @@
-import { NbMenuItem } from '@nebular/theme';
-
 export interface IMenuItem {
   title?: string;
   link?: string;

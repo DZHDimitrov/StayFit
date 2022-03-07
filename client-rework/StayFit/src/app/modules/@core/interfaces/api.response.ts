@@ -1,5 +1,5 @@
 export interface IApiResponse<T> {
-    errors: any[],
+    Errors: any[],
     data: T,
     isOk: boolean,
 }

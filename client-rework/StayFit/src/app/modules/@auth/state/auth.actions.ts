@@ -1,4 +1,7 @@
 import { createAction, props } from '@ngrx/store';
+
+import { createHTTPActions } from '../../@core/utility/store-actions.helper';
+
 import { User } from '../user.model';
 
 export const LOGIN_START = '[auth page] login start';
@@ -34,13 +37,21 @@ export const registerSuccess = createAction(
   props<{ userId: string }>()
 );
 
+export const registerFailure = createAction(REGISTER_FAILURE)
+
 export const loginSuccess = createAction(
   LOGIN_SUCCESS,
   props<{ user: User }>()
 );
 
+export const loginFailure = createAction(
+  LOGIN_FAILURE
+)
 
 
 export const autoLogin = createAction(AUTO_LOGIN_ACTION);
 
 export const autoLogout = createAction(AUTO_LOGOUT_ACTION);
+
+export const [checkDiaryOnwer,checkDiaryOwnerSuccess] =
+ createHTTPActions<{},{isDiaryOwner:boolean}>('[auth] check diary owner');

@@ -13,7 +13,7 @@ export const getKnowledge = createSelector(getReadingsState, (state) => {
   const currentKnowledge = JSON.parse(JSON.stringify(state.knowledge));
 
   const readingPreviewsWithCategory =
-    currentKnowledge.readingPreviewsWithCategory.map((rc) => {
+    currentKnowledge?.readingPreviewsWithCategory.map((rc) => {
       return {
         ...rc,
         path: cyrillicToLatin(rc.name.toLowerCase()),

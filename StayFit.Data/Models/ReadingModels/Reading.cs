@@ -14,11 +14,9 @@
         }
 
         [Required]
-        [StringLength(5)]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(20)]
         public string Content { get; set; }
 
         [Required]
@@ -35,7 +33,6 @@
         public ReadingSubCategory ReadingSubCategory { get; set; }
 
         //Creator
-        [Required]
         [ForeignKey(nameof(ApplicationUser))]
         public string ApplicationUserId { get; set; }
 

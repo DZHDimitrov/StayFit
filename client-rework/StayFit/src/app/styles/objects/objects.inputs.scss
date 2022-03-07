@@ -1,0 +1,30 @@
+@import '../colors//colors';
+@import '../settings/settings-animations.scss';
+.o-textarea {
+    width:100%;
+    background: $blue-100;
+    border: 2px solid $grey-300;
+    border-radius: 4px;
+    padding: 0.5rem 0rem 0rem 0.8rem;
+    outline: none;
+
+    &:focus {
+        animation-name: blueToWhite;
+        animation-duration: 0.7s;
+        animation-fill-mode: forwards;
+    }
+
+    &:not(:focus) {
+        animation-name: whiteToBlue;
+        animation-duration: 0.7s;
+        animation-fill-mode: forwards;
+    }
+
+    &:focus::placeholder {
+        color: transparent;
+    }
+
+    &::placeholder {
+        font-size: 18px;
+    }  
+}

@@ -6,6 +6,7 @@
 
     using StayFit.Data.Models;
     using StayFit.Data.Models.ConversationModels;
+    using StayFit.Data.Models.DiaryModels;
     using StayFit.Data.Models.FoodModels;
     using StayFit.Data.Models.FoodModels.Nutrients;
     using StayFit.Data.Models.Forum;
@@ -42,8 +43,6 @@
 
         public DbSet<FoodType> FoodTypes { get; set; }
 
-        //public DbSet<BodyPart> BodyParts { get; set; }
-
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Post> Posts { get; set; }
@@ -59,6 +58,10 @@
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<CategoryFoodType> CategoryFoodTypes { get; set; }
+
+        public DbSet<Diary> Diaries { get; set; }
+
+        public DbSet<Note> Notes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

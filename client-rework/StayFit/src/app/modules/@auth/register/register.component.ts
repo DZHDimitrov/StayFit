@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { Store } from '@ngrx/store';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { ConfirmedValidator } from '../../@core/utility/validators/form-validator';
-import { setLoadingSpinner } from '../../shared/state/shared.actions';
+
 import { registerStart } from '../state/auth.actions';
 
 @Component({
@@ -18,9 +22,27 @@ export class RegisterComponent implements OnInit {
     return this.userRegisterForm.controls;
   }
 
-  constructor(private fb: FormBuilder, private store: Store<IAppState>) {}
+  constructor(private fb: FormBuilder, private store: Store<IAppState>) {
+    this.initForm();
+  }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  submit() {
+    if (!this.userRegisterForm.valid) {
+      Object.keys(this.userRegisterForm.controls).forEach((key) => {
+        this.userRegisterForm.controls[key].markAsTouched({ onlySelf: true });
+      });
+      return;
+    }
+    const data = {...this.userRegisterForm.value};
+
+    this.store.dispatch(
+      registerStart(data)
+    );
+  }
+
+  private initForm() {
     this.userRegisterForm = this.fb.group(
       {
         firstName: ['', [Validators.required, Validators.minLength(4)]],
@@ -34,21 +56,6 @@ export class RegisterComponent implements OnInit {
       {
         validator: ConfirmedValidator('password', 'confirmPassword'),
       }
-    );
-  }
-
-  submit() {
-    if (!this.userRegisterForm.valid) {
-      Object.keys(this.userRegisterForm.controls).forEach((key) => {
-        this.userRegisterForm.controls[key].markAsTouched({ onlySelf: true });
-      });
-      return;
-    }
-    const { firstName, lastName, username, email, password, gender } =
-      this.userRegisterForm.value;
-    this.store.dispatch(setLoadingSpinner({ status: true }));
-    this.store.dispatch(
-      registerStart({ email, firstName, lastName, password, username, gender })
     );
   }
 }

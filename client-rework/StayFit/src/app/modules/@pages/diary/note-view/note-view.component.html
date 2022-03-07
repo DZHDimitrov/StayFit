@@ -1,0 +1,39 @@
+<div class="note-view-container o-column-container">
+    <div class="o-date-navigation-box o-row-container o-row-container--content-sb">
+        <div (click)="showPreviousDay()" class="date-showcase__back-wrapper">
+            <mat-icon class="date-showcase__back">west</mat-icon>
+        </div>
+        <p class="date-showcase__text">{{note?.createdOn}}</p>
+        <div (click)="showNextDay()" class="date-showcase__forward-wrapper">
+            <mat-icon class="date-showcase__forward">east</mat-icon>
+        </div>
+    </div>
+    <div class="note-content-container">
+        <mat-card>
+            <div class="header o-row-container o-row-container--content-sb">
+                <div (click)="endRouteSubscription()" [routerLink]="['/','pages','diary',note?.id,'edit']" class="header__edit">
+                    <mat-icon>edit_note</mat-icon>
+                </div>
+                <mat-icon *ngIf="note?.mood == 'Good'" class="header__mood" color="accent">mood</mat-icon>
+                <mat-icon *ngIf="note?.mood == 'Normal'" class="header__mood header__mood--normal">sentiment_satisfied</mat-icon>
+                <mat-icon *ngIf="note?.mood == 'Bad'" class="header__mood" color="warn">mood_bad</mat-icon>
+            </div>
+            <div *ngIf="note?.activity" class="activity">
+                <h2 class="activity__headline">Физическа активност</h2>
+                <p class="activity__text">{{note?.activity}}</p>
+            </div>
+            <div *ngIf="note?.nutrition" class="nutrition">
+                <h2 class="nutrition__headline">Хранене</h2>
+                <p class="nutrition__text">{{note?.nutrition}}</p>
+            </div>
+            <div *ngIf="note?.other" class="notes">
+                <h2 class="notes__headline">Бележки</h2>
+                <p class="notes__text">{{note?.other}}</p>
+            </div>
+            <div *ngIf="note?.sleepHours" class="sleep">
+                <h2 class="sleep__headline">Сън</h2>
+                <p class="sleep__text">{{note?.sleepHours}} hours</p>
+            </div>
+        </mat-card>
+    </div>
+</div>

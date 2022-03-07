@@ -1,0 +1,41 @@
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+@keyframes blueToWhite {
+    0% {
+        background: $blue-100;
+    }
+    100% {
+        background: white;
+    }
+}
+
+@keyframes whiteToBlue {
+    0% {
+        background: white;
+    }
+    100% {
+        background: $blue-100;
+    }
+}
+
+
+@keyframes delayWithVisiblity {
+    0% {
+      opacity: 0;
+      visibility:hidden;
+    }
+  
+    100% {
+      opacity:1;
+      visibility:visible;
+    }
+  }

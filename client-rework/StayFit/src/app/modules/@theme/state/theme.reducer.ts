@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { setNavMenu, setUserMenu } from './theme.actions';
+import {  setNavMenu, setUserMenu } from './theme.actions';
 import { initialState } from './theme.state';
 
 const _themeReducer = createReducer(
@@ -15,7 +15,7 @@ const _themeReducer = createReducer(
       ...state,
       navItems: action.navItems,
     };
-  })
+  }),
 );
 
 export function ThemeReducer(state, action) {

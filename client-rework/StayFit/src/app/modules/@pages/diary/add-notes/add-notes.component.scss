@@ -1,0 +1,105 @@
+@import "../../../../styles/colors/colors";
+@import "../../../../../app/styles/mixins.scss";
+
+.add-notes-container {
+  width: 45%;
+  margin: 0 auto;
+}
+
+.notes-container {
+  textarea {
+    height: 10rem;
+  }
+
+  .sleep {
+    &__input {
+      height: 3rem;
+      resize: none;
+    }
+  }
+}
+.mood {
+  &__description {
+    p {
+      font-size: 21px;
+    }
+  }
+  &__icons {
+    div {
+      position: relative;
+    }
+
+    width: 20%;
+    margin-left: 0.4rem;
+    margin-top: 0.4rem;
+    .good:hover {
+      .good-hint {
+        animation-name: delayWithVisiblity;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+      }
+    }
+    .normal:hover {
+      .normal-hint {
+        animation-name: delayWithVisiblity;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+      }
+    }
+    .bad:hover {
+      .bad-hint {
+        animation-name: delayWithVisiblity;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+      }
+    }
+    .normal {
+      color: orange;
+    }
+  }
+}
+
+.send-button {
+  display: flex;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.scale-mood {
+  transform: scale(2.2);
+}
+
+::ng-deep .mat-card-header-text {
+  margin: 0 !important;
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+}
+
+mat-icon {
+  transform: scale(1.7);
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.hint {
+  @include moodHint(-46px, -30px);
+}
+
+.good-hint {
+  @include moodHint(-46px, -30px);
+}
+
+.normal-hint {
+  @include moodHint(-46px, -48px);
+}
+
+.bad-hint {
+  @include moodHint(-46px, -20px);
+}

@@ -4,6 +4,7 @@
 
     using StayFit.Data.Common.Models;
     using StayFit.Data.Models.ConversationModels;
+    using StayFit.Data.Models.DiaryModels;
     using StayFit.Data.Models.Forum;
     using StayFit.Data.Models.ReadingModels;
 
@@ -68,5 +69,7 @@
         public ICollection<Message> RecievedMessages { get; set; }
 
         public ICollection<Reading> Readings { get; set; }
+
+        public ICollection<Diary> Diaries { get; set; }
     }
 }

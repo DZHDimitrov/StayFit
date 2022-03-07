@@ -4,12 +4,17 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
+
 import { Injectable } from '@angular/core';
+
 import { Store } from '@ngrx/store';
+
 import { Observable } from 'rxjs';
+
 import { exhaustMap, take } from 'rxjs/operators';
+
 import { IAppState } from 'src/app/state/app.state';
-import { AccountService } from '../backend/services/account.service';
+
 import { getToken } from '../../@auth/state/auth.selector';
 
 @Injectable()

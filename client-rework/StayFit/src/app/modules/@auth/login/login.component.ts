@@ -31,8 +31,7 @@ export class LoginComponent implements OnInit {
     }
     const username = this.userLoginForm.get('username')?.value;
     const password = this.userLoginForm.get('password')?.value;
-    // this.authService.login(username,password);
-    this.store.dispatch(setLoadingSpinner({ status: true }));
+
     this.store.dispatch(loginStart({ username, password }));
   }
 

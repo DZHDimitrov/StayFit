@@ -76,6 +76,9 @@
             existingClaims.Add(new Claim("username", principal.Identity.Name));
             existingClaims.Add(new Claim("userId", principal.GetId()));
 
+            var test = string.Join(", ",existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList());
+            existingClaims.Add(new Claim("roles",test));
+
             var systemClaims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, principal.Identity.Name),
@@ -101,7 +104,7 @@
                 audience: this.options.Audience,
                 claims: existingClaims,
                 notBefore: now,
-                expires: now.Add(this.options.Expiration),
+                expires: now.Add(TimeSpan.FromDays(2)),
                 signingCredentials: this.options.SigningCredentials);
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -109,10 +112,10 @@
             var response = new
             {
                 access_token = encodedJwt,
-                expires_in = (int)this.options.Expiration.TotalMilliseconds,
-                roles = existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value),
-                username = existingClaims.FirstOrDefault(x => x.Type == "username").Value,
-                userId = existingClaims.FirstOrDefault(x=> x.Type == "userId").Value
+                //expires_in = (int)this.options.Expiration.TotalMilliseconds,
+                //roles = existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value),
+                //username = existingClaims.FirstOrDefault(x => x.Type == "username").Value,
+                //userId = existingClaims.FirstOrDefault(x=> x.Type == "userId").Value
             };
 
             context.Response.ContentType = "application/json";

@@ -3,7 +3,8 @@ export class User {
     private username: string,
     private token: string,
     private expirationDate: Date,
-    private userId: string
+    private userId: string,
+    private roles:string[]
   ) {}
 
   get expireDate() {
@@ -12,5 +13,9 @@ export class User {
 
   get getToken() {
     return this.token;
+  }
+
+  hasRole(role: string){
+    return this.roles.some(r => r.toLowerCase() == role.toLowerCase())
   }
 }

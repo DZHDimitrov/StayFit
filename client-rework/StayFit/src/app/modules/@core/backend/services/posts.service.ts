@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
+
 import { IApiResponse } from '../../interfaces/api.response';
+
 import {
   ICreatePostRes,
   IDeletePostRes,
@@ -9,6 +12,7 @@ import {
   IPostRes,
   IUpdatePostRes,
 } from '../../interfaces/forum/forum-post.interface';
+
 import { PostApi } from '../api/posts.api';
 
 @Injectable({

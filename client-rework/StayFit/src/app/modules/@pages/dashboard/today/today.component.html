@@ -1,0 +1,13 @@
+<div class="dashboard-container o-row-container o-row-container--content-sb">
+    <div *ngFor="let task of tasks$ | async" class="card-container">
+        <div class="top-border"></div>
+        <div class="card-content">
+            <mat-icon color="accent" class="card-content__icon">{{task.icon}}</mat-icon>
+            <h1 class="card-content__heading">{{task.name}}</h1>
+            <p class="card-content__description">{{task.description}}</p>
+            <div class="button-wrapper">
+                <button [routerLink]="task.path ? task.path : './'" (click)="callAction(task.action)" class="card-content__button" mat-flat-button color="accent">{{task.buttonText}}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -42,10 +42,11 @@ export class MiniNavbarComponent implements OnInit, OnDestroy {
       .select(getCurrentRoute)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((route) => {
-        this.currentRoute = route.url;
-        const { mainCategory, subCategory } = route.params;
-
-        this.isInsideGroup = this.checkIfInGroup(mainCategory, subCategory);
+        this.currentRoute = route?.url;
+        if (route){
+          const { mainCategory, subCategory } = route.params;
+          this.isInsideGroup = this.checkIfInGroup(mainCategory, subCategory);
+        }
       });
 
     this.store

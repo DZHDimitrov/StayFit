@@ -1,0 +1,117 @@
+@import "../../../../styles/colors/colors";
+
+.diary-overview-container {
+  margin: 0 auto;
+  width: 65%;
+  .diary {
+    &__heading {
+      font-size: 41px;
+      margin-bottom: 2rem;
+    }
+  }
+  .calendar-days-container {
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: center;
+    align-items: stretch;
+    .day-box {
+      &:last-child {
+        margin-right: auto;
+      }
+      width: 23.7%;
+      background: white;
+      padding: 1.5rem 1.1rem;
+      border-radius: 5px;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      -webkit-box-shadow: 1px 0px 10px 1px rgba(0, 0, 0, 0.05);
+      box-shadow: 1px 0px 10px 1px rgba(0, 0, 0, 0.05);
+      &:hover {
+        -webkit-box-shadow: 1px 0px 10px 1px rgba(0, 0, 0, 0.15);
+        box-shadow: 1px 0px 10px 1px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+      }
+      &__head-row {
+        margin-bottom: 2.5rem;
+        .mood-icon {
+          transform: scale(1.7);
+        }
+        .day {
+          font-size: 32px;
+          color: $grey-400;
+          margin-left: auto;
+        }
+      }
+
+      .activity {
+        font-size: 18px;
+        margin-bottom: 1.2rem;
+        &__icon {
+          color: rgb(101, 212, 231);
+        }
+        &__text {
+          margin-left: 0.5rem;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+      .nutrition {
+        font-size: 18px;
+        margin-bottom: 1.4rem;
+        &__icon {
+          color: $orange-400;
+        }
+        &__text {
+          margin-left: 0.5rem;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+      .notes {
+        font-size: 18px;
+        margin-bottom: 1.4rem;
+        &__icon {
+          color: bisque;
+        }
+        &__text {
+          margin-left: 0.5rem;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+      .sleep {
+        font-size: 18px;
+        margin-bottom: 1.4rem;
+        &__icon {
+          color: rgb(104, 104, 230);
+        }
+        &__text {
+          margin-left: 0.5rem;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}
+
+.disabled-day {
+  background-color: $blue-200 !important;
+  pointer-events: none;
+}
+
+.normal {
+  color: $orange-400;
+}
+
+mat-icon {
+  transform: scale(1.1);
+}
+
+p {
+  margin: 0;
+}

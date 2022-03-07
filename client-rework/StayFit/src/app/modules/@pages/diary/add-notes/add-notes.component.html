@@ -1,0 +1,61 @@
+<div class="add-notes-container">
+    <mat-card>
+        <mat-card-header class="header">
+            <h1>
+                Дневникът ми за днес
+            </h1>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="noteForm" (ngSubmit)="save()">
+                <div class="notes-container">
+                    <fieldset class="activity">
+                        <textarea formControlName="activity" class="activity__input o-textarea"
+                            placeholder="Какво движение имаше днес?"></textarea>
+                    </fieldset>
+                    <fieldset class="nutrition">
+                        <textarea formControlName="nutrition" class="nutrition__input o-textarea"
+                            placeholder="Как се храни?"></textarea>
+                    </fieldset>
+                    <fieldset class="other">
+                        <textarea formControlName="other" class="other__input o-textarea"
+                            placeholder="Други бележки за деня?"></textarea>
+                    </fieldset>
+                    <fieldset class="sleep">
+                        <textarea formControlName="sleep" class="sleep__input o-textarea"
+                            placeholder="Колко часа сън имаше?"></textarea>
+                        <mat-error *ngIf="noteForm.get('sleep')?.errors">Невалиден брой часове</mat-error>
+                    </fieldset>
+                    <fieldset class="mood">
+                        <input formControlName="mood" #moodInput type="text" class="hidden">
+                        <div class="mood__description o-row-container o-row-container--content-sb">
+                            <p>Оценката ти за деня?</p>
+                            <mat-hint *ngIf="!noteForm.valid">*За да попълните дневника си, най-малко трябва да дадете
+                                оценка.</mat-hint>
+                        </div>
+                        <div class="mood__icons o-row-container o-row-container--content-sb">
+                            <div class="good">
+                                <mat-icon [ngClass]="isGoodMood ? 'scale-mood' : ''" (click)="selectMood('Good')"
+                                    color="accent">mood</mat-icon>
+                                <span class="good-hint">Супер!</span>
+                            </div>
+                            <div class="normal">
+                                <mat-icon [ngClass]="isNormalMood ? 'scale-mood' : ''" (click)="selectMood('Normal')">
+                                    sentiment_satisfied</mat-icon>
+                                <span class="normal-hint">Горе-долу</span>
+                            </div>
+                            <div class="bad">
+                                <mat-icon [ngClass]="isBadMood ? 'scale-mood' : ''" (click)="selectMood('Bad')"
+                                    class="bad" color="warn">mood_bad</mat-icon>
+                                <span class="bad-hint">Зле</span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <button *ngIf="mode == FormMode.CREATE" class="send-button" color="primary"
+                    mat-flat-button>Попълни</button>
+                <button *ngIf="mode == FormMode.EDIT" class="send-button" color="primary"
+                    mat-flat-button>Обнови</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

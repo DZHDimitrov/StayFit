@@ -1,20 +1,32 @@
 import { Injectable } from '@angular/core';
+
 import { Store } from '@ngrx/store';
+
 import { Observable } from 'rxjs';
+
 import { autoLogout } from 'src/app/modules/@auth/state/auth.actions';
+
 import { User } from 'src/app/modules/@auth/user.model';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import {
   IAuthResponseData,
   IRegisterResponseData,
 } from '../../interfaces/auth/user.interface';
+
 import { AccountApi } from '../api/account.api';
+
+import jwt_decode from 'jwt-decode'
+
+import { IApiResponse } from '../../interfaces/api.response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
   timeoutInterval: any;
+  redirectAfterLogin:string = '/';
 
   constructor(private api: AccountApi, private store: Store<IAppState>) {}
 
@@ -26,40 +38,34 @@ export class AccountService {
     return this.api.register(data);
   }
 
-  generateUser(data: IAuthResponseData) {
-    const expirationDate = new Date(new Date().getTime() + +data.expires_in);
-    const user = new User(
-      data.username,
-      data.access_token,
-      expirationDate,
-      data.userId
-    );
-    return user;
+  check(type:string):Observable<IApiResponse<boolean>> {
+    return this.api.check(type);
   }
 
-  generateErrorMessages(error: any) {
-    return Object.keys(error.errors).reduce((acc: any, el) => {
-      acc.push(...error.errors[el]);
-      return acc;
-    }, []);
-  }
+  // generateErrorMessages(error: any) {
+  //   return Object.keys(error.errors).reduce((acc: any, el) => {
+  //     acc.push(...error.errors[el]);
+  //     return acc;
+  //   }, []);
+  // }
 
-  setUserInLocalStorage(user: User) {
-    localStorage.setItem('userData', JSON.stringify(user));
+  setTokenInLocalStorage(token:string) {
+    localStorage.setItem('token', token);
   }
 
   getUserFromLocalStorage() {
-    const userDataString = window.localStorage.getItem('userData');
-    if (!userDataString) {
+    const token = window.localStorage.getItem('token');
+    if (!token) {
       return null;
     }
-    const parsedUser = JSON.parse(userDataString);
-    const expirationDate = parsedUser.expirationDate;
+    const decodedToken:any = jwt_decode(token);
+    const expirationDate = new Date(decodedToken.exp * 1000);
     const user = new User(
-      parsedUser.username,
-      parsedUser.token,
+      decodedToken.username,
+      token,
       expirationDate,
-      parsedUser.userId
+      decodedToken.userId,
+      decodedToken?.roles.split(", "),
     );
     this.runTimeoutInterval(user);
     return user;
@@ -69,7 +75,6 @@ export class AccountService {
     const todaysDate = new Date().getTime();
     const expirationDate = new Date(user.expireDate).getTime();
     const timeInterval = expirationDate - todaysDate;
-    console.log(timeInterval);
 
     this.timeoutInterval = setTimeout(() => {
       this.store.dispatch(autoLogout());

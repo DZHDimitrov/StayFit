@@ -1,0 +1,47 @@
+<div class="diary-overview-container">
+    <div class="diary o-column-container">
+        <h1 class="diary__heading">
+            Дневник
+        </h1>
+        <div class="o-date-navigation-box o-row-container o-row-container--content-sb">
+            <div (click)="navigate(navigationType.BACKWARDS)" class="date-showcase__back-wrapper">
+                <mat-icon class="date-showcase__back">west</mat-icon>
+            </div>
+            <p class="date-showcase__text">{{this.monthDisplay}}&nbsp;/&nbsp;{{this.year}}</p>
+            <div (click)="navigate(navigationType.FORWARDS)" class="date-showcase__forward-wrapper">
+                <mat-icon class="date-showcase__forward">east</mat-icon>
+            </div>
+        </div>
+        <div class="calendar-days-container o-row-container">
+            <div (click)="redirect(note,i+1)" [ngClass]="note.isActive === false ? 'disabled-day' :     ''"
+                *ngFor="let note of notes$ | async;let i = index" class="day-box">
+                <div class="day-box__head-row o-row-container o-row-container--content-sb">
+                    <mat-icon *ngIf="note.mood && note.mood === 'Good'" color="accent" class="mood-icon">mood
+                    </mat-icon>
+                    <mat-icon *ngIf="note.mood && note.mood === 'Normal'" class="mood-icon normal">sentiment_satisfied
+                    </mat-icon>
+                    <mat-icon *ngIf="note.mood && note.mood === 'Bad'" color="warn" class="mood-icon">mood_bad
+                    </mat-icon>
+                    <span class="day">{{i + 1}}</span>
+                </div>
+                <div *ngIf="note.activity" class="activity o-row-container--no-wrap">
+                    <mat-icon class="activity__icon">fitness_center</mat-icon>
+                    <span class="activity__text">{{note.activity}}</span>
+                </div>
+                <div *ngIf="note.nutrition" class="nutrition o-row-container--no-wrap">
+                    <mat-icon class="nutrition__icon">ramen_dining</mat-icon>
+                    <span class="nutrition__text">{{note.nutrition}}</span>
+                </div>
+                <div *ngIf="note.other" class="notes o-row-container--no-wrap">
+                    <mat-icon class="notes__icon">text_snippet</mat-icon>
+                    <span class="notes__text">{{note.other}}</span>
+                </div>
+                <div *ngIf="note.sleepHours" class="sleep o-row-container--no-wrap">
+                    <mat-icon class="sleep__icon">nightlight</mat-icon>
+                    <span class="sleep__text">{{note.sleepHours}} часа</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

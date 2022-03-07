@@ -1,13 +1,13 @@
 <mat-toolbar color="primary" class="navbar">
   <div [routerLink]="['/']" class="mat-display-1 logo">Stay Fit</div>
   <div class="navbar-items">
-    <span [routerLink]="item.link" *ngFor="let item of userNavItems$ | async">{{
-      item.title
-      }}</span>
+    <span [routerLink]="item.link" (click)="navigate(item)" *ngFor="let item of userNavItems$ | async">
+      {{item.title}}
+    </span>
     <mat-icon *ngIf="!(isLoggedIn$ | async)" [mat-menu-trigger-for]="menu">input</mat-icon>
     <mat-icon class="user-menu-icon" *ngIf="isLoggedIn$ | async" [mat-menu-trigger-for]="menu">menu_open</mat-icon>
     <mat-menu #menu="matMenu">
-      <button [routerLink]="['/','admin']" mat-menu-item>
+      <button *ngIf="isAdmin$ | async" [routerLink]="['/','admin']" mat-menu-item>
         Администрация
       </button>
       <button (click)="logout(item)" [routerLink]="item.link" mat-menu-item

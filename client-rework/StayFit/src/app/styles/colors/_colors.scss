@@ -1,0 +1,27 @@
+@import "~@angular/material/theming";
+@include mat-core();
+
+$primary: mat-palette($mat-blue, 800);
+$accent: mat-palette($mat-green, 500);
+$warn: mat-palette($mat-red,500);
+$theme: mat-light-theme($primary, $accent);
+@include angular-material-theme($theme);
+
+
+$primary-color: mat-color($primary);
+$warn-color:mat-color($warn);
+$accent-color:mat-color($accent);
+
+
+//blue
+// $light-background:#f7f9fa;
+$blue-100:#f7f9fa;
+$blue-200:#e2eaee;
+
+
+//grey
+$grey-300:lightgrey;
+$grey-400:grey;
+
+//orange
+$orange-400:orange;
