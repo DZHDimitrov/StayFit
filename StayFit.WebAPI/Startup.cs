@@ -8,11 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using StayFit.Data;
 using StayFit.Data.Models;
 using StayFit.Infrastructure.Middlewares.Authorization;
@@ -24,7 +21,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StayFit.WebAPI
@@ -40,86 +36,13 @@ namespace StayFit.WebAPI
             this.configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureCors();
-
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JwtTokenValidation:Secret"]));
-
-            services
-                .Configure<TokenProviderOptions>(opts =>
-                {
-                    opts.Audience = this.configuration["JwtTokenValidation:Audience"];
-                    opts.Issuer = this.configuration["JwtTokenValidation:Issuer"];
-                    opts.Path = "/api/account/login";
-                    opts.Expiration = TimeSpan.FromDays(1);
-                    opts.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-                });
-
-            services
-                .AddDefaultIdentity<ApplicationUser>(x =>
-                {
-                    x.Password.RequireDigit = false;
-                    x.Password.RequireLowercase = false;
-                    x.Password.RequireUppercase = false;
-                    x.Password.RequireNonAlphanumeric = false;
-                    x.Password.RequiredLength = 5;
-                })
-                .AddRoles<ApplicationRole>()
-                .AddEntityFrameworkStores<AppDbContext>();
-
-            services
-                .AddAuthentication()
-                .AddJwtBearer(opts =>
-                {
-                    opts.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = signingKey,
-                        ValidateIssuer = true,
-                        ValidIssuer = this.configuration["JwtTokenValidation:Issuer"],
-                        ValidateAudience = true,
-                        ValidAudience = this.configuration["JwtTokenValidation:Audience"],
-                        ValidateLifetime = true
-                    };
-                });
-
-            services
-                .AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
-
-            //JSON serializer config
-            services
-                 .AddControllers()
-                 .AddNewtonsoftJson(options =>
-                 {
-                     options.SerializerSettings.ContractResolver = new DefaultContractResolver()
-                     {
-                         NamingStrategy = new CamelCaseNamingStrategy(),
-                     };
-                     options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
-
-                 });
-
-            //swagger
-            services
-                .AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "StayFitAPI", Version = "v1" });
-                });
-
-            services.ConfigureAutoMapper();
-
-            services.ConfigureCloudinary(this.configuration);
+            services.ConfigureServices(this.configuration);
 
             services.AddMvc();
-
-            services.ConfigureAppServices();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
