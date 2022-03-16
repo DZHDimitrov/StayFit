@@ -1,8 +1,11 @@
-<ng-container>
-  <app-loading-spinner *ngIf="showLoading$ | async"></app-loading-spinner>
+<!-- <ng-container>
   <app-navigation></app-navigation>
   <div class="body">
     <router-outlet></router-outlet>
   </div>
   <app-footer></app-footer>
+</ng-container> -->
+<ng-container>
+  <app-loading-spinner *ngIf="showLoading$ | async"></app-loading-spinner>
+  <router-outlet></router-outlet>
 </ng-container>

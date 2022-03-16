@@ -61,7 +61,7 @@ export const USER_NAV_ITEMS_DIARY: INavItem[] = [
   },
   {
     title: 'Прогрес',
-    link: '',
+    link: ['pages','progress'],
   },
   {
     title: 'Магазин',

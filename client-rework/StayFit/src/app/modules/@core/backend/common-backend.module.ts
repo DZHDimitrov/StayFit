@@ -29,6 +29,8 @@ import { DiaryService } from './services/diary.service';
 import { DashboardApi } from './api/dashboard.api';
 
 import { DashboardService } from './services/dashboard.service';
+import { ProgressApi } from './api/progress.api';
+import { ProgressService } from './services/progress.service';
 
 const API = [
   ReadingsApi,
@@ -38,6 +40,7 @@ const API = [
   FoodsApi,
   DiaryApi,
   DashboardApi,
+  ProgressApi,
   HttpService
 ]
 const SERVICES = [
@@ -47,6 +50,7 @@ const SERVICES = [
   FoodsService,
   DiaryService,
   DashboardService,
+  ProgressService,
 ]
 
 @NgModule({

@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
+
 import { AuthGuard } from '../@core/guards/auth.guard';
+
 import { DiaryGuard } from '../@core/guards/diary.guard';
 
 const routes: Routes = [
@@ -19,13 +21,18 @@ const routes: Routes = [
     path: 'diary',
     loadChildren: () =>
       import('./diary/diary.module').then((m) => m.DiaryModule),
-    canActivate: [AuthGuard,DiaryGuard],
+    canActivate: [AuthGuard, DiaryGuard],
   },
   {
     path: 'dashboard',
     loadChildren: () =>
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'progress',
+    loadChildren: () =>
+      import('./progress/progress.module').then((m) => m.ProgressModule),
   },
 ];
 

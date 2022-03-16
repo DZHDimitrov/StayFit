@@ -79,3 +79,35 @@ export const latinToCyrillic = (text: string) => {
     .join("_");
   return text;
 };
+
+export const englishToBulgarian = {
+  Height:'Височина',
+
+  Weight:'Тегло',
+
+  Fats:'Мазнини',
+
+  Neck:'Врат',
+
+  Shoulders:'Рамене',
+
+  Chest:'Гръдна обиколка',
+
+  Arms:'Мишници',
+
+  Forearms:'Предмишници',
+
+  Waist:'Талия',
+
+  Wrist:'Китка',
+
+  Hips:'Ханш',
+
+  Thighs:'Бедра',
+
+  LeftCalf:'Ляв прасец',
+  
+  RightCalf:'Десен прасец',
+
+  Ankle:'Глезен'
+}

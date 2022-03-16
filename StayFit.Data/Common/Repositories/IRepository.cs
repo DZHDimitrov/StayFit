@@ -2,6 +2,7 @@
 namespace StayFit.Data.Common.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -15,6 +16,8 @@ namespace StayFit.Data.Common.Repositories
         Task<TEntity> GetByIdAsync(params object[] id);
 
         Task AddAsync(TEntity entity);
+
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         void Update(TEntity entity);
 

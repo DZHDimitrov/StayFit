@@ -1,0 +1,13 @@
+.u-margin-auto {
+    &--left {
+        margin-left: auto !important;
+    }
+
+    &--right {
+        margin-right: auto !important;
+    }
+
+    &--center {
+        margin:0 auto !important;
+    }
+}

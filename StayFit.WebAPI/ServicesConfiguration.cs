@@ -42,6 +42,10 @@ namespace StayFit.WebAPI
 
             @this.AddTransient<IReadingService, ReadingService>();
 
+            @this.AddTransient<IProgressService, ProgressService>();
+
+            @this.AddTransient<IBodyService, BodyService>();
+
             //Data repositories
             @this.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
 

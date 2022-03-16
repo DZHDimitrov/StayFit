@@ -730,6 +730,91 @@ namespace StayFit.Data.Migrations
                     b.ToTable("Votes", "Forum");
                 });
 
+            modelBuilder.Entity("StayFit.Data.Models.ProgerssModels.Measurement", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("Ankle")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("Chest")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfMeasurment")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("Fats")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Height")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Hips")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<double?>("LeftArm")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("LeftCalf")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("LeftForearm")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("LeftThigh")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("Neck")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("RightArm")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("RightCalf")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("RightForearm")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("RightThigh")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Shoulders")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Waist")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Weight")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Wrist")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Measurements");
+                });
+
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.Reading", b =>
                 {
                     b.Property<int>("Id")
@@ -1143,6 +1228,17 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Comment");
                 });
 
+            modelBuilder.Entity("StayFit.Data.Models.ProgerssModels.Measurement", b =>
+                {
+                    b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Measurements")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("StayFit.Data.Models.ReadingModels.Reading", b =>
                 {
                     b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
@@ -1205,6 +1301,8 @@ namespace StayFit.Data.Migrations
                     b.Navigation("Diaries");
 
                     b.Navigation("Logins");
+
+                    b.Navigation("Measurements");
 
                     b.Navigation("Messages");
 

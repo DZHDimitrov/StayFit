@@ -10,6 +10,7 @@
     using StayFit.Data.Models.FoodModels;
     using StayFit.Data.Models.FoodModels.Nutrients;
     using StayFit.Data.Models.Forum;
+    using StayFit.Data.Models.ProgerssModels;
     using StayFit.Data.Models.ReadingModels;
 
     public class AppDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>
@@ -62,6 +63,8 @@
         public DbSet<Diary> Diaries { get; set; }
 
         public DbSet<Note> Notes { get; set; }
+
+        public DbSet<Measurement> Measurements { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

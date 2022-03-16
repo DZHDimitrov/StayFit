@@ -1,0 +1,34 @@
+<div class="progress-container o-column-container o-column-container--content-c">
+    <div class="progress-navbar u-standard-shadow u-standard-shadow--hover">
+        <span class="measurements-text">Измервания</span>
+    </div>
+
+    <div class="chart">
+        <mat-card>
+            <div class="new-measurement-button">
+                <button [ngClass]="measurements.length > 0 ? 'u-margin-auto--left': ''" [routerLink]="['add']" mat-flat-button color="accent">Ново измерване</button>
+            </div>
+            <div class="body-part-selection" *ngIf="measurements.length > 0">
+                <mat-form-field>
+                    <mat-select [(value)]="selected" (selectionChange)="selectType($event.value)" disableOptionCentering
+                        panelClass="myPanelClass">
+                        <mat-option *ngFor="let option of selectionOptions" [value]="option.value">{{option.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <figure class="highcharts-figure">
+                <div id="container"></div>
+            </figure>
+        </mat-card>
+    </div>
+    <div *ngIf="measurements.length > 0" class="measurements-container">
+        <h1>Измерванията ти до момента</h1>
+        <mat-card class="custom-card">
+            <div *ngFor="let measurement of measurements" class = "measurement o-row-container o-row-container--content-sb">
+                <span [routerLink]="[measurement.id,'edit']" class="measurement__date">{{measurement.dateOfMeasurement}}</span>
+                <mat-icon (click)="deleteMeasurement(measurement.id)" class="measurement__delete-icon">delete_outline</mat-icon>
+            </div>
+        </mat-card>
+    </div>
+</div>

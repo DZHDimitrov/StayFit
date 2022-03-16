@@ -3,6 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using StayFit.Data.Common.Repositories;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -19,6 +20,8 @@
         protected AppDbContext Context { get; set; }
 
         public virtual async Task AddAsync(TEntity entity) => await this.DbSet.AddAsync(entity);
+
+        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities) => await this.DbSet.AddRangeAsync(entities);
 
         public virtual IQueryable<TEntity> All() => this.DbSet;
 

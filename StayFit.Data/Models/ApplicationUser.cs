@@ -6,6 +6,7 @@
     using StayFit.Data.Models.ConversationModels;
     using StayFit.Data.Models.DiaryModels;
     using StayFit.Data.Models.Forum;
+    using StayFit.Data.Models.ProgerssModels;
     using StayFit.Data.Models.ReadingModels;
 
     using System;
@@ -28,6 +29,8 @@
             this.Messages = new HashSet<Message>();
             this.Readings = new HashSet<Reading>();
             this.RecievedMessages = new HashSet<Message>();
+            this.Diaries = new HashSet<Diary>();
+            this.Measurements = new HashSet<Measurement>();
         }
 
         // Audit info
@@ -71,5 +74,7 @@
         public ICollection<Reading> Readings { get; set; }
 
         public ICollection<Diary> Diaries { get; set; }
+
+        public ICollection<Measurement> Measurements { get; set; }
     }
 }

@@ -27,9 +27,10 @@ import { ComponentsModule } from './modules/@components/components.module';
 import { FormsModule } from '@angular/forms';
 import { DashboardEffects } from './modules/@pages/dashboard/store/dashboard.effects';
 import { logoutClearState } from './modules/@auth/state/auth.reducer';
+import { AppLayoutComponent } from './app-layout/app-layout.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, AppLayoutComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

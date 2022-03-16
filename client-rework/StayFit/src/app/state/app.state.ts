@@ -14,6 +14,9 @@ import { IDiaryState } from '../modules/@pages/diary/store/diary.state';
 import { FoodsReducer } from '../modules/@pages/foods/store/foods.reducer';
 import { FOODS_STATE_NAME } from '../modules/@pages/foods/store/foods.selector';
 import { IFoodsState } from '../modules/@pages/foods/store/foods.state';
+import { ProgressReducer } from '../modules/@pages/progress/store/progress.reducer';
+import { PROGRESS_STATE_NAME } from '../modules/@pages/progress/store/progress.selectors';
+import { IProgressState } from '../modules/@pages/progress/store/progress.state';
 import { ReadingsReducer } from '../modules/@pages/readings/store/readings.reducer';
 import { READINGS_STATE_NAME } from '../modules/@pages/readings/store/readings.selector';
 import { IReadingsState } from '../modules/@pages/readings/store/readings.state';
@@ -33,6 +36,7 @@ export interface IAppState {
   [FOODS_STATE_NAME]:IFoodsState;
   [DIARY_STATE_NAME]:IDiaryState;
   [DASHBOARD_STATE_NAME]:IDashboardState;
+  [PROGRESS_STATE_NAME]:IProgressState;
   router:RouterReducerState,
 }
 
@@ -45,5 +49,6 @@ export const appReducer:any = {
   [FOODS_STATE_NAME]:FoodsReducer,
   [DIARY_STATE_NAME]:DiaryReducer,
   [DASHBOARD_STATE_NAME]:DashboardReducer,
+  [PROGRESS_STATE_NAME]:ProgressReducer,
   router:routerReducer,
 };
