@@ -33,4 +33,8 @@ export class DiaryService {
   editNote(noteId: number, data: INoteData): Observable<IApiResponse<string>> {
     return this.api.editNote(noteId, data);
   }
+
+  isOwner():Observable<IApiResponse<boolean>> {
+    return this.api.isOwner();
+  }
 }

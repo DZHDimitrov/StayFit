@@ -1,8 +1,10 @@
 ﻿namespace StayFit.Data.Models.ReadingModels
 {
+    using StayFit.Common;
     using StayFit.Data.Common.Models;
 
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class ReadingMainCategory : BaseDeletableModel<int>
     {
@@ -12,6 +14,8 @@
             this.ReadingSubCategories = new HashSet<ReadingSubCategory>();
         }
 
+        [StringLength(ReadingConstants.Constraints.ReadingCategoryMaxLength)]
+        [Required]
         public string Name { get; set; }
 
         public ICollection<Reading> Readings { get; set; }

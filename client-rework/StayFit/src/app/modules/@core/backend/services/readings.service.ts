@@ -40,8 +40,12 @@ export class ReadingsService {
     return this.api.loadReadingSubCategories(mainId);
   }
 
-  loadReading(category:string,subCategory?:string,id?:string):Observable<IApiResponse<IReading>> {
-    return this.api.loadReading(category,subCategory,id);
+  // loadReading(category:string,subCategory?:string,id?:string):Observable<IApiResponse<IReading>> {
+  //   return this.api.loadReading(category,subCategory,id);
+  // }
+
+    loadReading(id:string):Observable<IApiResponse<IReading>> {
+    return this.api.loadReading(id);
   }
 
   add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingRes>> {

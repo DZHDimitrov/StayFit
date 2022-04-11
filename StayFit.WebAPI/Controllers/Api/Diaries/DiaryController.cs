@@ -4,7 +4,6 @@ using StayFit.Infrastructure.Extensions;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 using StayFit.Shared;
 using StayFit.Shared.Diaries;
-using System.Collections;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,7 +12,6 @@ namespace StayFit.WebAPI.Controllers.Api.Diaries
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class DiaryController : BaseController
     {
         private readonly IDiaryService diaryService;
@@ -34,7 +32,7 @@ namespace StayFit.WebAPI.Controllers.Api.Diaries
         }
 
         [HttpGet]
-        [Route("diary_owner")]
+        [Route("owner")]
         public async Task<ApiResponse<bool>> IsDiaryOwner()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -47,6 +45,7 @@ namespace StayFit.WebAPI.Controllers.Api.Diaries
         [Route("{year}/{month}")]
         public async Task<ApiResponse<IEnumerable<NoteModel>>> LoadNotes(int year,int month)
         {
+            var a = User.Identity.IsAuthenticated;
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var response = await diaryService.LoadNotes(userId, year,month);

@@ -23,7 +23,7 @@ export const [loadSubCategoryWithPreviews, loadSubCategoryWithPreviewsSuccess] =
   >('[readings] load sub category with previews');
 
 export const [loadReading, loadReadingSuccess] = createHTTPActions<
-  { mainCategory: string; subCategory: string; id?: string },
+  { id: string },
   { currentReading: IReading }
 >('[readings] load reading');
 

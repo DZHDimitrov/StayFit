@@ -163,7 +163,10 @@ namespace StayFit.Services.StayFit.Services.Data
 
         public async Task<bool> IsDiaryOwner(string userId)
         {
-            var diary = await this.diaryRepo.All().Where(d => d.ApplicationUserId == userId).FirstOrDefaultAsync();
+            var diary = await this.diaryRepo
+                .All()
+                .Where(d => d.ApplicationUserId == userId)
+                .FirstOrDefaultAsync();
 
             return diary != null ? true : false;
         }

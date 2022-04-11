@@ -1,59 +1,54 @@
-<div class="register-container">
-  <div class="register-content">
-    <mat-toolbar class="register-toolbar mat-title" color="primary">Регистрация</mat-toolbar>
+<div class="register-wrapper">
+  <div class="register-container u-margin-auto--center">
+    <mat-toolbar class="o-row-container--content-c mat-title" color="primary">Регистрация</mat-toolbar>
     <mat-card>
-      <form [formGroup]="this.userRegisterForm" #formDirective="ngForm" (ngSubmit)="submit()">
+      <form [formGroup]="registerForm" #formDirective="ngForm" (ngSubmit)="submit()">
+
         <mat-form-field>
-          <input type="text" matInput placeholder="First name *" formControlName="firstName" />
-        </mat-form-field>
-        <mat-form-field>
-          <input type="text" matInput placeholder="Last name *" formControlName="lastName" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-icon matPrefix>email</mat-icon>
-          <input autofocus type="email" matInput placeholder="Email *" formControlName="email" />
-          <!-- <mat-error *ngIf="checkValidation('email')">
-						{{ emaiErrors() }}
-          
-					</mat-error> -->
+          <input type="text" matInput placeholder="Име *" formControlName="firstName" />
+          <mat-error>Дължината на полето трябва да бъде между 2 и 40 символа</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-icon matPrefix>person_outline</mat-icon>
-          <input autofocus type="text" matInput placeholder="Username *" formControlName="username" />
-          <!-- <mat-error *ngIf="checkValidation('username')">
-						{{ fieldRequired }}
-					</mat-error> -->
+          <input type="text" matInput placeholder="Фамилия *" formControlName="lastName" />
+          <mat-error>Дължината на полето трябва да бъде между 2 и 40 символа</mat-error>
+        </mat-form-field>
+        
+        <mat-form-field>
+          <input autofocus type="email" matInput placeholder="Имейл *" formControlName="email" />
+          <mat-error>Невалиден имейл</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-icon matPrefix>lock_outline</mat-icon>
-          <input type="password" autocomplete="false" matInput placeholder="Password *" formControlName="password" />
-          <mat-hint>Choose a password of at least eight characters, one uppercase
-            letter and one number</mat-hint>
-          <!-- <mat-error *ngIf="checkValidation('password')">
-        {{ getErrorPassword() }}
-      </mat-error> -->
+          <input autofocus type="text" matInput placeholder="Потребителско име *" formControlName="username" />
+          <mat-error>Дължината на полето трябва да бъде между 4 и 50 символа</mat-error>
         </mat-form-field>
+
         <mat-form-field>
-          <mat-icon matPrefix>lock_outline</mat-icon>
-          <input type="password" autocomplete="false" matInput placeholder="ConfirmPassword *"
+          <input type="password" autocomplete="false" matInput placeholder="Парола *" formControlName="password" />
+          <mat-error>Паролата не е попълнена или не съвпада</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input type="password" autocomplete="false" matInput placeholder="Потвърждаване на паролата *"
             formControlName="confirmPassword" />
-          <!-- <mat-error *ngIf="checkValidation('password')">
-        {{ getErrorPassword() }}
-      </mat-error> -->
         </mat-form-field>
+
         <mat-radio-group color="warn" formControlName="gender">
-          <mat-radio-button value="male">Мъж</mat-radio-button>
+          <mat-radio-button [checked]="true" value="male">Мъж</mat-radio-button>
           <mat-radio-button value="female">Жена</mat-radio-button>
         </mat-radio-group>
-        <div class="socialMediaFlex">
-          <button style="width: 50%" type="submit" mat-raised-button
-            color="primary">
-            Submit
+
+        <div class="o-row-container o-row-container--content-c">
+          <button class="submit-button" type="submit" mat-raised-button color="primary">
+            Регистрирай ме
           </button>
         </div>
       </form>
+      <div class="already-registered">
+        <span>Имаш акаунт? &nbsp;</span>
+        <a [routerLink]="['/','account','login']">Влез с него.</a>
+      </div>
     </mat-card>
   </div>
 </div>

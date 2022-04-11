@@ -9,7 +9,6 @@ import {
   BrowserAnimationsModule,
 } from '@angular/platform-browser/animations';
 import { ThemeModule } from './modules/@theme/theme.module';
-import { AuthInterceptor } from './modules/@core/interceptors/auth.interceptor';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -28,6 +27,7 @@ import { FormsModule } from '@angular/forms';
 import { DashboardEffects } from './modules/@pages/dashboard/store/dashboard.effects';
 import { logoutClearState } from './modules/@auth/state/auth.reducer';
 import { AppLayoutComponent } from './app-layout/app-layout.component';
+import { AuthInterceptor } from './modules/@core/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, AppLayoutComponent],

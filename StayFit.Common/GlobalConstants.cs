@@ -12,5 +12,7 @@
         //OK
         public const string ITEM_ADD_SUCCESS = "You successfully added a {0}.";
         public const string ITEM_REMOVE_SUCCESS = "Your {0} has been removed.";
+
+        //Models
     }
 }

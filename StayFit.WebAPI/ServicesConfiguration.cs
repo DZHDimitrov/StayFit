@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +24,8 @@ namespace StayFit.WebAPI
     {
         private static readonly string allowSpecificOrigins = "_myAllowSpecificOrigins";
 
-        public static void ConfigureServices(this IServiceCollection @this,IConfiguration configuration)
+        public static void AddAppServices(this IServiceCollection @this)
         {
-            //AppServices
             @this.AddTransient<IPostService, PostService>();
 
             @this.AddTransient<ICommentService, CommentService>();
@@ -45,23 +45,22 @@ namespace StayFit.WebAPI
             @this.AddTransient<IProgressService, ProgressService>();
 
             @this.AddTransient<IBodyService, BodyService>();
+        }
 
-            //Data repositories
-            @this.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
-
-            @this.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-
-            //Cloudinary
+        public static void ConfigureCloudinary(this IServiceCollection @this, IConfiguration configuration)
+        {
             var cloudinaryAccount = new CloudinaryDotNet.Account(
-                configuration["Authentication:Cloudinary:CloudName"],
-                configuration["Authentication:Cloudinary:ApiKey"],
-                configuration["Authentication:Cloudinary:ApiSecret"]);
+            configuration["Authentication:Cloudinary:CloudName"],
+            configuration["Authentication:Cloudinary:ApiKey"],
+            configuration["Authentication:Cloudinary:ApiSecret"]);
 
             var cloudinary = new Cloudinary(cloudinaryAccount);
 
             @this.AddSingleton(cloudinary);
+        }
 
-            //AutoMapper
+        public static void ConfigureAutoMapper(this IServiceCollection @this)
+        {
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -69,8 +68,10 @@ namespace StayFit.WebAPI
 
             IMapper mapper = mapperConfig.CreateMapper();
             @this.AddSingleton(mapper);
+        }
 
-            //CORS
+        public static void ConfigureCORS(this IServiceCollection @this)
+        {
             @this
                 .AddCors(options =>
                 {
@@ -83,8 +84,10 @@ namespace StayFit.WebAPI
                         .AllowAnyMethod();
                     });
                 });
+        }
 
-            //Add authentication and token config
+        public static void ConfigureToken(this IServiceCollection @this,IConfiguration configuration)
+        {
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtTokenValidation:Secret"]));
 
             @this
@@ -93,12 +96,14 @@ namespace StayFit.WebAPI
                     opts.Audience = configuration["JwtTokenValidation:Audience"];
                     opts.Issuer = configuration["JwtTokenValidation:Issuer"];
                     opts.Path = "/api/account/login";
-                    opts.Expiration = TimeSpan.FromDays(1);
+                    opts.Expiration = TimeSpan.FromDays(2);
                     opts.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
                 })
                 .AddAuthentication()
                 .AddJwtBearer(opts =>
                 {
+                    opts.RequireHttpsMetadata = false;
+                    opts.SaveToken = true;
                     opts.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -110,9 +115,10 @@ namespace StayFit.WebAPI
                         ValidateLifetime = true
                     };
                 }); ;
+        }
 
-            //Identity config
-
+        public static void ConfigureIdentity(this IServiceCollection @this)
+        {
             @this
                 .AddDefaultIdentity<ApplicationUser>(x =>
                 {
@@ -124,8 +130,10 @@ namespace StayFit.WebAPI
                 })
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
+        }
 
-            //Add controllers with JSON serializer config
+        public static void ConfigureControllers(this IServiceCollection @this)
+        {
             @this
                  .AddControllers()
                  .AddNewtonsoftJson(options =>
@@ -137,12 +145,19 @@ namespace StayFit.WebAPI
                      options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
 
                  });
+        }
 
-            //Database config
+        public static void ConfigureDatabase(this IServiceCollection @this)
+        {
             @this
                  .AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 
-            //Swagger config
+            @this.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            @this.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+        }
+
+        public static void ConfigureSwagger(this IServiceCollection @this)
+        {
             @this
                 .AddSwaggerGen(c =>
                 {

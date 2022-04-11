@@ -4,12 +4,11 @@ import { Observable } from 'rxjs';
 
 import { IApiResponse } from '../../interfaces/api.response';
 
-import {
-  IAuthResponseData,
-  IRegisterResponseData,
-} from '../../interfaces/auth/user.interface';
-
 import { HttpService } from './http.service';
+
+import { IRegisterRequest, IRegisterResponse } from 'src/app/modules/@auth/models/register.model';
+
+import { ILoginResponse } from 'src/app/modules/@auth/models/login.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,15 +18,11 @@ export class AccountApi {
 
   constructor(private api: HttpService) {}
 
-  login(data: FormData): Observable<IAuthResponseData> {
+  login(data: FormData): Observable<ILoginResponse> {
     return this.api.post(`${this.apiController}/login`, data);
   }
 
-  register(data: any): Observable<IRegisterResponseData> {
+  register(data: IRegisterRequest): Observable<IApiResponse<IRegisterResponse>> {
     return this.api.post(`${this.apiController}/register`, data);
-  }
-
-  check(type: string): Observable<IApiResponse<boolean>> {
-    return this.api.get(`${this.apiController}/check?type=${type}`);
   }
 }

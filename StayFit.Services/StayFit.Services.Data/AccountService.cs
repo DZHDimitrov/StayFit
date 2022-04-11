@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using StayFit.Data.Common.Repositories;
+using StayFit.Data.Models;
 using StayFit.Data.Models.DiaryModels;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
+using StayFit.Shared.Account;
 using StayFit.Shared.Enums;
 using System;
 using System.Linq;
@@ -12,32 +15,28 @@ namespace StayFit.Services.StayFit.Services.Data
     public class AccountService : IAccountService
     {
         private readonly IRepository<Diary> diaryRepo;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public AccountService(IRepository<Diary> diaryRepo)
+        public AccountService(IRepository<Diary> diaryRepo,UserManager<ApplicationUser> userManager)
         {
             this.diaryRepo = diaryRepo;
+            this.userManager = userManager;
         }
 
-        public async Task<bool> Check(string userId,string type)
+        public async Task<(string,IdentityResult)> Register(UserRegisterRequestModel model)
         {
-            UserCheckType userCheckType;
+            var user = new ApplicationUser 
+            { 
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                UserName = model.Username,
+                Gender = model.Gender
+            };
 
-            var isValidType = Enum.TryParse(type, true, out userCheckType);
+            var result = await this.userManager.CreateAsync(user, model.Password);
 
-            if(isValidType)
-            {
-                if (userCheckType == UserCheckType.diary)
-                {
-                    var diary = await diaryRepo
-                        .All()
-                        .Where(d => d.ApplicationUserId == userId)
-                        .FirstOrDefaultAsync();
-
-                    return diary != null ? true : false;
-                }
-            }
-
-            return false;
+            return (user.Id, result);
         }
     }
 }

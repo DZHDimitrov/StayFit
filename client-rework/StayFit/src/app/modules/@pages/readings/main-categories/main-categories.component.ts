@@ -46,8 +46,10 @@ export class MainCategoriesComponent implements OnInit, OnDestroy {
         takeUntil(this.unsubscribe$),
         tap((route) => {
           const { mainCategory } = route.state.params;
-          const category = latinToCyrillic(mainCategory);
-          this.store.dispatch(loadMainCategoryWithPreviews({ category }));
+          if (mainCategory) {
+            const category = latinToCyrillic(mainCategory);
+            this.store.dispatch(loadMainCategoryWithPreviews({ category }));
+          }
         }),
         delay(100)
       )

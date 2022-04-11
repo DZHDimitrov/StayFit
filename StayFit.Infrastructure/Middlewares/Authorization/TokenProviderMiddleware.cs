@@ -1,7 +1,9 @@
 ﻿namespace StayFit.Infrastructure.Middlewares.Authorization
 {
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
+    using StayFit.Data.Models;
     using StayFit.Infrastructure.Extensions;
     using System;
     using System.Collections.Generic;
@@ -64,7 +66,7 @@
             if (principal == null)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                await context.Response.WriteAsync("Invalid email or password.");
+                await context.Response.WriteAsync("Невалидно потребителско име или парола");
                 return;
             }
 
@@ -73,11 +75,15 @@
                 (now.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
 
             var existingClaims = principal.Claims.ToList();
+
             existingClaims.Add(new Claim("username", principal.Identity.Name));
             existingClaims.Add(new Claim("userId", principal.GetId()));
 
-            var test = string.Join(", ",existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList());
-            existingClaims.Add(new Claim("roles",test));
+            var roles = string
+                .Join(", ",existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value)
+                .ToList());
+
+            existingClaims.Add(new Claim("roles", roles));
 
             var systemClaims = new List<Claim>
             {
@@ -100,22 +106,18 @@
             }
 
             var jwt = new JwtSecurityToken(
-                issuer: this.options.Issuer,
-                audience: this.options.Audience,
+                issuer: options.Issuer,
+                audience: options.Audience,
                 claims: existingClaims,
                 notBefore: now,
-                expires: now.Add(TimeSpan.FromDays(2)),
-                signingCredentials: this.options.SigningCredentials);
+                expires: now.Add(options.Expiration),
+                signingCredentials: options.SigningCredentials);
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             var response = new
             {
                 access_token = encodedJwt,
-                //expires_in = (int)this.options.Expiration.TotalMilliseconds,
-                //roles = existingClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value),
-                //username = existingClaims.FirstOrDefault(x => x.Type == "username").Value,
-                //userId = existingClaims.FirstOrDefault(x=> x.Type == "userId").Value
             };
 
             context.Response.ContentType = "application/json";

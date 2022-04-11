@@ -93,7 +93,7 @@ export class PagesEffects {
       ofType(loadReading),
       switchMap(({ payload }) => {
         return this.readingService
-          .loadReading(payload.mainCategory, payload.subCategory, payload.id)
+          .loadReading(payload.id)
           .pipe(
             map((r) => {
               return loadReadingSuccess({ currentReading: r.data });

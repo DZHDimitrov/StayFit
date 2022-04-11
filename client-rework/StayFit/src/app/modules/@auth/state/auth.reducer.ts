@@ -1,23 +1,23 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import { autoLogout, checkDiaryOwnerSuccess, loginSuccess, } from './auth.actions';
+import { autoLoginSuccess, checkDiaryOwnerSuccess, loginSuccess, setRequestedURL, } from './auth.actions';
 
 import { initialState } from './auth.state';
 
 const _authReducer = createReducer(
   initialState,
 
-  on(loginSuccess, (state, action) => {
+  on(loginSuccess, (state, {payload}) => {
     return {
       ...state,
-      user: action.user,
+      user: payload.user,
     };
   }),
-
-  on(autoLogout,state => {
+  
+  on(autoLoginSuccess,(state,{payload}) => {
     return {
       ...state,
-      user: null,
+      user:payload.user,
     }
   }),
 
@@ -26,6 +26,13 @@ const _authReducer = createReducer(
       ...state,
       isDiaryOwner:payload.isDiaryOwner
     }
+  }),
+  
+  on(setRequestedURL, (state, {payload}) => {
+    return {
+      ...state,
+      requestedURL: payload.url,
+    };
   })
 );
 
@@ -35,7 +42,7 @@ export function AuthReducer(state, action:Action) {
 
 export function logoutClearState(reducer) {
   return function (state, action) {
-      if (action.type === '[auth page] auto logout') {
+      if (action.type === '[auth] auto logout action') {
         state = undefined;
       }
       return reducer(state, action);

@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-
 using Newtonsoft.Json;
 using StayFit.Data;
 using StayFit.Data.Models;
@@ -38,7 +37,23 @@ namespace StayFit.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureServices(this.configuration);
+            services.AddAppServices();
+
+            services.ConfigureCloudinary(configuration);
+
+            services.ConfigureAutoMapper();
+
+            services.ConfigureCORS();    
+
+            services.ConfigureToken(configuration);
+
+            services.ConfigureIdentity();
+
+            services.ConfigureControllers();
+
+            services.ConfigureDatabase();
+
+            services.ConfigureSwagger();
 
             services.AddMvc();
         }
@@ -58,10 +73,10 @@ namespace StayFit.WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StayFit v1"));
             };
-            app.UseStaticFiles();
 
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
-            //app.ConfigureCustomExceptionMiddleware();
+
             app.UseExceptionHandler(app =>
             {
                 app.Run(
@@ -69,7 +84,9 @@ namespace StayFit.WebAPI
                     {
                         context.Response.StatusCode = (int)HttpStatusCode.OK;
                         context.Response.ContentType = "application/json";
+
                         var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+
                         if (exceptionHandlerFeature?.Error != null)
                         {
                             var ex = exceptionHandlerFeature.Error;
@@ -96,6 +113,7 @@ namespace StayFit.WebAPI
 
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseJwtBearerTokens(app.ApplicationServices.GetRequiredService<IOptions<TokenProviderOptions>>(), PrincipalResolver);
 
             app.UseEndpoints(endpoints =>
@@ -117,18 +135,14 @@ namespace StayFit.WebAPI
             var userManager = context.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
             var username = context.Request.Form["username"];
             var user = await userManager.FindByNameAsync(username);
-            if (user == null || user.IsDeleted)
-            {
-                return null;
-            }
+
+            if (user == null || user.IsDeleted) return null;
 
             var password = context.Request.Form["password"];
 
             var isValidPassword = await userManager.CheckPasswordAsync(user, password);
-            if (!isValidPassword)
-            {
-                return null;
-            }
+
+            if (!isValidPassword) return null;
 
             var roles = await userManager.GetRolesAsync(user);
 

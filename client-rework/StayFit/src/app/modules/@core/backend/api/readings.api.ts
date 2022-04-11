@@ -39,20 +39,25 @@ export class ReadingsApi {
     return this.api.get(`${this.apiController}/${category}/${subcategory}`);
   }
 
-  loadReading(category:string,subCategory?:string,id?:string):Observable<IApiResponse<IReading>> {
-    let queryString:string[] | string= [];
+  // loadReading(category:string,subCategory?:string,id?:string):Observable<IApiResponse<IReading>> {
+  //   let queryString:string[] | string= [];
 
-    if (subCategory) {
-      queryString.push(`subCategory=${subCategory}`);
-    }
+  //   if (subCategory) {
+  //     queryString.push(`subCategory=${subCategory}`);
+  //   }
 
-    if (id) {
-      queryString.push(`id=${id.toString()}`);
-    }
+  //   if (id) {
+  //     queryString.push(`id=${id.toString()}`);
+  //   }
 
-    queryString = queryString.join('&');
+  //   queryString = queryString.join('&');
 
-    return this.api.get(`${this.apiController}/id/${category}?${queryString}`);
+  //   console.log(`${this.apiController}/id/${category}?${queryString}`);
+  //   return this.api.get(`${this.apiController}/id/${category}?${queryString}`);
+  // }
+
+  loadReading(id:string):Observable<IApiResponse<IReading>> {
+    return this.api.get(`${this.apiController}/reading?id=${id}`);
   }
 
   add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingRes>> {

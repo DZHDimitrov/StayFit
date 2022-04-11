@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './app-layout/app-layout.component';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './modules/@core/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: AppLayoutComponent,
+    canActivate:[AuthGuard],
     children: [
       {
         path: 'pages',
@@ -29,26 +31,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/@auth/auth.module').then((m) => m.AuthModule),
   },
-  // {
-  //   path: 'pages',
-  //   loadChildren: () =>
-  //     import('./modules/@pages/pages.module').then((m) => m.PagesModule),
-  // },
-  // {
-  //   path:'admin',
-  //   loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),
-  // },
-  // {
-  //   path: 'account',
-  //   loadChildren: () =>
-  //     import('./modules/@auth/auth.module').then((m) => m.AuthModule),
-  // },
-  // {
-  //   path: '',
-  //   component: HomeComponent,
-  //   redirectTo: '',
-  //   pathMatch: 'full',
-  // },
 ];
 
 @NgModule({

@@ -263,10 +263,12 @@ namespace StayFit.Services.StayFit.Services.Data
                     {
                         Id = mc.Id,
                         Name = mc.Name,
-                    }).ToListAsync();
+                    })
+                    .ToListAsync();
             }
 
-            return await this.subCategories.All()
+            return await this.subCategories
+                .All()
                 .Where(sc => sc.ReadingMainCategoryId == (int)mainId)
                 .Select(sc => new ReadingCategoryModel
                 {
@@ -276,54 +278,69 @@ namespace StayFit.Services.StayFit.Services.Data
                 .ToListAsync();
         }
 
-        public async Task<ReadingModel> LoadReading(string mainCategory, string subCategory, int? readingId)
+        public async Task<ReadingModel> LoadReading(int readingId)
         {
-            var currentMainCategory = await this.mainCategories
+            return await this.readings
                 .All()
-                .Include(rmc => rmc.ReadingSubCategories)
-                .ThenInclude(rmc => rmc.Readings)
-                .Include(rmc => rmc.Readings)
-                .Where(rmc => rmc.Name.ToLower() == mainCategory)
+                .Where(r => r.Id == readingId)
+                .Select(r => new ReadingModel
+                {
+                    Id = r.Id,
+                    Content = r.Content,
+                    ImageUrl = r.ImageUrl,
+                    Title = r.Name
+                })
                 .FirstOrDefaultAsync();
-
-            ReadingModel readingModel = null;
-
-            if (currentMainCategory == null)
-            {
-                throw new ArgumentException("Not found");
-            }
-
-            var currentSubCategory = currentMainCategory.ReadingSubCategories
-                .FirstOrDefault(rsb => rsb.Name == subCategory);
-
-            if (currentSubCategory == null)
-            {
-                readingModel = currentMainCategory.Readings
-                    .Where(r => r.Id == readingId)
-                    .Select(r => new ReadingModel
-                    {
-                        Id = r.Id,
-                        ImageUrl = r.ImageUrl,
-                        Title = r.Name,
-                        Content = r.Content,
-                    })
-                    .FirstOrDefault();
-            }
-            else
-            {
-                readingModel = currentSubCategory.Readings
-                    .Where(r => r.Id == readingId)
-                    .Select(r => new ReadingModel
-                    {
-                        Id = r.Id,
-                        ImageUrl = r.ImageUrl,
-                        Title = r.Name,
-                        Content = r.Content,
-                    })
-                    .FirstOrDefault();
-            }
-
-            return readingModel;
         }
+
+        //public async Task<ReadingModel> LoadReading(string mainCategory, string subCategory, int? readingId)
+        //{
+        //    var currentMainCategory = await this.mainCategories
+        //        .All()
+        //        .Include(rmc => rmc.ReadingSubCategories)
+        //        .ThenInclude(rmc => rmc.Readings)
+        //        .Include(rmc => rmc.Readings)
+        //        .Where(rmc => rmc.Name.ToLower() == mainCategory)
+        //        .FirstOrDefaultAsync();
+
+        //    ReadingModel readingModel = null;
+
+        //    if (currentMainCategory == null)
+        //    {
+        //        throw new ArgumentException("Not found");
+        //    }
+
+        //    var currentSubCategory = currentMainCategory.ReadingSubCategories
+        //        .FirstOrDefault(rsb => rsb.Name == subCategory);
+
+        //    if (currentSubCategory == null)
+        //    {
+        //        readingModel = currentMainCategory.Readings
+        //            .Where(r => r.Id == readingId)
+        //            .Select(r => new ReadingModel
+        //            {
+        //                Id = r.Id,
+        //                ImageUrl = r.ImageUrl,
+        //                Title = r.Name,
+        //                Content = r.Content,
+        //            })
+        //            .FirstOrDefault();
+        //    }
+        //    else
+        //    {
+        //        readingModel = currentSubCategory.Readings
+        //            .Where(r => r.Id == readingId)
+        //            .Select(r => new ReadingModel
+        //            {
+        //                Id = r.Id,
+        //                ImageUrl = r.ImageUrl,
+        //                Title = r.Name,
+        //                Content = r.Content,
+        //            })
+        //            .FirstOrDefault();
+        //    }
+
+        //    return readingModel;
+        //}
     }
 }

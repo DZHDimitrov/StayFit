@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path:'',
     component:PanelComponent,
-    canActivate:[AuthGuard,AdminGuard]
+    // canActivate:[AuthGuard,AdminGuard]
   },
   {
     path:"**",

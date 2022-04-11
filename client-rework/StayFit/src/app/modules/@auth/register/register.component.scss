@@ -1,18 +1,15 @@
-.register-container {
-  margin: auto;
+.register-wrapper {
   height: 100%;
-  margin-top:10rem;
-  
-  .register-content {
-    width:25%;
-    display: block;
-    margin: 0 auto;
+  padding-top: 10rem;
 
-    .register-toolbar {
-      justify-content: center;
-    }
+  .register-container {
+    width: 25%;
+    display: block;
+    min-width: 420px;
+
     form {
       width: 100%;
+
       .mat-form-field {
         width: 100%;
         display: block;
@@ -23,14 +20,23 @@
         height: 60px;
         margin-top: 15px;
       }
-      .socialMediaFlex {
-        display: flex;
-        justify-content: space-around;
-      }
 
       .mat-radio-button {
         margin-right: 1rem;
       }
+
+      .submit-button {
+        width: 50%;
+      }
+    }
+
+    .already-registered {
+      margin-top: 0.5rem;
+      font-size: 16px;
     }
   }
+}
+
+mat-form-field {
+  margin-bottom: 0.5rem;
 }

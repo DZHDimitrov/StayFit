@@ -14,7 +14,9 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<SubCategoryWithPreviewsModel> LoadSubCategoryWithPreviews(string mainCategory,string subCategory);
 
-        public Task<ReadingModel> LoadReading(string mainCategory,string subCategory,int? readingId);
+        //public Task<ReadingModel> LoadReading(string mainCategory,string subCategory,int? readingId);
+
+        public Task<ReadingModel> LoadReading(int readingId);
 
         public Task<AddReadingResponse> CreateReading(AddReadingRequest model);
 

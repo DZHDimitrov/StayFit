@@ -41,4 +41,8 @@ export class DiaryApi {
   editNote(noteId: number, data: INoteData): Observable<IApiResponse<string>> {
     return this.api.put(`${this.apiController}/${noteId}/notes`, data);
   }
+
+  isOwner():Observable<IApiResponse<boolean>> {
+    return this.api.get(`${this.apiController}/owner`);
+  }
 }

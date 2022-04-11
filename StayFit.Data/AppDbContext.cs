@@ -1,9 +1,8 @@
 ﻿namespace StayFit.Data
 {
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-
+    using StayFit.Common;
     using StayFit.Data.Models;
     using StayFit.Data.Models.ConversationModels;
     using StayFit.Data.Models.DiaryModels;
@@ -74,6 +73,7 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<ApplicationUser>().Property(c => c.UserName).HasMaxLength(UserConstants.Constraints.UsernameMaxLength);
 
             builder.Entity<FoodBaseNutrient>().HasKey(c => new { c.FoodId, c.BaseNutrientId });
 

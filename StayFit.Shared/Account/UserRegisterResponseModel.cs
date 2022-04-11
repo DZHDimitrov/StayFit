@@ -1,6 +1,6 @@
 ﻿namespace StayFit.Shared.Account
 {
-    public class UserRegisterResponse
+    public class UserRegisterResponseModel
     {
         public string Id { get; set; }
     }

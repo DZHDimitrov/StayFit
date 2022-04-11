@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { Title } from '@angular/platform-browser';
+
 import { Store } from '@ngrx/store';
 
 import { IAppState } from 'src/app/state/app.state';
 
 import { ConfirmedValidator } from '../../@core/utility/validators/form-validator';
 
-import { registerStart } from '../state/auth.actions';
+import { register } from '../state/auth.actions';
 
 @Component({
   selector: 'app-register',
@@ -16,45 +18,69 @@ import { registerStart } from '../state/auth.actions';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  userRegisterForm!: FormGroup;
-
-  get controls() {
-    return this.userRegisterForm.controls;
+  constructor(
+    private fb: FormBuilder,
+    private store: Store<IAppState>,
+    private titleService: Title
+  ) {
+    this.initForm();
+    this.titleService.setTitle("Register")
   }
 
-  constructor(private fb: FormBuilder, private store: Store<IAppState>) {
-    this.initForm();
+  registerForm!: FormGroup;
+
+  get gender() {
+    return this.registerForm.get("gender");
   }
 
   ngOnInit(): void {}
 
   submit() {
-    if (!this.userRegisterForm.valid) {
-      Object.keys(this.userRegisterForm.controls).forEach((key) => {
-        this.userRegisterForm.controls[key].markAsTouched({ onlySelf: true });
+    if (!this.registerForm.valid) {
+      Object.keys(this.registerForm.controls).forEach((key) => {
+        this.registerForm.controls[key].markAsTouched({ onlySelf: true });
       });
       return;
     }
-    const data = {...this.userRegisterForm.value};
+    const data = { ...this.registerForm.value };
 
-    this.store.dispatch(
-      registerStart(data)
-    );
+    this.store.dispatch(register({data}));
   }
 
   private initForm() {
-    this.userRegisterForm = this.fb.group(
+    this.registerForm = this.fb.group(
       {
-        firstName: ['', [Validators.required, Validators.minLength(4)]],
-        lastName: ['', [Validators.required, Validators.minLength(4)]],
-        username: ['', [Validators.required, Validators.minLength(6)]],
+        firstName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(40),
+          ],
+        ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(40),
+          ],
+        ],
+        username: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(50),
+          ],
+        ],
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        password: ['', [Validators.required]],
         confirmPassword: [''],
         gender: ['', Validators.required],
       },
       {
-        validator: ConfirmedValidator('password', 'confirmPassword'),
+        validator: ConfirmedValidator('confirmPassword', 'password'),
       }
     );
   }

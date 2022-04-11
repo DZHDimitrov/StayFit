@@ -1,13 +1,11 @@
-.login-container {
+.login-wrapper {
   height: 100%;
-  width: 100%;
-  margin-top:10rem;
+  padding-top: 10rem;
 
-  .login-content {
+  .login-container {
+    min-width: 420px;
     width: 25%;
-    .login-toolbar {
-      justify-content: center;
-    }
+
     form {
       width: 100%;
 
@@ -20,6 +18,10 @@
         width: 100%;
         height: 60px;
         margin-top: 15px;
+      }
+
+      .login-button {
+        width: 50%;
       }
     }
   }

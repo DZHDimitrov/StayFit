@@ -36,7 +36,9 @@ export class ReadingComponent implements OnInit, OnDestroy {
       .subscribe((route) => {
         const [mainCategory, subCategory, id] = this.findParts(route.state.url);
 
-        this.store.dispatch(loadReading({ mainCategory, subCategory, id }));
+        if (id) {
+          this.store.dispatch(loadReading({ id }));
+        }
 
         this.currentReading$ = this.store
           .select(getReadingById)

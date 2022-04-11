@@ -21,7 +21,7 @@ const routes: Routes = [
     path: 'diary',
     loadChildren: () =>
       import('./diary/diary.module').then((m) => m.DiaryModule),
-    canActivate: [AuthGuard, DiaryGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: 'dashboard',

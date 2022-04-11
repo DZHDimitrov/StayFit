@@ -2,7 +2,7 @@ import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { isAuthenticated } from 'src/app/modules/@auth/state/auth.selector';
+import { getUser, isAuthenticated } from 'src/app/modules/@auth/state/auth.selector';
 import {
   ITask,
   ITaskDisplay,
@@ -33,6 +33,8 @@ export class TodayComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.store.dispatch(loadTasks());
+
+    this.store.select(getUser).subscribe(console.log);
   }
 
   ngAfterContentInit(): void {
