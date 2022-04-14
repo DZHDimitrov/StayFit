@@ -37,6 +37,8 @@ namespace StayFit.Services.StayFit.Services.Data
                 .ProjectTo<FoodCategoryModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
+            Console.WriteLine();
+
             return categories;
         }
 
