@@ -26,9 +26,10 @@ import { getSubCategoryWithPreviews } from '../store/readings.selector';
 export class SubCategoriesComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>) {}
 
-  subCategoryWithPreviews;
   unsubscribe$: Subject<void> = new Subject();
-
+  
+  subCategoryWithPreviews;
+  
   ngOnInit(): void {
     this.store
       .select(getRouterState)

@@ -1,9 +1,11 @@
-<div class="mini-navbar-wrapper">
-  <app-mini-navbar></app-mini-navbar>
-</div>
-<div class="main-categories-container">
-  <app-reading-block
-    [routerLink]="preview.name.includes('състав') ? ['/','pages','foods'] : hasSubGroups ? [preview.path] : [preview.id]"
-    [imageUrl]="preview.imageUrl" [title]="preview.name" [width]="300" [height]="210"
-    *ngFor="let preview of mainCategoryWithPreviews"></app-reading-block>
+<div class="main-categories-wrapper">
+  <div class="mini-navbar-wrapper">
+    <app-mini-navbar></app-mini-navbar>
+  </div>
+  <div class="main-categories-container">
+    <app-reading-block
+      [routerLink]="preview.name.includes('състав') ? ['/','pages','foods'] : hasSubGroups ? [preview.path] : [preview.id]"
+      [imageUrl]="preview.imageUrl" [title]="preview.name" [width]="300" [height]="210"
+      *ngFor="let preview of mainCategoryWithPreviews"></app-reading-block>
+  </div>
 </div>

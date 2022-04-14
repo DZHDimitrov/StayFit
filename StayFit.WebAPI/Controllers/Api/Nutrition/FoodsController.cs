@@ -2,9 +2,8 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
+    using StayFit.Common;
     using StayFit.Infrastructure.Extensions;
-
     using StayFit.Services.StayFit.Services.Data.Interfaces;
 
     using StayFit.Shared;
@@ -14,7 +13,7 @@
     using System.Threading.Tasks;
 
     [Route("api/[controller]")]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     [ApiController]
     public class FoodsController : BaseController
     {
@@ -72,6 +71,7 @@
         }
 
         [HttpPut]
+        [Authorize(Roles = UserConstants.Roles.Administrator + "," + UserConstants.Roles.Moderator)]
         [Route("id/{foodId}")]
         public async Task<ApiResponse<FoodEditedModel>> EditFoodById(int foodId,EditFoodModel model)
         {

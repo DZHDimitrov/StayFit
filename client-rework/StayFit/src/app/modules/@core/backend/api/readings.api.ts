@@ -2,21 +2,22 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { IReadingCategory } from 'src/app/modules/@pages/readings/models/readings-category.model';
+
+import { IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from 'src/app/modules/@pages/readings/models/readings-previews.model';
+
+import { ICreateReadingRes, IDeleteReading, IReading } from 'src/app/modules/@pages/readings/models/readings-reading.model';
+
 import { IApiResponse } from '../../interfaces/api.response';
 
 import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 
 import { HttpService } from './http.service';
 
-import {IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from '../../interfaces/readings/readings-previews.interface';
-
-import { ICreateReadingRes, IDeleteReading, IReading } from '../../interfaces/readings/readings-reading.interface';
-
-import { IReadingCategory } from '../../interfaces/readings/readings-category.interface';
-
 @Injectable()
 export class ReadingsApi {
   private readonly apiController: string = 'readings';
+  
   constructor(private api: HttpService) {}
 
   loadKnowledge(): Observable<IApiResponse<IKnowledge>> {
@@ -38,23 +39,6 @@ export class ReadingsApi {
   loadSubCategoryWithPreviews(category: string, subcategory: string): Observable<IApiResponse<ISubCategoryWithPreviews>> {
     return this.api.get(`${this.apiController}/${category}/${subcategory}`);
   }
-
-  // loadReading(category:string,subCategory?:string,id?:string):Observable<IApiResponse<IReading>> {
-  //   let queryString:string[] | string= [];
-
-  //   if (subCategory) {
-  //     queryString.push(`subCategory=${subCategory}`);
-  //   }
-
-  //   if (id) {
-  //     queryString.push(`id=${id.toString()}`);
-  //   }
-
-  //   queryString = queryString.join('&');
-
-  //   console.log(`${this.apiController}/id/${category}?${queryString}`);
-  //   return this.api.get(`${this.apiController}/id/${category}?${queryString}`);
-  // }
 
   loadReading(id:string):Observable<IApiResponse<IReading>> {
     return this.api.get(`${this.apiController}/reading?id=${id}`);

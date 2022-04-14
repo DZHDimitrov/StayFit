@@ -50,7 +50,7 @@ export class FoodsApi {
     return this.api.post(`${this.apiController}`, data);
   }
 
-  edit(foodId: number, data: IEditFood): Observable<any> {
+  edit(foodId: number, data: IEditFood): Observable<IApiResponse<{id:number,food:IFood}>> {
     return this.api.put(`${this.apiController}/id/${foodId}`, data);
   }
 }

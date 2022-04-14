@@ -16,8 +16,9 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private readonly IRepository<Diary> diaryRepo;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IRepository<ApplicationUser> userRepo;
 
-        public AccountService(IRepository<Diary> diaryRepo,UserManager<ApplicationUser> userManager)
+        public AccountService(IRepository<Diary> diaryRepo,UserManager<ApplicationUser> userManager, IRepository<ApplicationUser> _userRepo)
         {
             this.diaryRepo = diaryRepo;
             this.userManager = userManager;

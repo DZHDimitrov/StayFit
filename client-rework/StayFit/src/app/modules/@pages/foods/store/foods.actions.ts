@@ -2,7 +2,7 @@ import { IAddFood, IEditFood } from 'src/app/modules/@core/interfaces/requests/f
 
 import { IFoodCategory } from 'src/app/modules/@core/interfaces/foods/foods-category.interface';
 
-import { FoodDetailsMode, IFoodPreview } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
+import { FoodDetailsMode, IFood, IFoodPreview } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
 
 import { IFoodKeyword } from 'src/app/modules/@core/interfaces/foods/foods-keywords.interface';
 
@@ -34,8 +34,8 @@ createHTTPActions<{ categoryId: number }, { foodTypes: IFoodType[] }>('[foods] l
 export const [setFoodDetailsMode] =
 createHTTPActions<{mode:FoodDetailsMode}>('[foods] set food details mode');
 
-export const [editFoodById, editFoodByIdSuccess] =
-createHTTPActions<{ foodId: number; data: IEditFood },{ foodId: number; data: IEditFood }>('[foods] edit food by id');
+export const [editFoodById, editFoodByIdSuccess,editFoodByIdFailure] =
+createHTTPActions<{ foodId: number; data: IEditFood },{ foodId: number; data: IFood },{error?:string}>('[foods] edit food by id');
 
 export const [addFood, addFoodSuccess, addFoodFailure] = 
 createHTTPActions<{ data: IAddFood },{},{}>('[foods] add food');

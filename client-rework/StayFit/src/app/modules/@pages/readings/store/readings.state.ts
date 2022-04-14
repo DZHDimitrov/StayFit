@@ -1,8 +1,8 @@
-import { IReadingCategory } from 'src/app/modules/@core/interfaces/readings/readings-category.interface';
+import { IReadingCategory } from "../models/readings-category.model";
 
-import {IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from 'src/app/modules/@core/interfaces/readings/readings-previews.interface';
+import { IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from "../models/readings-previews.model";
 
-import { IReading } from 'src/app/modules/@core/interfaces/readings/readings-reading.interface';
+import { IReading } from "../models/readings-reading.model";
 
 export interface IReadingsState {
   knowledge: IKnowledge | null;

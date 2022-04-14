@@ -62,7 +62,6 @@ namespace StayFit.Services.StayFit.Services.Data
                     Name = mc.Name,
                     Previews = mc.ReadingSubCategories.Any() ?
                                mc.ReadingSubCategories
-                                 .OrderByDescending(sc => sc.CreatedOn)
                                  .Select(sc => new ReadingPreviewModel
                                  {
                                      Id = sc.Id,
@@ -144,23 +143,6 @@ namespace StayFit.Services.StayFit.Services.Data
             mainCategory = string.Join(" ", mainCategory?.Split("_")).ToLower();
             subCategory = string.Join(" ", subCategory?.Split("_")).ToLower();
 
-
-            var existingCategory = await this.mainCategories.All().Where(mc => mc.Name.ToLower() == mainCategory).FirstOrDefaultAsync();
-
-            if (existingCategory == null)
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
-            }
-
-            var subCategories = await this.subCategories.All()
-                .Where(sc => sc.ReadingMainCategory.Name.ToLower() == mainCategory)
-                .ToListAsync();
-
-            //if (subCategories.Count == 0)
-            //{
-            //    throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND), "sub-groups");
-            //}
-
             var currentMainCategory = await this.mainCategories
                 .All()
                 .Include(mc => mc.ReadingSubCategories)
@@ -172,21 +154,21 @@ namespace StayFit.Services.StayFit.Services.Data
                 .Where(sc => sc.Name.ToLower() == subCategory || sc.Name.ToLower().Contains(subCategory))
                 .FirstOrDefault();
 
-            //if (currentSubCategory == null)
-            //{
-            //    throw new ArgumentException($"{mainCategory} does not contain {subCategory}");
-            //}
-
             var subCategoryWithPreviewsModel = new SubCategoryWithPreviewsModel
             {
-                Title = currentSubCategory?.Name ?? "Групата не съществува",
-                CategoryNames = currentMainCategory.ReadingSubCategories.Select(rsb => rsb.Name).ToList(),
-                Previews = currentSubCategory?.Readings.Count > 0 ? currentSubCategory.Readings.Select(r => new ReadingPreviewModel
+                Title = currentSubCategory.Name,
+                CategoryNames = currentMainCategory.ReadingSubCategories
+                                                   .Select(rsb => rsb.Name)
+                                                   .ToList(),
+                Previews = currentSubCategory?.Readings.Count > 0 ?
+                currentSubCategory.Readings
+                .Select(r => new ReadingPreviewModel
                 {
                     Id = r.Id,
                     Name = r.Name,
                     ImageUrl = r.ImageUrl,
-                }).ToList() : new List<ReadingPreviewModel>()
+                })
+                .ToList() : new List<ReadingPreviewModel>()
             };
 
             return subCategoryWithPreviewsModel;
@@ -199,20 +181,10 @@ namespace StayFit.Services.StayFit.Services.Data
                 .Where(mc => mc.Id == model.ReadingMainCategoryId)
                 .FirstOrDefaultAsync();
 
-            if (mainCategory == null)
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
-            }
-
             var subCategory = await this.subCategories
                 .All()
                 .Where(sc => sc.ReadingMainCategoryId == model.ReadingMainCategoryId)
                 .FirstOrDefaultAsync();
-
-            if (subCategory == null && model.ReadingSubCategoryId != null)
-            {
-                throw new ArgumentException($"This group cannot have sub-categories!");
-            }
 
             var imageUrl = await ApplicationCloudinary.UploadImage(this.cloudinary, model.Image, model.Title);
 
@@ -238,7 +210,11 @@ namespace StayFit.Services.StayFit.Services.Data
 
         public async Task<ReadingDeleteResponse> DeleteReading(int id)
         {
-            var article = await this.readings.All().Where(r => r.Id == id).FirstOrDefaultAsync();
+            var article = await this.readings
+                .All()
+                .Where(r => r.Id == id)
+                .FirstOrDefaultAsync();
+
             //this.dbContext.Readings.Remove(article);
             //this.dbContext.SaveChanges();
 
@@ -269,7 +245,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             return await this.subCategories
                 .All()
-                .Where(sc => sc.ReadingMainCategoryId == (int)mainId)
+                .Where(sc => sc.ReadingMainCategoryId == (int)mainId && !sc.Name.Contains("Хранителен"))
                 .Select(sc => new ReadingCategoryModel
                 {
                     Id = sc.Id,
@@ -292,55 +268,5 @@ namespace StayFit.Services.StayFit.Services.Data
                 })
                 .FirstOrDefaultAsync();
         }
-
-        //public async Task<ReadingModel> LoadReading(string mainCategory, string subCategory, int? readingId)
-        //{
-        //    var currentMainCategory = await this.mainCategories
-        //        .All()
-        //        .Include(rmc => rmc.ReadingSubCategories)
-        //        .ThenInclude(rmc => rmc.Readings)
-        //        .Include(rmc => rmc.Readings)
-        //        .Where(rmc => rmc.Name.ToLower() == mainCategory)
-        //        .FirstOrDefaultAsync();
-
-        //    ReadingModel readingModel = null;
-
-        //    if (currentMainCategory == null)
-        //    {
-        //        throw new ArgumentException("Not found");
-        //    }
-
-        //    var currentSubCategory = currentMainCategory.ReadingSubCategories
-        //        .FirstOrDefault(rsb => rsb.Name == subCategory);
-
-        //    if (currentSubCategory == null)
-        //    {
-        //        readingModel = currentMainCategory.Readings
-        //            .Where(r => r.Id == readingId)
-        //            .Select(r => new ReadingModel
-        //            {
-        //                Id = r.Id,
-        //                ImageUrl = r.ImageUrl,
-        //                Title = r.Name,
-        //                Content = r.Content,
-        //            })
-        //            .FirstOrDefault();
-        //    }
-        //    else
-        //    {
-        //        readingModel = currentSubCategory.Readings
-        //            .Where(r => r.Id == readingId)
-        //            .Select(r => new ReadingModel
-        //            {
-        //                Id = r.Id,
-        //                ImageUrl = r.ImageUrl,
-        //                Title = r.Name,
-        //                Content = r.Content,
-        //            })
-        //            .FirstOrDefault();
-        //    }
-
-        //    return readingModel;
-        //}
     }
 }

@@ -22,8 +22,9 @@ import { getKnowledge } from '../store/readings.selector';
 export class KnowledgeComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>) {}
 
-  readingPreviewsWithCategory: any[] | null = null;
   unsubscribe$: Subject<void> = new Subject();
+  
+  readingPreviewsWithCategory: any[] | null = null;
 
   ngOnInit(): void {
     this.store.dispatch(loadKnowledge());

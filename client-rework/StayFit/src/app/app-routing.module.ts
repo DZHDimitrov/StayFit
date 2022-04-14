@@ -2,9 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './app-layout/app-layout.component';
 import { HomeComponent } from './home/home.component';
+import { PageNotFoundComponent } from './modules/@components/page-not-found/page-not-found.component';
 import { AuthGuard } from './modules/@core/guards/auth.guard';
 
 const routes: Routes = [
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('./modules/@auth/auth.module').then((m) => m.AuthModule),
+  },
   {
     path: '',
     component: AppLayoutComponent,
@@ -23,14 +29,18 @@ const routes: Routes = [
       {
         path:'',
         component: HomeComponent
-      }
+      },
     ],
   },
   {
-    path: 'account',
-    loadChildren: () =>
-      import('./modules/@auth/auth.module').then((m) => m.AuthModule),
+    path: 'not-found',
+    component:PageNotFoundComponent,
   },
+  {
+    path: '**',
+    pathMatch:'full',
+    component:PageNotFoundComponent,
+  }
 ];
 
 @NgModule({

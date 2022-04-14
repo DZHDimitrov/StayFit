@@ -19,8 +19,27 @@
       border-radius: 5px;
       & > *:hover {
         cursor: pointer;
-        font-size: 21px;
       }
     }
+  }
+}
+
+.nav-item {
+  position: relative;
+  text-decoration: none;
+  &:hover::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    bottom: -4px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: black;
+    animation: widen 0.3s ease-out forwards;
+  }
+  &:hover {
+    cursor: pointer;
   }
 }

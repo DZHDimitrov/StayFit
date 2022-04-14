@@ -11,6 +11,7 @@ import { MainCategoriesComponent } from './main-categories/main-categories.compo
 import { KnowledgeComponent } from './knowledge/knowledge.component';
 
 import { SubCategoriesComponent } from './sub-categories/sub-categories.component';
+import { PageNotFoundComponent } from '../../@components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {

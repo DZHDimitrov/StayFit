@@ -5,6 +5,7 @@
         public static class Roles
         {
             public const string Administrator = "Administrator";
+            public const string Moderator = "Moderator";
         }
 
         public static class Constraints

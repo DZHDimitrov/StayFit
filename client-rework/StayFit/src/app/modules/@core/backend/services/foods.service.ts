@@ -46,7 +46,7 @@ export class FoodsService {
     return this.api.add(data);
   }
 
-  edit(foodId: number, data: any): Observable<any> {
+  edit(foodId: number, data: any): Observable<IApiResponse<{id:number,food:IFood}>> {
     return this.api.edit(foodId, data);
   }
 

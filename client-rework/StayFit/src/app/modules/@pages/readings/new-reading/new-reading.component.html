@@ -1,10 +1,5 @@
 <div class="page-container">
-  <mat-card>
     <form [formGroup]="this.formGroup" (ngSubmit)="submit()">
-      <mat-card-header>
-        <h2 class="mat-display-1 title">Добави четиво</h2>
-      </mat-card-header>
-      <mat-card-content>
         <div class="content">
           <mat-form-field class="title" appearance="outline">
             <mat-label>Заглавие</mat-label>
@@ -38,7 +33,6 @@
             <mat-error>{{requiredField}}</mat-error>
           </mat-form-field>
         </div>
-      </mat-card-content>
       <mat-card-actions class="actions">
         <button [disabled]="!this.formGroup.valid" type="submit" mat-flat-button color="primary">Изпрати</button>
         <section class="image-container">
@@ -50,5 +44,4 @@
         </section>
       </mat-card-actions>
     </form>
-  </mat-card>
 </div>

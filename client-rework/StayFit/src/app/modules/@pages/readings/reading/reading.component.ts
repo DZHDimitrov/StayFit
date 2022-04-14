@@ -4,15 +4,15 @@ import { Store } from '@ngrx/store';
 
 import { Observable, Subject } from 'rxjs';
 
-import { shareReplay, take, takeUntil } from 'rxjs/operators';
-
-import { IReading } from 'src/app/modules/@core/interfaces/readings/readings-reading.interface';
+import { shareReplay, takeUntil } from 'rxjs/operators';
 
 import { latinToCyrillic } from 'src/app/modules/@core/utility/text-transilerator';
 
 import { IAppState } from 'src/app/state/app.state';
 
 import { getRouterState } from 'src/app/state/router/router.selector';
+
+import { IReading } from '../models/readings-reading.model';
 
 import { loadReading } from '../store/readings.actions';
 

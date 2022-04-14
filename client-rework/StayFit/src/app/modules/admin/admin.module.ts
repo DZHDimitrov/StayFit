@@ -7,10 +7,16 @@ import { PanelComponent } from './panel/panel.component';
 import { PagesModule } from '../@pages/pages.module';
 import { FoodsModule } from '../@pages/foods/foods.module';
 import { ReadingsModule } from '../@pages/readings/readings.module';
+import { RolesTableComponent } from './roles-table/roles-table.component';
+import { AdminEffects } from './store/admin.effects';
+import { EffectsModule } from '@ngrx/effects';
+import { UserRolesComponent } from './user-roles/user-roles.component';
 
 @NgModule({
   declarations: [
-    PanelComponent
+    PanelComponent,
+    RolesTableComponent,
+    UserRolesComponent
   ],
   imports: [
     CommonModule,
@@ -19,8 +25,8 @@ import { ReadingsModule } from '../@pages/readings/readings.module';
     PagesModule,
     FoodsModule,
     ReadingsModule,
+    EffectsModule.forFeature([AdminEffects]),
     // ReactiveFormsModule,
-    // EffectsModule.forFeature([AdminEffects]),
   ],
 })
 export class AdminModule {}

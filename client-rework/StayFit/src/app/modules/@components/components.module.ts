@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { FoodsIntroComponent } from './foods-intro/foods-intro.component';
 import { SendQuestionComponent } from './send-question/send-question.component';
-import { FormsModule } from '@angular/forms';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
     SearchBarComponent,
     FoodsIntroComponent,
     SendQuestionComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +32,7 @@ import { FormsModule } from '@angular/forms';
     SearchBarComponent,
     FoodsIntroComponent,
     SendQuestionComponent,
+    PageNotFoundComponent,
   ],
   providers: [],
 })

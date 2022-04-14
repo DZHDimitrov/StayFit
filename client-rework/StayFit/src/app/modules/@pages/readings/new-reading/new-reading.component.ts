@@ -8,11 +8,11 @@ import { Observable } from 'rxjs';
 
 import { shareReplay } from 'rxjs/operators';
 
-import { IReadingCategory } from 'src/app/modules/@core/interfaces/readings/readings-category.interface';
-
 import { GlobalConstants } from 'src/app/settings/global-constants';
 
 import { IAppState } from 'src/app/state/app.state';
+
+import { IReadingCategory } from '../models/readings-category.model';
 
 import { addReading, loadReadingMainCategories, loadReadingSubCategories, resetReadingSubCategories } from '../store/readings.actions';
 
@@ -87,7 +87,6 @@ export class NewReadingComponent implements OnInit {
       title: ['', [Validators.required,Validators.minLength(5)]],
       content: ['', [Validators.required, Validators.minLength(10)]],
       image: ['',[Validators.required]],
-      // bodyPart: [''],
     });
   }
 }

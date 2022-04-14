@@ -111,6 +111,19 @@ namespace StayFit.WebAPI
             app.UseCors(allowSpecificOrigins);
             app.UseRouting();
 
+            app.Use(async (context, next) =>
+            {
+                await next();
+
+                if (context.Response.StatusCode == (int)HttpStatusCode.Forbidden)
+                {
+                    await context.Response.WriteAsJsonAsync(new ApiError()
+                    {
+                        Error = "Нямате достъп или права за този ресурс"
+                    });
+                }
+            });
+
             app.UseAuthentication();
             app.UseAuthorization();
 

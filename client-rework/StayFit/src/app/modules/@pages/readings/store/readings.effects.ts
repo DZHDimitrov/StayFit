@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import { Store } from '@ngrx/store';
-
 import { ToastrService } from 'ngx-toastr';
 
-import { exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-
-import { IAppState } from 'src/app/state/app.state';
+import { exhaustMap, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 
 import { ReadingsService } from '../../../@core/backend/services/readings.service';
 
@@ -27,6 +24,8 @@ import {
   loadReadingMainCategoriesSuccess,
   loadReadingSubCategories,
   loadReadingSubCategoriesSuccess,
+  loadMainCategoryWithPreviewsFailure,
+  loadSubCategoryWithPreviewsFailure,
 } from './readings.actions';
 
 @Injectable()
@@ -34,8 +33,8 @@ export class PagesEffects {
   constructor(
     private readingService: ReadingsService,
     private actions$: Actions,
-    private store: Store<IAppState>,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router:Router
   ) {}
 
   loadKnowledge$ = createEffect(() => {
@@ -59,14 +58,26 @@ export class PagesEffects {
           .loadMainCategoryWithPreviews(payload.category)
           .pipe(
             map((res) => {
-              return loadMainCategoryWithPreviewsSuccess({
-                mainCategoryWithPreviews: res.data,
-              });
+              console.log(res);
+              if (res.isOk) {
+                return loadMainCategoryWithPreviewsSuccess({
+                  mainCategoryWithPreviews: res.data,
+                });
+              }
+              return loadMainCategoryWithPreviewsFailure();
             })
           );
       })
     );
   });
+
+  loadMainCategoryWithPreviewsFailure$ = createEffect(() => {
+    return this.actions$.pipe(ofType(loadMainCategoryWithPreviewsFailure),
+    tap(action => {
+      this.toastr.error('Няма такава категория','Error')
+      this.router.navigate(['/'])
+    }))
+  },{dispatch:false})
 
   loadSubCategoryWithPreviews$ = createEffect(() => {
     return this.actions$.pipe(
@@ -79,14 +90,29 @@ export class PagesEffects {
           )
           .pipe(
             map((res) => {
-              return loadSubCategoryWithPreviewsSuccess({
-                subCategoryWithPreviews: res.data,
-              });
+              if (res.isOk) {
+                return loadSubCategoryWithPreviewsSuccess({
+                  subCategoryWithPreviews: res.data,
+                });
+              }
+              return loadSubCategoryWithPreviewsFailure();
             })
           );
       })
     );
   });
+
+  loadSubCategoryWithPreviewsFailure$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadSubCategoryWithPreviewsFailure),
+      take(1),
+      tap(action => {
+        console.log('asd')
+        this.toastr.error('Няма такава категория','Error');
+        this.router.navigate(['/']);
+      })
+    )
+  },{dispatch:false})
 
   loadReading$ = createEffect(() => {
     return this.actions$.pipe(

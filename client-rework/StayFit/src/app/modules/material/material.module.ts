@@ -13,8 +13,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatDatepickerModule} from '@angular/material/datepicker'
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 export const MAT_MODULES = [
   MatButtonModule,
@@ -31,7 +35,11 @@ export const MAT_MODULES = [
   MatAutocompleteModule,
   MatTabsModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatTableModule,
+  MatDialogModule,
+  MatPaginatorModule,
+  MatSlideToggleModule,
 ];
 
 @NgModule({

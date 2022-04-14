@@ -11,9 +11,6 @@ import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    // NewFoodComponent,
-  ],
   imports: [
     CommonModule,
     PagesRoutingModule,
@@ -21,8 +18,5 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     ReactiveFormsModule,
   ],
-  exports:[
-    // NewFoodComponent,
-  ]
 })
 export class PagesModule {}

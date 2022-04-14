@@ -2,17 +2,18 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { IReadingCategory } from 'src/app/modules/@pages/readings/models/readings-category.model';
+
+import { IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from 'src/app/modules/@pages/readings/models/readings-previews.model';
+
+import { ICreateReadingRes, IDeleteReading, IReading } from 'src/app/modules/@pages/readings/models/readings-reading.model';
+
 import { IApiResponse } from '../../interfaces/api.response';
 
 import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 
 import { ReadingsApi } from '../api/readings.api';
 
-import {IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from '../../interfaces/readings/readings-previews.interface';
-
-import { ICreateReadingRes, IDeleteReading, IReading } from '../../interfaces/readings/readings-reading.interface';
-
-import { IReadingCategory } from '../../interfaces/readings/readings-category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -40,11 +41,7 @@ export class ReadingsService {
     return this.api.loadReadingSubCategories(mainId);
   }
 
-  // loadReading(category:string,subCategory?:string,id?:string):Observable<IApiResponse<IReading>> {
-  //   return this.api.loadReading(category,subCategory,id);
-  // }
-
-    loadReading(id:string):Observable<IApiResponse<IReading>> {
+  loadReading(id:string):Observable<IApiResponse<IReading>> {
     return this.api.loadReading(id);
   }
 

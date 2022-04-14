@@ -34,9 +34,7 @@ export class MainCategoriesComponent implements OnInit, OnDestroy {
   unsubscribe$: Subject<void> = new Subject();
 
   mainCategoryWithPreviews: any;
-
   previews;
-
   hasSubGroups: boolean = false;
 
   ngOnInit(): void {

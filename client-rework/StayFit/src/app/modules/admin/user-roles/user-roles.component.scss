@@ -1,0 +1,19 @@
+table {
+    width: 100%;
+}
+
+.mat-column {
+    &-username {
+        width: 90%;
+    }
+}
+
+.user-roles-wrapper {
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top:-24px;
+    right:-24px;
+}

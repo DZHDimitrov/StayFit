@@ -1,9 +1,5 @@
 <div class="page-container">
-  <mat-card>
     <form [formGroup]="foodForm" (ngSubmit)="createFood()">
-      <mat-card-header>
-        <h2 class="mat-display-1 title">Добави храна</h2>
-      </mat-card-header>
       <section class="form-content">
         <mat-form-field appearance="outline">
           <mat-label>Избор на категория</mat-label>
@@ -30,16 +26,15 @@
             <input formControlName="description" type="text" matInput>
           </mat-form-field>
         </div>
-          <mat-card-actions>
-            <button [disabled]="!this.foodForm.valid" class="send-button" mat-flat-button color="primary">Изпрати</button>
-            <section class="image-container">
-              <input class="hidden-image" type="file" hidden="true" #uploader onclick="this.value = null" (change)="fileChange(uploader.files)"/>
-              <button type="button" mat-flat-button color="warn" (click)="uploader.click()">
-                Изберете снимка
-              </button>
-            </section>
-          </mat-card-actions>
+            <div class="actions">
+              <button [disabled]="!this.foodForm.valid" class="send-button" mat-flat-button color="primary">Изпрати</button>
+              <section class="image-container">
+                <input class="hidden-image" type="file" hidden="true" #uploader onclick="this.value = null" (change)="fileChange(uploader.files)"/>
+                <button type="button" mat-flat-button color="warn" (click)="uploader.click()">
+                  Изберете снимка
+                </button>
+              </section>
+            </div>
       </section>
     </form>
-  </mat-card>
 </div>

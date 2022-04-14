@@ -22,7 +22,7 @@ export class AdminGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         return this.store.select(getUser).pipe(map(user => {
-            if (!user?.hasRole(Roles.ADMIN)){
+            if (!user?.hasRole(Roles.Administrator)){
                 this.router.navigate(['/']);
                 return false;
             }
