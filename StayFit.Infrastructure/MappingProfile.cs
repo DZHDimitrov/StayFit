@@ -1,15 +1,18 @@
 ﻿namespace StayFit.Infrastructure
 {
     using AutoMapper;
+
     using StayFit.Data.Models.FoodModels;
     using StayFit.Data.Models.Forum;
     using StayFit.Data.Models.ProgerssModels;
     using StayFit.Data.Models.ReadingModels;
-    using StayFit.Shared;
+
     using StayFit.Shared.Forum;
-    using StayFit.Shared.Nutritions.Food.Responses;
+    using StayFit.Shared.Nutritions;
+    using StayFit.Shared.Nutritions.Food;
     using StayFit.Shared.Progress;
     using StayFit.Shared.Readings;
+    using StayFit.Shared.Readings.Requests;
 
     public class MappingProfile : Profile
     {
@@ -20,10 +23,6 @@
 
             this.CreateMap<Food, FoodPreviewModel>()
                 .ForMember(f => f.Name, cfg => cfg.MapFrom(f => f.FoodType.Name));
-
-            this.CreateMap<Food, FoodKeywordModel>()
-                .ForMember(f => f.Name, cfg => cfg.MapFrom(f => f.FoodType.Name))
-                .ForMember(f => f.Category, cfg => cfg.MapFrom(f => f.FoodCategory.Category));
 
             //Forum
             this.CreateMap<PostMainCategory, PostMainCategoryModel>();

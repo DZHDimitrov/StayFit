@@ -1,5 +1,5 @@
-import { ITask } from "src/app/modules/@core/interfaces/dashboard/dashboard-task.interface";
 import { createHTTPActions } from "src/app/modules/@core/utility/store-actions.helper";
+import { ITask } from "../models/dashboard-task.model";
 
 export const [loadTasks,loadTasksSuccess] =
 createHTTPActions<{},{tasks:ITask[]}>('[dashboard] tasks');

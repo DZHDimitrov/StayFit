@@ -1,11 +1,15 @@
 ﻿namespace StayFit.Data.Models.FoodModels
 {
-    using StayFit.Data.Common.Models;
-
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
-    public class FoodCategory : BaseDeletableModel<int>
+    public class FoodCategory
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Id { get; set; }
+
         public FoodCategory()
         {
             this.Foods = new HashSet<Food>();

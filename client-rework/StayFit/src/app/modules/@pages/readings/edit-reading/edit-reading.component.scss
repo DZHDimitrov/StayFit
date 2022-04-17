@@ -1,0 +1,62 @@
+.page-container {
+    width: 60%;
+    margin: 0 auto;
+
+    .image-wrapper {
+        border: 3px solid #333333;
+        font-size: 2.5rem;
+        border-radius: 2% 6% 5% 4%/1% 1% 2% 4%;
+        text-transform: uppercase;
+        letter-spacing: 0.3ch;
+        background: #ffffff;
+        position: relative;
+        width: 550px;
+        height: 350px;
+        margin: 0 auto;
+        padding: 0.2rem;
+        margin-bottom: 2rem;
+
+        &::before {
+            content: '';
+            border: 2px solid #353535;
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg);
+            border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 2% 6% 5% 4%/1% 1% 2% 4%;
+        }
+    }
+
+
+    mat-card-header {
+        justify-content: center;
+    }
+
+    mat-card {
+        padding: 2rem;
+    }
+
+    .content {
+        display: flex;
+        flex-flow: column;
+
+        &>*:first-child {
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    mat-card-actions {
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+    }
+}

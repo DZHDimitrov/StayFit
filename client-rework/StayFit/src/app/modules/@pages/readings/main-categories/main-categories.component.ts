@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { Router } from '@angular/router';
 
@@ -26,10 +27,7 @@ import { getMainCategoryWithPreviews } from '../store/readings.selector';
   styleUrls: ['./main-categories.component.scss'],
 })
 export class MainCategoriesComponent implements OnInit, OnDestroy {
-  constructor(
-    private store: Store<IAppState>,
-    private router: Router
-  ) {}
+  constructor(private store: Store<IAppState>, private router: Router,private titleService:Title) {}
 
   unsubscribe$: Subject<void> = new Subject();
 
@@ -43,9 +41,10 @@ export class MainCategoriesComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.unsubscribe$),
         tap((route) => {
-          const { mainCategory } = route.state.params;
-          if (mainCategory) {
+          const { mainCategory, subCategory } = route.state.params;
+          if (mainCategory && !subCategory) {
             const category = latinToCyrillic(mainCategory);
+            this.titleService.setTitle(category.substring(0,1).toUpperCase() + category.substring(1));
             this.store.dispatch(loadMainCategoryWithPreviews({ category }));
           }
         }),

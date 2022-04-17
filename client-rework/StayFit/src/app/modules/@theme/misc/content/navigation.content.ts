@@ -3,7 +3,6 @@ export interface INavItem {
   link: string[] | string;
 }
 
-//TODO: Try to do it smarter.
 export const GUEST_NAV_ITEMS: INavItem[] = [
   {
     title: 'Stay fit',
@@ -30,18 +29,14 @@ export const GUEST_NAV_ITEMS: INavItem[] = [
 export const USER_NAV_ITEMS_NO_DIARY: INavItem[] = [
   {
     title: 'Днес',
-    link: ['pages','dashboard'],
+    link: ['pages', 'dashboard'],
   },
   {
-    title:'Услуги',
-    link:''
-  },
-  {
-    title:'Форум',
+    title: 'Услуги',
     link: '',
   },
   {
-    title: 'Магазин',
+    title: 'Форум',
     link: '',
   },
   {
@@ -53,22 +48,22 @@ export const USER_NAV_ITEMS_NO_DIARY: INavItem[] = [
 export const USER_NAV_ITEMS_DIARY: INavItem[] = [
   {
     title: 'Днес',
-    link: ['pages','dashboard'],
+    link: ['pages', 'dashboard'],
   },
   {
     title: 'Дневник',
-    link:[],
+    link: [],
   },
   {
     title: 'Прогрес',
-    link: ['pages','progress'],
+    link: ['pages', 'progress'],
   },
   {
-    title: 'Магазин',
+    title: 'Форум',
     link: '',
   },
   {
     title: 'Знание',
     link: ['pages', 'readings'],
   },
-]
+];

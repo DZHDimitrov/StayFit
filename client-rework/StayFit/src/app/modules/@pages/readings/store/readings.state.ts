@@ -2,7 +2,7 @@ import { IReadingCategory } from "../models/readings-category.model";
 
 import { IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from "../models/readings-previews.model";
 
-import { IReading } from "../models/readings-reading.model";
+import { IReading, IReadingForEdit } from "../models/readings-reading.model";
 
 export interface IReadingsState {
   knowledge: IKnowledge | null;
@@ -15,7 +15,7 @@ export interface IReadingsState {
 
   subCategoryWithPreviews:ISubCategoryWithPreviews | null,
 
-  currentReading: IReading | null;
+  currentReading: IReading | IReadingForEdit | null;
 }
 
 export const initialState: IReadingsState = {

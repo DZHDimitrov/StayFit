@@ -1,6 +1,6 @@
 <div class="card-block-container">
   <mat-card class="card-block" [ngStyle]="{ width: this.width + 'px'}">
-    <img src="{{ imageUrl }}" alt="" />
+    <img [ngStyle]="{width:this.pictureWidth + 'px',height:this.pictureHeight + 'px'}" src="{{ imageUrl }}" alt="" />
     <mat-card-content>
       <div>
         <h2 class="mat-subheading-2">

@@ -17,7 +17,8 @@ import { ChartService } from '../services/chart.service';
 import { BodyPartDisplay } from '../enums/BodyPartDisplay.enum';
 
 import { Measurement } from '../models/measurement.model';
-import { ActivatedRoute } from '@angular/router';
+
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress',
@@ -28,15 +29,16 @@ export class ProgressComponent implements OnInit {
   constructor(
     private store: Store<IAppState>,
     private chartService: ChartService,
-
+    private titleService: Title
   ) {
     this.initSelectionOptions();
+    this.titleService.setTitle('Измервания и прогрес');
   }
 
-  measurements!: Measurement[];
-  measurementsUntilNow!:any;
+  measurements: Measurement[] = [];
+  measurementsUntilNow!: any;
   selectionOptions!: any[];
-  selected:string = 'Weight';
+  selected: string = 'Weight';
 
   ngOnInit(): void {
     this.store.dispatch(loadMeasurements());
@@ -50,7 +52,7 @@ export class ProgressComponent implements OnInit {
       });
   }
 
-  selectType(bodyPart:string) {
+  selectType(bodyPart: string) {
     const measurements = this.chartService.filterMeasurements(
       this.measurements,
       bodyPart
@@ -60,12 +62,15 @@ export class ProgressComponent implements OnInit {
       const chartOptions = this.chartService.getChartOptions({ measurements });
       Highcharts.chart('container', chartOptions);
     } else {
-      Highcharts.chart('container',{}).destroy();
+      Highcharts.chart('container', {}).destroy();
     }
   }
 
   deleteMeasurement(measurementId) {
-    this.store.dispatch(deleteMeasurement({measurementId}));
+    if(!window.confirm("Сигурни ли сте, че искате та изтриете това измерване?")) {
+      return;
+    }
+    this.store.dispatch(deleteMeasurement({ measurementId }));
   }
 
   initSelectionOptions() {
@@ -76,6 +81,8 @@ export class ProgressComponent implements OnInit {
           value: el[0],
         });
         return acc;
-      },[]);
+      },
+      []
+    );
   }
 }

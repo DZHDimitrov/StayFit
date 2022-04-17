@@ -5,12 +5,33 @@ export interface IReading {
   imageUrl: string;
 }
 
-export interface ICreateReadingRes {
+export interface IReadingForEdit extends IReading {
+  mainCategoryId: number;
+  subCategoryId?: number;
+}
+
+export interface IEditReadingRequest {
+  readingmaincategoryid: number;
+  title: string;
+  imageurl: string;
+  content: string;
+  readingsubcategoryid?: number;
+}
+
+export interface ICreateReadingRequest {
+  readingmaincategoryid: number;
+  title: string;
+  imageurl: string;
+  content: string;
+  readingsubcategoryid?: number;
+}
+
+export interface ICreateReadingResponse {
   id: number;
   title: string;
 }
 
-export interface IDeleteReading {
+export interface IDeleteReadingResponse {
   id: number;
   title: string;
 }

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace StayFit.WebAPI.Controllers.Api.User
 {
     [Route("api/[controller]")]
-    [AllowAnonymous]
+    [Authorize(Roles = UserConstants.Roles.Administrator)]
     [ApiController]
     public class UserController : BaseController
     {

@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { Store } from '@ngrx/store';
+
 import { ToastrService } from 'ngx-toastr';
+
 import { of } from 'rxjs';
 
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, map, switchMap, tap } from 'rxjs/operators';
 
 import { FoodsService } from 'src/app/modules/@core/backend/services/foods.service';
-
-import { FoodDetailsMode } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
+import { setLoadingSpinner } from 'src/app/modules/shared/state/shared.actions';
 
 import { IAppState } from 'src/app/state/app.state';
+
+import { FoodDetailsMode } from '../models/foods-food.model';
 
 import {
   loadFoodById,
@@ -20,8 +24,6 @@ import {
   loadFoodsByCategorySuccess,
   loadFoodsCategories,
   loadFoodsCategoriesSuccess,
-  loadAutocompleteKeywords,
-  loadAutocompleteKeywordsSuccess,
   loadSearchedFood,
   loadSearchedFoodSuccess,
   loadFoodsByCategory,
@@ -33,6 +35,11 @@ import {
   addFood,
   addFoodSuccess,
   editFoodByIdFailure,
+  addFoodFailure,
+  deleteFood,
+  deleteFoodSuccess,
+  deleteFoodFailure,
+  loadFoodByIdFailure,
 } from './foods.actions';
 
 @Injectable()
@@ -41,7 +48,8 @@ export class FoodsEffects {
     private actions$: Actions,
     private service: FoodsService,
     private store: Store<IAppState>,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   loadCategories$ = createEffect(() => {
@@ -51,21 +59,6 @@ export class FoodsEffects {
         return this.service.loadCategories().pipe(
           map((res) => {
             return loadFoodsCategoriesSuccess({ foodCategories: res.data });
-          })
-        );
-      })
-    );
-  });
-
-  loadAutocompleteKeywords$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(loadAutocompleteKeywords),
-      switchMap(({ payload }) => {
-        return this.service.loadAutocompleteKeywords(payload.searchedFood).pipe(
-          map((res) => {
-            return loadAutocompleteKeywordsSuccess({
-              foods: res.data,
-            });
           })
         );
       })
@@ -91,12 +84,28 @@ export class FoodsEffects {
       switchMap(({ payload }) => {
         return this.service.loadFoodById(payload.id).pipe(
           map((res) => {
-            return loadFoodByIdSuccess({ food: res.data });
+            if (res.isOk) {
+              return loadFoodByIdSuccess({ food: res.data });
+            }
+            return loadFoodByIdFailure({error:res.Errors[0].Error})
+          }),
+          catchError(err => {
+            return of(loadFoodByIdFailure({}));
           })
         );
       })
     );
   });
+
+  loadFoodByIdFailure$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadFoodByIdFailure),
+      tap(({payload}) => {
+        this.toastr.error(payload.error ?? 'Възникна грешка','Error');
+        this.router.navigate(['/','pages','foods']);
+      })
+    )
+  },{dispatch:false})
 
   loadSearchedFood$ = createEffect(() => {
     return this.actions$.pipe(
@@ -132,32 +141,38 @@ export class FoodsEffects {
       switchMap(({ payload }) => {
         return this.service.edit(payload.foodId, payload.data).pipe(
           map((res) => {
-            if(res.isOk) {
-              this.toastr.success('Успешно обновихте данните храната','Success')
+            if (res.isOk) {
+              this.toastr.success(
+                'Успешно обновихте данните храната',
+                'Success'
+              );
               return editFoodByIdSuccess({
                 foodId: payload.foodId,
                 data: res.data.food,
               });
             }
-            return editFoodByIdFailure({error:res.Errors[0].Error});
+            return editFoodByIdFailure({ error: res.Errors[0].Error });
           }),
           catchError((err) => {
-            return of(editFoodByIdFailure({error:err.error.error}));
-          }),
-         
+            return of(editFoodByIdFailure({ error: err.error.error }));
+          })
         );
       })
     );
   });
 
-  editFoodByIdFailure$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(editFoodByIdFailure),
-      tap(({payload}) => {
-        this.toastr.error(payload?.error ?? 'Възникна грешка', 'Error');
-      })
-    )
-  },{dispatch:false})
+  editFoodByIdFailure$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(editFoodByIdFailure),
+        tap(({ payload }) => {
+          this.toastr.error(payload?.error ?? 'Възникна грешка', 'Error');
+          this.router.navigate(['/', 'pages', 'foods']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
 
   editFoodByIdBackToView$ = createEffect(
     () => {
@@ -179,10 +194,70 @@ export class FoodsEffects {
       switchMap(({ payload }) => {
         return this.service.add(payload.data).pipe(
           map((res) => {
-            return addFoodSuccess();
+            if (res.isOk) {
+              this.toastr.success('Успешно добавихте нова храна', 'Success');
+              this.router.navigate(['/', 'pages', 'foods']);
+              return addFoodSuccess();
+            }
+            return addFoodFailure({ error: res.Errors[0].error });
+          }),
+          catchError((err) => {
+            return of(addFoodFailure({ error: err?.error.error }));
           })
         );
       })
     );
   });
+  addFoodFailure$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(addFoodFailure),
+        tap(({ payload }) => {
+          this.toastr.error(payload?.error ?? 'Възникна грешка');
+          this.router.navigate(['/']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  deleteFood$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(deleteFood),
+      tap(action => {
+        this.store.dispatch(setLoadingSpinner({status:true}));
+      }),
+      debounceTime(1500),
+      switchMap(({ payload }) => {
+        return this.service.delete(payload.foodId).pipe(
+          map((res) => {
+            if (res.isOk) {
+              this.toastr.success('Успешно изтрихте храната','Success');
+              this.router.navigate(['/','pages','foods']);
+              this.store.dispatch(setLoadingSpinner({status:false}));
+              return deleteFoodSuccess({ foodId: res.data });
+            }
+            return deleteFoodFailure({ error: res.Errors[0].Error });
+          }),
+          catchError((err) => {
+            return of(addFoodFailure({ error: err.error.error }));
+          })
+        );
+      })
+    );
+  });
+
+  deleteFoodFailure$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(deleteFoodFailure),
+        tap(({ payload }) => {
+          this.toastr.error(payload?.error ?? 'Възникна грешка');
+          this.router.navigate(['/']);
+          this.store.dispatch(setLoadingSpinner({status:false}));
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

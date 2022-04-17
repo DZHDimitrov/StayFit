@@ -1,54 +1,55 @@
 <div class="add-measurement-wrapper">
     <mat-card>
         <form [formGroup]="measurementForm">
-        <div  class="measurement">
-            <div class="measurement__group">
-                <label class="heading">Кога се измери?</label>
-                <div class="group-inputs">
-                    <mat-form-field appearance="standard">
-                        <mat-label>Изберете дата</mat-label>
-                        <input [disabled]="mode == FormMode.EDIT" formControlName="DateOfMeasurement" matInput [matDatepicker]="picker">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
+            <div class="measurement">
+                <div class="measurement__group">
+                    <label class="heading">Кога се измери?</label>
+                    <div class="group-inputs">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Изберете дата</mat-label>
+                            <input [disabled]="mode == FormMode.EDIT" formControlName="DateOfMeasurement" matInput
+                                [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="measurement__group">
+                    <label class="heading">Общи мерки</label>
+                    <div class="group-inputs">
+                        <input class="input" formControlName="Height" type="text" placeholder="Височина">
+                        <input class="input" formControlName="Weight" type="text" placeholder="Тегло">
+                        <input class="input" formControlName="Fats" type="text" placeholder="Подкожни мазнини">
+                    </div>
+                </div>
+                <div class="measurement__group">
+                    <label class="heading">Горна част</label>
+                    <div class="group-inputs">
+                        <input class="input" formControlName="Neck" type="text" placeholder="Врат">
+                        <input class="input" formControlName="Shoulders" type="text" placeholder="Раменен пояс">
+                        <input class="input" formControlName="Chest" type="text" placeholder="Гръден кош">
+                        <input class="input" formControlName="LeftArm" type="text" placeholder="Лява мишница">
+                        <input class="input" formControlName="RightArm" type="text" placeholder="Дясна мишница">
+                        <input class="input" formControlName="LeftForearm" type="text" placeholder="Лява предмишница">
+                        <input class="input" formControlName="RightForearm" type="text" placeholder="Дясна предмишница">
+                        <input class="input" formControlName="Waist" type="text" placeholder="Талия">
+                        <input class="input" formControlName="Wrist" type="text" placeholder="Китка">
+                    </div>
+                </div>
+                <div class="measurement__group">
+                    <label class="heading">Горна част</label>
+                    <div class="group-inputs">
+                        <input class="input" formControlName="Hips" type="text" placeholder="Ханш">
+                        <input class="input" formControlName="LeftThigh" type="text" placeholder="Ляво бедро">
+                        <input class="input" formControlName="RightThigh" type="text" placeholder="Дясно бедро">
+                        <input class="input" formControlName="LeftCalf" type="text" placeholder="Ляв прасец">
+                        <input class="input" formControlName="RightCalf" type="text" placeholder="Десен прасец">
+                        <input class="input" formControlName="Ankle" type="text" placeholder="Глезен">
+                    </div>
                 </div>
             </div>
-            <div class="measurement__group">
-                <label class="heading">Общи мерки</label>
-                <div class="group-inputs">
-                    <input class="input" formControlName="Height" type="text" placeholder="Височина">
-                    <input class="input" formControlName="Weight" type="text" placeholder="Тегло">
-                    <input class="input" formControlName="Fats" type="text" placeholder="Подкожни мазнини">
-                </div>
-            </div>
-            <div class="measurement__group">
-                <label class="heading">Горна част</label>
-                <div class="group-inputs">
-                    <input class="input" formControlName="Neck" type="text" placeholder="Врат">
-                    <input class="input" formControlName="Shoulders" type="text" placeholder="Раменен пояс">
-                    <input class="input" formControlName="Chest" type="text" placeholder="Гръден кош">
-                    <input class="input" formControlName="LeftArm" type="text" placeholder="Лява мишница">
-                    <input class="input" formControlName="RightArm" type="text" placeholder="Дясна мишница">
-                    <input class="input" formControlName="LeftForearm" type="text" placeholder="Лява предмишница">
-                    <input class="input" formControlName="RightForearm" type="text" placeholder="Дясна предмишница">
-                    <input class="input" formControlName="Waist" type="text" placeholder="Талия">
-                    <input class="input" formControlName="Wrist" type="text" placeholder="Китка">
-                </div>
-            </div>
-            <div class="measurement__group">
-                <label class="heading">Горна част</label>
-                <div class="group-inputs">
-                    <input class="input" formControlName="Hips" type="text" placeholder="Ханш">
-                    <input class="input" formControlName="LeftThigh" type="text" placeholder="Ляво бедро">
-                    <input class="input" formControlName="RightThigh" type="text" placeholder="Дясно бедро">
-                    <input class="input" formControlName="LeftCalf" type="text" placeholder="Ляв прасец">
-                    <input class="input" formControlName="RightCalf" type="text" placeholder="Десен прасец">
-                    <input class="input" formControlName="Ankle" type="text" placeholder="Глезен">
-                </div>
-            </div>
-        </div>
-        <button (click)="save()" *ngIf="mode == FormMode.CREATE" color="primary" mat-flat-button>Запиши</button>
-        <button (click)="edit()" *ngIf="mode == FormMode.EDIT" color="primary" mat-flat-button>Обнови</button>
-    </form>
+            <button (click)="save()" *ngIf="mode == FormMode.CREATE" color="primary" mat-flat-button>Запиши</button>
+            <button (click)="edit()" *ngIf="mode == FormMode.EDIT" color="primary" mat-flat-button>Обнови</button>
+        </form>
     </mat-card>
 </div>

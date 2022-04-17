@@ -8,6 +8,12 @@
             public const string Moderator = "Moderator";
         }
 
+        public static class Errors
+        {
+            public const string UserAlreadyAddedInRole = "Потребителят вече име тези права";
+            public const string UserNotInRole = "Потребителят няма такива права за премахване";
+        }
+
         public static class Constraints
         {
             public const int UsernameMinLength = 4;

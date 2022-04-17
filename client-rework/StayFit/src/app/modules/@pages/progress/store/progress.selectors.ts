@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 import { IProgressState } from './progress.state';
 
 export const PROGRESS_STATE_NAME = 'progress';

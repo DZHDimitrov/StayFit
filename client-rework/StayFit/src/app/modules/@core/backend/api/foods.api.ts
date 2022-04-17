@@ -2,17 +2,21 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { IFoodCategory } from 'src/app/modules/@pages/foods/models/foods-category.model';
+
+import {
+  IFood,
+  IFoodPreview,
+} from 'src/app/modules/@pages/foods/models/foods-food.model';
+
+import {
+  IAddFoodRequest,
+  IEditFoodRequest,
+} from 'src/app/modules/@pages/foods/models/foods-request';
+
+import { IFoodType } from 'src/app/modules/@pages/foods/models/foods-types.model';
+
 import { IApiResponse } from '../../interfaces/api.response';
-
-import { IAddFood, IEditFood } from '../../interfaces/requests/foods.req';
-
-import { IFoodCategory } from '../../interfaces/foods/foods-category.interface';
-
-import { IFood, IFoodPreview } from '../../interfaces/foods/foods-food.interface';
-
-import { IFoodKeyword } from '../../interfaces/foods/foods-keywords.interface';
-
-import { IFoodType } from '../../interfaces/foods/foods-types.interface';
 
 import { HttpService } from './http.service';
 
@@ -26,12 +30,10 @@ export class FoodsApi {
     return this.api.get(`${this.apiController}/categories`);
   }
 
-  loadAutocompleteKeywords(searchedFood: string): Observable<IApiResponse<IFoodKeyword[]>> {
-    return this.api.get(`${this.apiController}/search/keywords?food=${searchedFood}`);
-  }
-
-  loadFoodsByCategory(category: string | number): Observable<IApiResponse<IFoodPreview[]>> {
-    return this.api.get(`${this.apiController}/${category}`);
+  loadFoodsByCategory(
+    category: string | number
+  ): Observable<IApiResponse<IFoodPreview[]>> {
+    return this.api.get(`${this.apiController}/${category}/previews`);
   }
 
   loadFoodTypesByCategoryId(categoryId): Observable<IApiResponse<IFoodType[]>> {
@@ -39,18 +41,25 @@ export class FoodsApi {
   }
 
   loadFoodById(id: number): Observable<IApiResponse<IFood>> {
-    return this.api.get(`${this.apiController}/id/${id}`);
+    return this.api.get(`${this.apiController}/${id}`);
   }
 
   search(text: string): Observable<IApiResponse<IFoodPreview>> {
     return this.api.get(`${this.apiController}/search?text=${text}`);
   }
 
-  add(data: IAddFood): Observable<void> {
+  add(data: IAddFoodRequest): Observable<IApiResponse<string>> {
     return this.api.post(`${this.apiController}`, data);
   }
 
-  edit(foodId: number, data: IEditFood): Observable<IApiResponse<{id:number,food:IFood}>> {
-    return this.api.put(`${this.apiController}/id/${foodId}`, data);
+  edit(
+    foodId: number,
+    data: IEditFoodRequest
+  ): Observable<IApiResponse<{ id: number; food: IFood }>> {
+    return this.api.put(`${this.apiController}/${foodId}`, data);
+  }
+
+  delete(foodId: number): Observable<IApiResponse<string>> {
+    return this.api.delete(`${this.apiController}/${foodId}`);
   }
 }

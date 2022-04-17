@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
+using StayFit.Common;
 using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models;
+using StayFit.Infrastructure;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
+
 using StayFit.Shared.Requests.User;
 using StayFit.Shared.User;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,16 +38,13 @@ namespace StayFit.Services.StayFit.Services.Data
             var user = await userManager.FindByIdAsync(request.UserId);
             var role = await roleManager.FindByIdAsync(roleId);
 
-            if (role == null)
-            {
-                throw new ArgumentException($"Inexistant role");
-            }
+            Guards.AgainstNull(role, "Ролята");
 
             if (request.ToAdd)
             {
                 if (await userManager.IsInRoleAsync(user, role.Name))
                 {
-                    throw new ArgumentException("User is already added in this role");
+                    throw new ArgumentException(UserConstants.Errors.UserAlreadyAddedInRole);
                 }
 
                 var addResult = await userManager.AddToRoleAsync(user, role.Name);
@@ -57,7 +59,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (!await userManager.IsInRoleAsync(user, role.Name))
             {
-                throw new ArgumentException($"User is not in {role.Name} role");
+                throw new ArgumentException(UserConstants.Errors.UserNotInRole);
             }
 
             var removeResult = await userManager.RemoveFromRoleAsync(user, role.Name);
@@ -121,10 +123,7 @@ namespace StayFit.Services.StayFit.Services.Data
         {
             var role = await roleManager.FindByIdAsync(roleId);
 
-            if (role == null)
-            {
-                throw new ArgumentException("Inexistant role");
-            }
+            Guards.AgainstNull(role,"Ролята");
 
             var result = await roleManager.DeleteAsync(role);
 

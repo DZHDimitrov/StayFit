@@ -27,6 +27,7 @@ import { MainCategoriesComponent } from './main-categories/main-categories.compo
 import { SubCategoriesComponent } from './sub-categories/sub-categories.component';
 
 import { KnowledgeComponent } from './knowledge/knowledge.component';
+import { EditReadingComponent } from './edit-reading/edit-reading.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { KnowledgeComponent } from './knowledge/knowledge.component';
     MainCategoriesComponent,
     SubCategoriesComponent,
     KnowledgeComponent,
+    EditReadingComponent,
   ],
   imports: [
     CommonModule,

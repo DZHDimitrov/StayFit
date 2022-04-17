@@ -1,0 +1,51 @@
+<div class="page-container">
+  <mat-card>
+    <div class="image-wrapper">
+      <img [src]="reading?.imageUrl">
+    </div>
+    <form [formGroup]="this.formGroup" (ngSubmit)="submit()">
+      <div class="content">
+        <mat-form-field class="title" appearance="outline">
+          <mat-label>Заглавие</mat-label>
+          <input matInput type="text" placeholder="Тренировки на открито" formControlName="title" />
+          <mat-error *ngIf="this.formGroup.get('title')?.hasError('required')">{{requiredField}}</mat-error>
+          <mat-error *ngIf="this.formGroup.get('title')?.hasError('minlength')">{{fieldMinLength(5)}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="main-category" appearance="outline">
+          <mat-label>Избор на основна категория</mat-label>
+          <mat-select formControlName="readingMainCategoryId" (valueChange)="loadSubCategories($event)">
+            <mat-option *ngFor="let category of this.mainCategories$ | async" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="
+                  (this.subCategories$ | async) &&
+                  (this.subCategories$ | async)!.length > 0
+                " appearance="outline" class="main-category">
+          <mat-label>Избор на подкатегория</mat-label>
+          <mat-select formControlName="readingSubCategoryId">
+            <mat-option *ngFor="let category of this.subCategories$ | async" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Съдържание</mat-label>
+          <textarea matInput formControlName="content" cols="30" rows="10"></textarea>
+          <mat-error>{{requiredField}}</mat-error>
+        </mat-form-field>
+      </div>
+      <mat-card-actions class="actions">
+        <button [disabled]="!this.formGroup.valid" type="submit" mat-flat-button color="primary">Обнови</button>
+        <section class="image-container">
+          <input class="hidden-image" type="file" hidden="true" #uploader onclick="this.value = null"
+            (change)="fileChange(uploader.files)" />
+          <button type="button" mat-flat-button color="warn" (click)="uploader.click()">
+            Изберете друга снимка
+          </button>
+        </section>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

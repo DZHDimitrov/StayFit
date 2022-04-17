@@ -31,24 +31,6 @@ export const getFoodCategoriesSelection = createSelector(getFoodsState, (state) 
   });
 });
 
-export const getAutocompleteKeywords = createSelector(
-  getFoodsState,
-  (state) => {
-    return state.searchKeywords.map(keyword => {
-      return {
-        ...keyword,
-        searchName: [
-          keyword.category?.split(' ')[0].toLowerCase(),
-          '-',
-          keyword.name?.toLocaleLowerCase(),
-          '-',
-          keyword.description?.toLowerCase(),
-        ].join(' '),
-      }
-    });
-  }
-);
-
 export const getFoodsByCategory = createSelector(getFoodsState, (state) => {
   return state.foodsByCategory;
 });

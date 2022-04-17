@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using StayFit.Infrastructure.Extensions;
+
 using StayFit.Services.StayFit.Services.Data.Interfaces;
+
 using StayFit.Shared;
 using StayFit.Shared.Progress;
+
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;

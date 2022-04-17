@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class ReadingMainCategory : BaseDeletableModel<int>
+    public class ReadingMainCategory : BaseModel<int>
     {
         public ReadingMainCategory()
         {

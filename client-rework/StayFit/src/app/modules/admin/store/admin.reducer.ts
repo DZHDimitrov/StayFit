@@ -1,6 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
+
 import { IRole } from '../models/roles.model';
-import { loadRolesSuccess, loadUsersInRole, loadUsersInRoleSuccess, modifyRoleSuccess, removeRoleSuccess } from './admin.actions';
+
+import { loadRolesSuccess, loadUsersInRoleSuccess, modifyRoleSuccess, removeRoleSuccess } from './admin.actions';
 
 import { InitialState } from './admin.state';
 

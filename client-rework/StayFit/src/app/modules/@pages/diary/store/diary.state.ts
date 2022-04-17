@@ -1,4 +1,4 @@
-import { INote } from "src/app/modules/@core/interfaces/diary/diary.interface";
+import { INote } from "../models/diary.model";
 
 export interface IDiaryState {
   diaryId: string | number | null;

@@ -1,9 +1,22 @@
 <div class="reading-wrapper">
+  <div class="reading-image">
+    <img [src]="currentReading?.imageUrl" alt="" />
+  </div>
   <div class="reading">
-    <div class="reading__image">
-      <img [src]="(currentReading$ | async)?.imageUrl" alt="" />
+    <div class="reading__actions">
+      <button *ngIf="hasPrivilegeToEdit" color="primary" [routerLink]="['edit']" mat-flat-button>
+        <mat-icon>edit</mat-icon>
+        Направи промяна
+      </button>
+      <button *ngIf="hasPrivilegeToDelete" color="warn" (click)="deleteReading(this.currentReading?.id)"
+        mat-flat-button>
+        <mat-icon>delete</mat-icon>
+        Изтрий
+      </button>
     </div>
-    <h1 class="mat-display-3 reading__title">{{ (this.currentReading$ | async)?.title }}</h1>
-    <p class="mat-body-1 reading__content">{{ (this.currentReading$ | async)?.content }}</p>
+    <div class="headline">
+      <h1 class="mat-display-3 reading__title">{{ this.currentReading?.title }}</h1>
+    </div>
+    <p class="mat-body-1 reading__content">{{ this.currentReading?.content }}</p>
   </div>
 </div>

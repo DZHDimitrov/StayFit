@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
+import { Title } from '@angular/platform-browser';
+
 import { Store } from '@ngrx/store';
 
 import { Subject } from 'rxjs';
@@ -20,7 +22,9 @@ import { getKnowledge } from '../store/readings.selector';
   styleUrls: ['./knowledge.component.scss'],
 })
 export class KnowledgeComponent implements OnInit, OnDestroy {
-  constructor(private store: Store<IAppState>) {}
+  constructor(private store: Store<IAppState>,private titleService:Title) {
+    this.titleService.setTitle('Знание')
+  }
 
   unsubscribe$: Subject<void> = new Subject();
   

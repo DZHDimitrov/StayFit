@@ -18,8 +18,15 @@
                     <span class="mat-headline">{{nutrient.quantity}}</span>
                     <p class="mat-subheading-1">{{nutrient.name}}</p>
                 </div>
-                <button (click)="switchMode('edit')" class="edit-button" mat-flat-button>
+            </div>
+            <div class="actions">
+                <button color="primary" *ngIf="hasPrivilegeToEdit" (click)="switchMode('edit')" class="edit-button" mat-flat-button>
                     <mat-icon>edit</mat-icon>
+                    Направи промяна
+                </button>
+                <button color="warn" *ngIf="hasPrivilegeToDelete" (click)="deleteFood(foodDetails.id)" class="edit-button" mat-flat-button>
+                    <mat-icon>delete</mat-icon>
+                    Изтрий храната
                 </button>
             </div>
         </div>
@@ -41,6 +48,7 @@
     </section>
 </div>
 <div *ngIf="(this.mode$ | async) === 'edit'">
-    <app-edit-food [allNutrients]="allNutrients" [coreNutrients]="coreNutrients" [foodDetails]="foodDetails"></app-edit-food>
+    <app-edit-food [allNutrients]="allNutrients" [coreNutrients]="coreNutrients" [foodDetails]="foodDetails">
+    </app-edit-food>
 </div>
 <app-send-question></app-send-question>

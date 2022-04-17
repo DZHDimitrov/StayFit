@@ -1,16 +1,22 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+
 import { Store } from '@ngrx/store';
+
 import { Observable } from 'rxjs';
+
 import { map } from 'rxjs/operators';
-import { getUser, isAuthenticated } from 'src/app/modules/@auth/state/auth.selector';
-import {
-  ITask,
-  ITaskDisplay,
-} from 'src/app/modules/@core/interfaces/dashboard/dashboard-task.interface';
+
 import { decorateTask } from 'src/app/modules/@core/utility/component-decorator.helper';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { createDiary } from '../../diary/store/diary.actions';
+
+import { ITaskDisplay } from '../models/dashboard-task.model';
+
 import { loadTasks } from '../store/dashboard.actions';
+
 import { getTasks } from '../store/dashboard.selectors';
 
 @Component({
@@ -19,7 +25,9 @@ import { getTasks } from '../store/dashboard.selectors';
   styleUrls: ['./today.component.scss'],
 })
 export class TodayComponent implements OnInit, AfterContentInit {
-  constructor(private store: Store<IAppState>) {}
+  constructor(private store: Store<IAppState>,private titleService:Title) {
+    this.titleService.setTitle('Задачи за днес')
+  }
 
   tasks$!: Observable<ITaskDisplay[]>;
 
@@ -33,8 +41,6 @@ export class TodayComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.store.dispatch(loadTasks());
-
-    this.store.select(getUser).subscribe(console.log);
   }
 
   ngAfterContentInit(): void {
@@ -43,7 +49,6 @@ export class TodayComponent implements OnInit, AfterContentInit {
         return tasks.map(decorateTask);
       })
     );
-    // this.tasks$.subscribe(console.log)
   }
 
   callAction(action?: string) {

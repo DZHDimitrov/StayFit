@@ -1,16 +1,25 @@
 import { Component, OnInit } from '@angular/core';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { Store } from '@ngrx/store';
+
 import { Observable } from 'rxjs';
+
 import { shareReplay } from 'rxjs/operators';
-import { IFoodCategory } from 'src/app/modules/@core/interfaces/foods/foods-category.interface';
-import { IFoodType } from 'src/app/modules/@core/interfaces/foods/foods-types.interface';
+
 import { IAppState } from 'src/app/state/app.state';
+
+import { IFoodCategory } from '../models/foods-category.model';
+
+import { IFoodType } from '../models/foods-types.model';
+
 import {
   addFood,
   loadFoodsCategories,
   loadFoodTypesByCategoryId,
 } from '../store/foods.actions';
+
 import {
   getFoodCategoriesSelection,
   getFoodTypesByCategory,
@@ -25,7 +34,7 @@ export class NewFoodComponent implements OnInit {
   foodForm!: FormGroup;
   foodCategories$!: Observable<Partial<IFoodCategory>[]>;
   foodTypes$!: Observable<IFoodType[]>;
-  
+
   constructor(private store: Store<IAppState>, private fb: FormBuilder) {
     this.initForm();
   }
@@ -73,7 +82,7 @@ export class NewFoodComponent implements OnInit {
       foodCategoryId: ['', Validators.required],
       foodTypeId: ['', Validators.required],
       calories: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       image: ['', Validators.required],
     });
   }

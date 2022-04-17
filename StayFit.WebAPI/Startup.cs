@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using StayFit.Data;
 using StayFit.Data.Models;
+using StayFit.Data.Seeding;
 using StayFit.Infrastructure.Middlewares.Authorization;
 
 using StayFit.Shared;
@@ -65,6 +66,8 @@ namespace StayFit.WebAPI
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
                 dbContext.Database.Migrate();
+
+                ApplicationDbContextSeeder.Seed(dbContext, serviceScope.ServiceProvider);
             }
 
             if (env.IsDevelopment())
@@ -131,17 +134,8 @@ namespace StayFit.WebAPI
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(
-                //    name: "MyArea",
-                //    pattern: "{area:exists}/api/{controller}"
-                //    );
                 endpoints.MapControllers();
             });
-
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(name: "asd",template: "asd", defaults: new {controller = "asd",action = "" } )
-            //});
         }
         private static async Task<GenericPrincipal> PrincipalResolver(HttpContext context)
         {

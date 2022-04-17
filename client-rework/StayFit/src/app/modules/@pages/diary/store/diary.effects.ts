@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
+
 import { Router } from '@angular/router';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+
 import { Store } from '@ngrx/store';
+
 import { ToastrService } from 'ngx-toastr';
+
 import { of } from 'rxjs';
+
 import {
   catchError,
   debounceTime,
@@ -14,11 +20,17 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+
 import { DiaryService } from 'src/app/modules/@core/backend/services/diary.service';
+
 import { USER_NAV_ITEMS_DIARY } from 'src/app/modules/@theme/misc/content/navigation.content';
+
 import { setNavMenu } from 'src/app/modules/@theme/state/theme.actions';
+
 import { setLoadingSpinner } from 'src/app/modules/shared/state/shared.actions';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import {
   createDiary,
   createDiarySuccess,
@@ -46,6 +58,10 @@ export class DiaryEffects {
   createDiary$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(createDiary),
+      tap(action => {
+        this.store.dispatch(setLoadingSpinner({status:true}))
+      }),
+      debounceTime(1500),
       switchMap((action) => {
         return this.diaryService.createDiary().pipe(
           map((res) => {
@@ -62,6 +78,7 @@ export class DiaryEffects {
       tap(action => {
         this.toastr.success('Дневникът Ви беше създаден успешно.')
         this.store.dispatch(setNavMenu({navItems:USER_NAV_ITEMS_DIARY}));
+        this.store.dispatch(setLoadingSpinner({status:false}))
       })
     )
   },{dispatch:false})

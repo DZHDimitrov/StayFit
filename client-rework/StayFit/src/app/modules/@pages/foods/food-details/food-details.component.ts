@@ -1,17 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { Store } from '@ngrx/store';
-import { Observable, of, Subject } from 'rxjs';
+
+import { Observable, Subject } from 'rxjs';
+
 import {
   filter,
+  map,
   switchMap,
+  take,
   takeUntil,
 } from 'rxjs/operators';
-import { FoodDetailsMode } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
-import { INutrient } from 'src/app/modules/@core/interfaces/foods/foods-nutrients.interface';
-// import { FoodDetailsMode } from 'src/app/modules/@core/interfaces/responses/foods/foods.res';
+import { getUser } from 'src/app/modules/@auth/state/auth.selector';
+import { Roles } from 'src/app/modules/@core/enums/roles';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { getRouterState } from 'src/app/state/router/router.selector';
-import { loadFoodById, setFoodDetailsMode } from '../store/foods.actions';
+
+import { FoodDetailsMode } from '../models/foods-food.model';
+
+import { INutrient } from '../models/foods-nutrients.model';
+
+import { deleteFood, loadFoodById, setFoodDetailsMode } from '../store/foods.actions';
+
 import {
   getAllNutrients,
   getCoreNutrients,
@@ -29,6 +41,8 @@ export class FoodDetailsComponent implements OnInit,OnDestroy {
   constructor(private store: Store<IAppState>) {}
 
   unsubscribe$: Subject<void> = new Subject();
+  hasPrivilegeToEdit:boolean = false;
+  hasPrivilegeToDelete:boolean = false;
 
   foodDetails!: any;
   mode$!: Observable<FoodDetailsMode>;
@@ -46,7 +60,9 @@ export class FoodDetailsComponent implements OnInit,OnDestroy {
         takeUntil(this.unsubscribe$),
         switchMap((route) => {
           const foodId = route.state.params['id'];
-          this.store.dispatch(loadFoodById({ id: foodId }));
+          if(foodId) {
+            this.store.dispatch(loadFoodById({ id: foodId }));
+          }
           return this.store.select(getFoodDetails);
         })
       )
@@ -73,6 +89,11 @@ export class FoodDetailsComponent implements OnInit,OnDestroy {
           this.allNutrients = allNutrients;
         },
       });
+
+    this.store.select(getUser).pipe(take(1)).subscribe(user => {
+      this.hasPrivilegeToEdit = (user?.hasRole(Roles.ADMINISTRATOR) || user?.hasRole(Roles.MODERATOR)) ?? false;
+      this.hasPrivilegeToDelete = user?.hasRole(Roles.ADMINISTRATOR) ?? false;
+    })
   }
 
   ngOnDestroy(): void {
@@ -86,5 +107,9 @@ export class FoodDetailsComponent implements OnInit,OnDestroy {
     if (mode === FoodDetailsMode.EDIT) {
       this.store.dispatch(setFoodDetailsMode({ mode: FoodDetailsMode.EDIT }));
     }
+  }
+
+  deleteFood(foodId:number){
+    this.store.dispatch(deleteFood({foodId:foodId.toString()}))
   }
 }

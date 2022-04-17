@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+
 import { BodyPart } from '../enums/BodyPart.enum';
-import { BodyPartDisplay } from '../enums/BodyPartDisplay.enum';
+
 import { Measurement } from '../models/measurement.model';
 
 @Injectable({

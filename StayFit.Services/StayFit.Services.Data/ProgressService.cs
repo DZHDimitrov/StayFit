@@ -1,16 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+
+using Microsoft.EntityFrameworkCore;
+using StayFit.Common;
 using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models.ProgerssModels;
+using StayFit.Infrastructure;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
+
+using StayFit.Shared.Enums;
 using StayFit.Shared.Progress;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using StayFit.Shared.Enums;
 
 namespace StayFit.Services.StayFit.Services.Data
 {
@@ -20,9 +25,11 @@ namespace StayFit.Services.StayFit.Services.Data
         private readonly IMapper mapper;
         private readonly IBodyService bodyService;
 
-        public ProgressService(IDeletableEntityRepository<Measurement> measurementRepo,IMapper mapper,IBodyService bodyService)
+        public ProgressService(IDeletableEntityRepository<Measurement> _measurementRepo,
+            IMapper mapper,
+            IBodyService bodyService)
         {
-            this.measurementRepo = measurementRepo;
+            measurementRepo = _measurementRepo;
             this.mapper = mapper;
             this.bodyService = bodyService;
         }
@@ -33,7 +40,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (!DateTime.TryParse(model.DateOfMeasurement, out dateOfMeasurement))
             {
-                throw new ArgumentException("Invalid model");
+                throw new ArgumentException(MeasurementConstants.Errors.InvalidDate);
             }
 
             bool isValidModel = false;
@@ -43,8 +50,6 @@ namespace StayFit.Services.StayFit.Services.Data
                 .GetProperties()
                 .Where(p => p.Name != "DateOfMeasurment")
                 .ToArray();
-
-            ;
 
             foreach (var property in properties)
             {
@@ -60,10 +65,10 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (!isValidModel)
             {
-                throw new ArgumentException("There must atleast one valid measurement");
+                throw new ArgumentException(MeasurementConstants.Errors.AtleastOneValid);
             }
 
-            var values = this.bodyService.GetParsedValues(model);
+            var values = bodyService.GetParsedValues(model);
 
             var measure = await measurementRepo
                 .All()
@@ -119,18 +124,19 @@ namespace StayFit.Services.StayFit.Services.Data
                     ApplicationUserId = userId,
                 };
 
-                await this.measurementRepo.AddAsync(measure);
+                await measurementRepo.AddAsync(measure);
             }
            
-            return await this.measurementRepo.SaveChangesAsync();
+            return await measurementRepo.SaveChangesAsync();
         }
 
         public async Task<string> EditMeasurement(string measurementId,EditMeasurementModel model)
         {
             DateTime dateOfMeasurement;
+
             if(!DateTime.TryParse(model.DateOfMeasurement,out dateOfMeasurement))
             {
-                throw new ArgumentException();
+                throw new ArgumentException(MeasurementConstants.Errors.InvalidDate);
             }
 
 
@@ -139,15 +145,11 @@ namespace StayFit.Services.StayFit.Services.Data
                 .Where(m => m.Id == measurementId)
                 .FirstOrDefaultAsync();
 
-            //Indexistant
-            if (measure == null)
-            {
-                throw new ArgumentException();
-            }
-            //Can't change the day
+            Guards.AgainstNull(measure, "Измерването");
+
             if (measure.DateOfMeasurment != dateOfMeasurement)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(MeasurementConstants.Errors.UnableToChangeSetDate);
             }
 
             var values = this.bodyService.GetParsedValues(model);
@@ -171,8 +173,8 @@ namespace StayFit.Services.StayFit.Services.Data
             measure.RightCalf = values[BodyPartType.RightCalf] ?? measure.RightCalf;
             measure.Ankle = values[BodyPartType.Ankle] ?? measure.Ankle;
 
-            this.measurementRepo.Update(measure);
-            await this.measurementRepo.SaveChangesAsync();
+            measurementRepo.Update(measure);
+            await measurementRepo.SaveChangesAsync();
 
             return measure.Id;
         }
@@ -213,22 +215,26 @@ namespace StayFit.Services.StayFit.Services.Data
 
         public async Task DeleteMeasurement(string measurementId)
         {
-            var measurement = await this.measurementRepo
+            var measurement = await measurementRepo
                 .All()
                 .Where(m => m.Id == measurementId)
                 .FirstOrDefaultAsync();
 
-            this.measurementRepo.Delete(measurement);
-            await this.measurementRepo.SaveChangesAsync();
+            Guards.AgainstNull(measurement, "Измерването");
+
+            measurementRepo.Delete(measurement);
+            await measurementRepo.SaveChangesAsync();
         }
 
         public async Task<MeasurementModel> LoadMeasurementById(string measurementId)
         {
-            var measurement = await this.measurementRepo
+            var measurement = await measurementRepo
                 .All()
                 .Where(m => m.Id == measurementId)
-                .ProjectTo<MeasurementModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<MeasurementModel>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(measurement, "Измерването");
 
             return measurement;
         }

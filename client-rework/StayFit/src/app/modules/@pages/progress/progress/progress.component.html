@@ -6,7 +6,8 @@
     <div class="chart">
         <mat-card>
             <div class="new-measurement-button">
-                <button [ngClass]="measurements.length > 0 ? 'u-margin-auto--left': ''" [routerLink]="['add']" mat-flat-button color="accent">Ново измерване</button>
+                <button [ngClass]="measurements.length > 0 ? 'u-margin-auto--left': ''" [routerLink]="['add']"
+                    mat-flat-button color="accent">Ново измерване</button>
             </div>
             <div class="body-part-selection" *ngIf="measurements.length > 0">
                 <mat-form-field>
@@ -25,9 +26,12 @@
     <div *ngIf="measurements.length > 0" class="measurements-container">
         <h1>Измерванията ти до момента</h1>
         <mat-card class="custom-card">
-            <div *ngFor="let measurement of measurements" class = "measurement o-row-container o-row-container--content-sb">
-                <span [routerLink]="[measurement.id,'edit']" class="measurement__date">{{measurement.dateOfMeasurement}}</span>
-                <mat-icon (click)="deleteMeasurement(measurement.id)" class="measurement__delete-icon">delete_outline</mat-icon>
+            <div *ngFor="let measurement of measurements"
+                class="measurement o-row-container o-row-container--content-sb">
+                <span [routerLink]="[measurement.id,'edit']"
+                    class="measurement__date">{{measurement.dateOfMeasurement}}</span>
+                <mat-icon (click)="deleteMeasurement(measurement.id)" class="measurement__delete-icon">delete_outline
+                </mat-icon>
             </div>
         </mat-card>
     </div>

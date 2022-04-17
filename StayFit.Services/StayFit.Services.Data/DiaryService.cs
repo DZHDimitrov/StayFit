@@ -1,10 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
+using StayFit.Common;
+using StayFit.Data;
 using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models.DiaryModels;
+using StayFit.Infrastructure;
 using StayFit.Services.Common;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
+
 using StayFit.Shared.Diaries;
 using StayFit.Shared.Enums;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,13 +24,16 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private readonly IRepository<Diary> diaryRepo;
         private readonly IRepository<Note> noteRepo;
+        private readonly AppDbContext db;
 
         public DiaryService(
-            IRepository<Diary> diaryRepo,
-            IRepository<Note> noteRepo)
+            IRepository<Diary> _diaryRepo,
+            IRepository<Note> _noteRepo,
+            AppDbContext db)
         {
-            this.diaryRepo = diaryRepo;
-            this.noteRepo = noteRepo;
+            diaryRepo = _diaryRepo;
+            noteRepo = _noteRepo;
+            this.db = db;
         }
 
         public async Task<string> CreateDiary(string userId)
@@ -36,7 +45,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (diary != null)
             {
-                throw new ArgumentException(ServicesDataConstants.UserAlreadyOwnsADiary);
+                throw new ArgumentException(DiaryConstants.Errors.AlreadyOwnsADiary);
             }
 
             var newDiary = new Diary
@@ -59,7 +68,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (!isValidMoodType)
             {
-                throw new ArgumentException(string.Format(ServicesDataConstants.InvalidMoodType,model.Mood));
+                throw new ArgumentException(string.Format(DiaryConstants.Errors.InvalidMoodType,model.Mood));
             }
 
             DateTime currentDate;
@@ -67,7 +76,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (!isValidDate)
             {
-                throw new ArgumentException(string.Format(ServicesDataConstants.InvalidDate,date));
+                throw new ArgumentException(string.Format(DiaryConstants.Errors.InvalidDate,date));
             }
 
             double? sleepHours = null;
@@ -78,7 +87,7 @@ namespace StayFit.Services.StayFit.Services.Data
                 var isValidHour = double.TryParse(model.SleepHours, out currentSleepHours);
                 if (!isValidHour)
                 {
-                    throw new ArgumentException(string.Format(ServicesDataConstants.InvalidHour,model.SleepHours));
+                    throw new ArgumentException(string.Format(DiaryConstants.Errors.InvalidHour,model.SleepHours));
                 }
 
                 sleepHours = currentSleepHours;
@@ -96,7 +105,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
             if (diary.HasNotes)
             {
-                throw new ArgumentException(string.Format(ServicesDataConstants.DiaryAlreadyFilled,date));
+                throw new ArgumentException(string.Format(DiaryConstants.Errors.DiaryAlreadyFilled,date));
             }
 
             var note = new Note
@@ -124,15 +133,7 @@ namespace StayFit.Services.StayFit.Services.Data
                 .Where(d => d.ApplicationUserId == userId)
                 .FirstOrDefaultAsync();
 
-            if (diary == null)
-            {
-                throw new NullReferenceException(ServicesDataConstants.NullReferenceDiary);
-            }
-
-            if (diary.Notes.Count == 0)
-            {
-                throw new NullReferenceException(ServicesDataConstants.NullReferenceNote);
-            }
+            Guards.AgainstNull(diary, "Дневникът");
 
             double? sleepHours = null;
 
@@ -155,8 +156,8 @@ namespace StayFit.Services.StayFit.Services.Data
             noteToEdit.Nutrition = model.Nutrition;
             noteToEdit.SleepHours = sleepHours;
 
-            this.noteRepo.Update(noteToEdit);
-            await this.noteRepo.SaveChangesAsync();
+            noteRepo.Update(noteToEdit);
+            await noteRepo.SaveChangesAsync();
 
             return noteToEdit.CreatedOn.ToString("dd/MM/yyyy");
         }
@@ -180,17 +181,11 @@ namespace StayFit.Services.StayFit.Services.Data
                 .FirstOrDefaultAsync();
 
 
-            if (diary == null)
-            {
-                throw new NullReferenceException(ServicesDataConstants.NullReferenceDiary);
-            }
+            Guards.AgainstNull(diary, "Дневникът");
 
             var note = diary.Notes.Where(n => n.Id == noteId).FirstOrDefault();
 
-            if (note == null)
-            {
-                throw new NullReferenceException(ServicesDataConstants.NullReferenceNote);
-            }
+            Guards.AgainstNull(diary, "Записките");
 
             if (take == "next")
             {
@@ -247,10 +242,7 @@ namespace StayFit.Services.StayFit.Services.Data
                 .Include(d => d.Notes)
                 .FirstOrDefaultAsync();
 
-            if (diary == null)
-            {
-                throw new NullReferenceException(ServicesDataConstants.NullReferenceDiary);
-            }
+            Guards.AgainstNull(diary, "Дневникът");
 
             var monthDays = DateTime.DaysInMonth(year, month);
 

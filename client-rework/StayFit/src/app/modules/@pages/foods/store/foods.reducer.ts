@@ -4,7 +4,6 @@ import {
   loadFoodByIdSuccess,
   loadFoodsByCategorySuccess,
   loadFoodsCategoriesSuccess,
-  loadAutocompleteKeywordsSuccess,
   loadSearchedFoodSuccess,
   loadFoodTypesByCategoryIdSuccess,
   setFoodDetailsMode,
@@ -20,13 +19,6 @@ export const _foodsReducer = createReducer(
     return {
       ...state,
       foodsCategories: payload.foodCategories,
-    };
-  }),
-
-  on(loadAutocompleteKeywordsSuccess, (state, {payload}) => {
-    return {
-      ...state,
-      searchKeywords: payload.foods,
     };
   }),
 

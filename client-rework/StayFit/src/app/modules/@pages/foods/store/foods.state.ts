@@ -1,32 +1,29 @@
-import { IFoodCategory } from 'src/app/modules/@core/interfaces/foods/foods-category.interface';
+import { IFoodCategory } from '../models/foods-category.model';
 
-import { FoodDetailsMode, IFood, IFoodPreview } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
-
-import { IFoodKeyword } from 'src/app/modules/@core/interfaces/foods/foods-keywords.interface';
+import {
+  FoodDetailsMode,
+  IFood,
+  IFoodPreview,
+} from '../models/foods-food.model';
 
 export interface IFoodsState {
-
   foodsCategories: IFoodCategory[];
 
   foodsByCategory: IFoodPreview[];
-  
-  searchKeywords: IFoodKeyword[];
 
   searchedFood: IFoodPreview[];
-  
+
   foodDetails: IFood | any;
 
   foodTypesByCategory: any[];
-  
-  editMode: FoodDetailsMode,
+
+  editMode: FoodDetailsMode;
 }
 
 export const initialState: IFoodsState = {
   foodsCategories: [],
 
   editMode: FoodDetailsMode.VIEW,
-
-  searchKeywords: [],
 
   foodsByCategory: [],
 

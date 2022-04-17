@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 
+import { Router } from '@angular/router';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+
 import { ToastrService } from 'ngx-toastr';
 
-import { map, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 import { UserService } from '../../@core/backend/services/user.service';
 
 import {
   loadRoles,
+  loadRolesFailure,
   loadRolesSuccess,
   loadUsersInRole,
   loadUsersInRoleSuccess,
@@ -20,7 +26,7 @@ import {
 
 @Injectable()
 export class AdminEffects {
-  constructor(private actions$: Actions, private userService: UserService,private toastr:ToastrService) {}
+  constructor(private actions$: Actions, private userService: UserService,private toastr:ToastrService,private router:Router) {}
 
   loadRoles$ = createEffect(() => {
     return this.actions$.pipe(
@@ -28,12 +34,28 @@ export class AdminEffects {
       switchMap(({ payload }) => {
         return this.userService.getRoles().pipe(
           map((res) => {
-            return loadRolesSuccess({ roles: res.data });
+            if (res.isOk) {
+              return loadRolesSuccess({ roles: res.data });
+            }
+            return loadRolesFailure({error:res.Errors[0].Error})
+          }),
+          catchError(err => {
+            return of(loadRolesFailure({error:err.error.error}))
           })
         );
       })
     );
   });
+
+  loadRolesFailure$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadRolesFailure),
+      tap(({payload}) => {
+        this.toastr.error(payload.error ?? 'Възникна грешка', 'Error');
+        this.router.navigate(['/']);
+      })
+    )
+  },{dispatch:false})
 
   loadUsersInRole$ = createEffect(() => {
     return this.actions$.pipe(

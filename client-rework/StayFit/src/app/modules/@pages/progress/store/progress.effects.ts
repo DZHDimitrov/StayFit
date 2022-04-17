@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
+
 import { Router } from '@angular/router';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+
 import { ToastrService } from 'ngx-toastr';
+
 import { map, switchMap, tap } from 'rxjs/operators';
+
 import { ProgressService } from 'src/app/modules/@core/backend/services/progress.service';
+
 import {
   createMeasurement,
+  createMeasurementFailure,
   createMeasurementSuccess,
   deleteMeasurement,
   deleteMeasurementSuccess,
@@ -22,8 +29,8 @@ export class ProgressEffects {
   constructor(
     private actions$: Actions,
     private progressService: ProgressService,
-    private router:Router,
-    private toastr:ToastrService
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   createMeasurement$ = createEffect(() => {
@@ -32,22 +39,34 @@ export class ProgressEffects {
       switchMap(({ payload }) => {
         return this.progressService.createMeasurement(payload.data).pipe(
           map((res) => {
-            return createMeasurementSuccess({ addedCount: res.data });
+            if (res.isOk) {
+              this.toastr.success(
+                'Успешно добавихте ново измерване',
+                'Success'
+              );
+              this.router.navigate(['/', 'pages', 'progress']);
+              return createMeasurementSuccess({ addedCount: res.data });
+            }
+            return createMeasurementFailure({ error: res.Errors[0].Error });
           })
         );
       })
     );
   });
 
-  createMeasurementSuccess$ = createEffect(() => {
+  createMeasurementFailure$ = createEffect(
+    () => {
       return this.actions$.pipe(
-          ofType(createMeasurementSuccess),
-          tap(action => {
-              this.toastr.success('Добавихте ново измерване','Успех');
-              this.router.navigate(['/','pages','progress']);
-          })
-      )
-  },{dispatch:false})
+        ofType(createMeasurementFailure),
+        tap(({ payload }) => {
+          this.toastr.error(payload.error ?? 'Възникна грешка');
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  create;
 
   editMeasurementById$ = createEffect(() => {
     return this.actions$.pipe(
@@ -64,15 +83,18 @@ export class ProgressEffects {
     );
   });
 
-  editMeasurementByIdSuccess$ = createEffect(() => {
+  editMeasurementByIdSuccess$ = createEffect(
+    () => {
       return this.actions$.pipe(
-          ofType(editMeasurementByIdSuccess),
-          tap(action => {
-            this.toastr.success('Измерването беше обновено','Успех');
-            this.router.navigate(['/','pages','progress']);
-          })
-      )
-  },{dispatch:false})
+        ofType(editMeasurementByIdSuccess),
+        tap((action) => {
+          this.toastr.success('Измерването беше обновено', 'Success');
+          this.router.navigate(['/', 'pages', 'progress']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
 
   loadMeasurements$ = createEffect(() => {
     return this.actions$.pipe(
@@ -119,12 +141,15 @@ export class ProgressEffects {
     );
   });
 
-  deleteMeasurementSuccess$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(deleteMeasurementSuccess),
-      tap(action => {
-        this.toastr.success('Измерването беше изтрито','Успех')
-      })
-    )
-  })
+  deleteMeasurementSuccess$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(deleteMeasurementSuccess),
+        tap((action) => {
+          this.toastr.success('Измерването беше изтрито', 'Success');
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

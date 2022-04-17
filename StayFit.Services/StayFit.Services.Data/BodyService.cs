@@ -1,7 +1,8 @@
 ﻿using StayFit.Services.StayFit.Services.Data.Interfaces;
+
 using StayFit.Shared.Enums;
 using StayFit.Shared.Progress;
-using System;
+
 using System.Collections.Generic;
 using System.Globalization;
 

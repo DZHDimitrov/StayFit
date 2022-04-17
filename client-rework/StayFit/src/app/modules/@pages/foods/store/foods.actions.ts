@@ -1,20 +1,15 @@
-import { IAddFood, IEditFood } from 'src/app/modules/@core/interfaces/requests/foods.req';
+;import { createHTTPActions } from 'src/app/modules/@core/utility/store-actions.helper';
 
-import { IFoodCategory } from 'src/app/modules/@core/interfaces/foods/foods-category.interface';
+import { IFoodCategory } from '../models/foods-category.model';
 
-import { FoodDetailsMode, IFood, IFoodPreview } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
+import { FoodDetailsMode, IFood, IFoodPreview } from '../models/foods-food.model';
 
-import { IFoodKeyword } from 'src/app/modules/@core/interfaces/foods/foods-keywords.interface';
+import { IAddFoodRequest, IEditFoodRequest } from '../models/foods-request';
 
-import { IFoodType } from 'src/app/modules/@core/interfaces/foods/foods-types.interface';
-
-import { createHTTPActions } from 'src/app/modules/@core/utility/store-actions.helper';
+import { IFoodType } from '../models/foods-types.model';
 
 export const [loadFoodsCategories, loadFoodsCategoriesSuccess] =
 createHTTPActions<{}, { foodCategories: IFoodCategory[] }>('[foods] load categories');
-
-export const [loadAutocompleteKeywords, loadAutocompleteKeywordsSuccess] =
-createHTTPActions<{ searchedFood: string }, { foods: IFoodKeyword[] }>('[foods] load autocomplete keywords');
 
 export const [loadSearchedFood, loadSearchedFoodSuccess] =
 createHTTPActions<{ text: string },{ foods: any }>('[foods] load searched food');
@@ -22,8 +17,8 @@ createHTTPActions<{ text: string },{ foods: any }>('[foods] load searched food')
 export const [loadFoodsByCategory, loadFoodsByCategorySuccess] =
 createHTTPActions<{ category: string }, { foods: IFoodPreview[] }>('[foods] load foods by category');
 
-export const [loadFoodById, loadFoodByIdSuccess] = 
-createHTTPActions<{ id: number },{ food: any }>('[foods] load food by id');
+export const [loadFoodById, loadFoodByIdSuccess,loadFoodByIdFailure] = 
+createHTTPActions<{ id: number },{ food: any },{error?:string}>('[foods] load food by id');
 
 export const [loadFoodCategories, loadFoodCategoriesSuccess] =
 createHTTPActions<{}, { categories: Partial<IFoodCategory>[] }>('[foods] load food categories');
@@ -35,7 +30,10 @@ export const [setFoodDetailsMode] =
 createHTTPActions<{mode:FoodDetailsMode}>('[foods] set food details mode');
 
 export const [editFoodById, editFoodByIdSuccess,editFoodByIdFailure] =
-createHTTPActions<{ foodId: number; data: IEditFood },{ foodId: number; data: IFood },{error?:string}>('[foods] edit food by id');
+createHTTPActions<{ foodId: number; data: IEditFoodRequest },{ foodId: number; data: IFood },{error?:string}>('[foods] edit food by id');
 
 export const [addFood, addFoodSuccess, addFoodFailure] = 
-createHTTPActions<{ data: IAddFood },{},{}>('[foods] add food');
+createHTTPActions<{ data: IAddFoodRequest },{},{error?:string}>('[foods] add food');
+
+export const [deleteFood,deleteFoodSuccess, deleteFoodFailure] =
+createHTTPActions<{foodId:string},{foodId:string},{error?:string}>('[foods] delete food by id');

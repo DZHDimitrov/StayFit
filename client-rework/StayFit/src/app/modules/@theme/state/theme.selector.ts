@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 import { IThemeState } from './theme.state';
 
 export const THEME_STATE_NAME = 'theme state';

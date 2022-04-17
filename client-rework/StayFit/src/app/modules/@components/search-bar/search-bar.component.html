@@ -1,13 +1,9 @@
 <div class="search-bar-container">
     <mat-form-field appearance="fill">
-        <input matInput [matAutocomplete]="auto" type="search" (keyup)="search($event.target)"
+        <input matInput type="search" (keyup)="search($event.target)"
             placeholder="Търси продукт" />
-        <mat-autocomplete (optionSelected)="autocomplete($event)" #auto="matAutocomplete">
-            <mat-option *ngFor="let option of searchedFood$ | async" [value]="option.searchName">{{ option.searchName }}
-            </mat-option>
-        </mat-autocomplete>
     </mat-form-field>
-    <button (click)="test()" class="search-button" color="primary" mat-flat-button>
+    <button (click)="navigate()" class="search-button" color="primary" mat-flat-button>
         <mat-icon>search</mat-icon>
     </button>
 </div>

@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
+import { Title } from '@angular/platform-browser';
+
 import { Store } from '@ngrx/store';
 
 import { Subject } from 'rxjs';
@@ -24,25 +26,30 @@ import { getSubCategoryWithPreviews } from '../store/readings.selector';
   styleUrls: ['./sub-categories.component.scss'],
 })
 export class SubCategoriesComponent implements OnInit, OnDestroy {
-  constructor(private store: Store<IAppState>) {}
+  constructor(private store: Store<IAppState>,private titleService:Title) {}
 
   unsubscribe$: Subject<void> = new Subject();
-  
+
   subCategoryWithPreviews;
-  
+
   ngOnInit(): void {
     this.store
       .select(getRouterState)
       .pipe(
         takeUntil(this.unsubscribe$),
         tap((route) => {
-          const { mainCategory, subCategory } = route.state.params;
-          this.store.dispatch(
-            loadSubCategoryWithPreviews({
-              mainCategory: latinToCyrillic(mainCategory),
-              subCategory: latinToCyrillic(subCategory),
-            })
-          );
+          const { mainCategory, subCategory, id } = route.state.params;
+
+          if (mainCategory && subCategory && !id) {
+            const translatedCategory = latinToCyrillic(subCategory).split("_").join(" ");
+            this.titleService.setTitle(translatedCategory.substring(0,1).toUpperCase() + translatedCategory.substring(1))
+            this.store.dispatch(
+              loadSubCategoryWithPreviews({
+                mainCategory: latinToCyrillic(mainCategory),
+                subCategory: translatedCategory,
+              })
+            );
+          }
         })
       )
       .subscribe();

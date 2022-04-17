@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { IAppState } from '../state/app.state';
+import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-  constructor(private store:Store<IAppState>) {}
-
-  ngOnInit(): void {
+export class HomeComponent {
+  constructor(private titleService:Title) {
+    this.titleService.setTitle('Бъди по-добър със StayFit')
   }
 }

@@ -6,13 +6,14 @@ import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
 
-import {  map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { IAppState } from 'src/app/state/app.state';
 
 import { autoLogout } from '../../@auth/state/auth.actions';
 
 import { getUser, isAuthenticated } from '../../@auth/state/auth.selector';
+import { Roles } from '../../@core/enums/roles';
 
 import { INavItem } from '../misc/content/navigation.content';
 
@@ -26,19 +27,16 @@ import { getMenuItems, getNavItems } from '../state/theme.selector';
   styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
-  constructor(
-    private store: Store<IAppState>,
-    private router: Router,
-  ) {}
+  constructor(private store: Store<IAppState>, private router: Router) {}
 
   userItems$!: Observable<IMenuItem[]>;
   userNavItems$!: Observable<INavItem[]>;
   isLoggedIn$!: Observable<boolean>;
-  isAdmin$!:Observable<boolean | undefined>
+  hasPrivilege$!: Observable<boolean | undefined>;
 
   get currentMonth() {
     const month = new Date().getMonth() + 1;
-    
+
     return this.pad(month.toString());
   }
 
@@ -53,9 +51,11 @@ export class NavigationComponent implements OnInit {
 
     this.isLoggedIn$ = this.store.select(isAuthenticated);
 
-    this.isAdmin$ = this.store.select(getUser).pipe(map(user => {
-      return user?.hasRole("ADMIN");
-    }))
+    this.hasPrivilege$ = this.store.select(getUser).pipe(
+      map((user) => {
+        return user?.hasRole(Roles.ADMINISTRATOR);
+      })
+    );
   }
 
   navigate(el: any) {

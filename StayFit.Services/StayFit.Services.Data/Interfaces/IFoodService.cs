@@ -1,5 +1,6 @@
-﻿using StayFit.Shared.Nutritions.Food.Requests;
-using StayFit.Shared.Nutritions.Food.Responses;
+﻿using StayFit.Shared.Nutritions.Food;
+using StayFit.Shared.Nutritions.Food.Requests;
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,11 +16,11 @@ namespace StayFit.Services.StayFit.Services.Data.Interfaces
 
         public Task<FoodModel> LoadFoodById(int foodId);
 
-        public Task<FoodCreatedModel> CreateFood(CreateFoodModel model);
+        public Task<string> CreateFood(CreateFoodModel model);
 
         public Task<FoodEditedModel> EditFoodById(int foodId,EditFoodModel model);
 
-        public Task<IEnumerable<FoodKeywordModel>> LoadSearchKeywords(string searchedFood);
+        public Task<string> DeleteFoodById(int foodId);
 
         public Task<IEnumerable<FoodPreviewModel>> Search(string text);
     }

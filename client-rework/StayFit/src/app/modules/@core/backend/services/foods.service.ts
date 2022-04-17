@@ -2,17 +2,14 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { IFoodCategory } from 'src/app/modules/@pages/foods/models/foods-category.model';
+
+import { IFood, IFoodPreview } from 'src/app/modules/@pages/foods/models/foods-food.model';
+import { IAddFoodRequest } from 'src/app/modules/@pages/foods/models/foods-request';
+
+import { IFoodType } from 'src/app/modules/@pages/foods/models/foods-types.model';
+
 import { IApiResponse } from '../../interfaces/api.response';
-
-import { IAddFood } from '../../interfaces/requests/foods.req';
-
-import { IFoodCategory } from '../../interfaces/foods/foods-category.interface';
-
-import { IFood, IFoodPreview } from '../../interfaces/foods/foods-food.interface';
-
-import { IFoodKeyword } from '../../interfaces/foods/foods-keywords.interface';
-
-import { IFoodType } from '../../interfaces/foods/foods-types.interface';
 
 import { FoodsApi } from '../api/foods.api';
 
@@ -24,10 +21,6 @@ export class FoodsService {
 
   loadCategories(): Observable<IApiResponse<IFoodCategory[]>> {
     return this.api.loadCategories();
-  }
-
-  loadAutocompleteKeywords(searchedFood: string): Observable<IApiResponse<IFoodKeyword[]>> {
-    return this.api.loadAutocompleteKeywords(searchedFood);
   }
 
   loadFoodsByCategory(category: string | number): Observable<IApiResponse<IFoodPreview[]>> {
@@ -42,12 +35,16 @@ export class FoodsService {
     return this.api.search(text);
   }
 
-  add(data: IAddFood): Observable<void> {
+  add(data: IAddFoodRequest): Observable<IApiResponse<string>> {
     return this.api.add(data);
   }
 
   edit(foodId: number, data: any): Observable<IApiResponse<{id:number,food:IFood}>> {
     return this.api.edit(foodId, data);
+  }
+
+  delete(foodId):Observable<IApiResponse<string>> {
+    return this.api.delete(foodId);
   }
 
   loadFoodTypesByCategoryId(categoryId): Observable<IApiResponse<IFoodType[]>> {

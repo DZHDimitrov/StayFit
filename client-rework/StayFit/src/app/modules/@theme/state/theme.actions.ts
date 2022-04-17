@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { createHTTPActions } from '../../@core/utility/store-actions.helper';
+
 import { INavItem } from '../misc/content/navigation.content';
+
 import { IMenuItem } from '../misc/content/user-menu.content';
 
 export const SET_USER_MENU = '[theme] user menu';

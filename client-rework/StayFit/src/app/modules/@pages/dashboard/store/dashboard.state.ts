@@ -1,4 +1,4 @@
-import { ITask } from 'src/app/modules/@core/interfaces/dashboard/dashboard-task.interface';
+import { ITask } from "../models/dashboard-task.model";
 
 export interface IDashboardState {
   tasks: ITask[];

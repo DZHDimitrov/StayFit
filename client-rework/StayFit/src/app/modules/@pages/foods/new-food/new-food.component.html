@@ -1,40 +1,41 @@
 <div class="page-container">
-    <form [formGroup]="foodForm" (ngSubmit)="createFood()">
-      <section class="form-content">
+  <form [formGroup]="foodForm" (ngSubmit)="createFood()">
+    <section class="form-content">
+      <mat-form-field appearance="outline">
+        <mat-label>Избор на категория</mat-label>
+        <mat-select formControlName="foodCategoryId" (selectionChange)="loadFoodTypes($event)">
+          <mat-option [value]="0">Избор</mat-option>
+          <mat-option [value]="category.id" *ngFor="let category of this.foodCategories$ | async">{{ category.name
+            }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Избор на храна</mat-label>
+        <mat-select formControlName="foodTypeId">
+          <mat-option [value]="food.id" *ngFor="let food of this.foodTypes$ | async">{{ food.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="calories-description-group">
         <mat-form-field appearance="outline">
-          <mat-label>Избор на категория</mat-label>
-          <mat-select formControlName="foodCategoryId" (selectionChange)="loadFoodTypes($event)">
-            <mat-option [value]="0">Избор</mat-option>
-            <mat-option [value]="category.id" *ngFor="let category of this.foodCategories$ | async">{{ category.name
-              }}</mat-option>
-          </mat-select>
+          <mat-label>Калории</mat-label>
+          <input formControlName="calories" type="text" matInput>
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Избор на храна</mat-label>
-          <mat-select formControlName="foodTypeId">
-            <mat-option [value]="food.id" *ngFor="let food of this.foodTypes$ | async">{{ food.name }}
-            </mat-option>
-          </mat-select>
+          <mat-label>Описание</mat-label>
+          <input formControlName="description" type="text" matInput>
         </mat-form-field>
-        <div class="calories-description-group">
-          <mat-form-field appearance="outline">
-            <mat-label>Калории</mat-label>
-            <input formControlName="calories" type="text" matInput>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Описание</mat-label>
-            <input formControlName="description" type="text" matInput>
-          </mat-form-field>
-        </div>
-            <div class="actions">
-              <button [disabled]="!this.foodForm.valid" class="send-button" mat-flat-button color="primary">Изпрати</button>
-              <section class="image-container">
-                <input class="hidden-image" type="file" hidden="true" #uploader onclick="this.value = null" (change)="fileChange(uploader.files)"/>
-                <button type="button" mat-flat-button color="warn" (click)="uploader.click()">
-                  Изберете снимка
-                </button>
-              </section>
-            </div>
-      </section>
-    </form>
+      </div>
+      <div class="actions">
+        <button [disabled]="!this.foodForm.valid" class="send-button" mat-flat-button color="primary">Изпрати</button>
+        <section class="image-container">
+          <input class="hidden-image" type="file" hidden="true" #uploader onclick="this.value = null"
+            (change)="fileChange(uploader.files)" />
+          <button type="button" mat-flat-button color="warn" (click)="uploader.click()">
+            Изберете снимка
+          </button>
+        </section>
+      </div>
+    </section>
+  </form>
 </div>

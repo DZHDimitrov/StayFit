@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { INote, INoteRequest } from 'src/app/modules/@pages/diary/models/diary.model';
+
 import { IApiResponse } from '../../interfaces/api.response';
-
-import { INote } from '../../interfaces/diary/diary.interface';
-
-import { INoteData } from '../../interfaces/diary/post-requests/diary-notes.post';
 
 import { DiaryApi } from '../api/diary.api';
 
@@ -26,11 +24,11 @@ export class DiaryService {
     return this.api.loadNoteById(noteId, take);
   }
 
-  createNote(date: string, data: INoteData): Observable<IApiResponse<string>> {
+  createNote(date: string, data: INoteRequest): Observable<IApiResponse<string>> {
     return this.api.createNote(date, data);
   }
 
-  editNote(noteId: number, data: INoteData): Observable<IApiResponse<string>> {
+  editNote(noteId: number, data: INoteRequest): Observable<IApiResponse<string>> {
     return this.api.editNote(noteId, data);
   }
 

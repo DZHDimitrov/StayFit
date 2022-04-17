@@ -6,18 +6,16 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 
-import { debounceTime, map, switchMap, take, tap } from 'rxjs/operators';
+import { debounceTime, switchMap, take, tap } from 'rxjs/operators';
 
 import { FormMode } from 'src/app/modules/@core/enums/form-mode.enum';
 
-import { INote } from 'src/app/modules/@core/interfaces/diary/diary.interface';
-
-import { INoteData } from 'src/app/modules/@core/interfaces/diary/post-requests/diary-notes.post';
 import { setLoadingSpinner } from 'src/app/modules/shared/state/shared.actions';
 
 import { IAppState } from 'src/app/state/app.state';
 
 import { getCurrentRoute } from 'src/app/state/router/router.selector';
+import { INote, INoteRequest } from '../models/diary.model';
 
 import { createNote, editNote, loadNoteById } from '../store/diary.actions';
 
@@ -120,7 +118,7 @@ export class AddNotesComponent implements OnInit {
   save() {
     const { activity, nutrition, other, sleep, mood } = this.noteForm.value;
 
-    const data: INoteData = {
+    const data: INoteRequest = {
       activity,
       mood,
       nutrition,
@@ -131,7 +129,7 @@ export class AddNotesComponent implements OnInit {
     this.callAction(data);
   }
 
-  private callAction(data:INoteData) {
+  private callAction(data:INoteRequest) {
     this.store.dispatch(setLoadingSpinner({status:true}));
     
     switch (this.mode) {

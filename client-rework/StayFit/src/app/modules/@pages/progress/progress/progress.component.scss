@@ -1,86 +1,86 @@
-@import '../../../../styles/colors/colors';
+@import "../../../../styles/colors/colors";
 $row-bottom-margin: 2rem;
 
 mat-card {
-    width: 100%;
-    display:flex !important;
-    flex-flow: column !important;
-    justify-content: center !important;
-    padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+  width: 100%;
+  display: flex !important;
+  flex-flow: column !important;
+  justify-content: center !important;
+  padding: 1.5rem 0.5rem 1.5rem 0.5rem;
 }
 
 .progress-container {
-    width: 60%;
-    margin:0 auto;
+  width: 60%;
+  margin: 0 auto;
 
-    .progress-navbar {
-        background: white;
-        padding:1rem;
-        border-radius: 6px;
-        margin-bottom:$row-bottom-margin;
-        .measurements-text {
-            font-size: 21px;
-            &:not(:last-child){
-                margin-right:1rem;
-            }
-        }
+  .progress-navbar {
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: $row-bottom-margin;
+    .measurements-text {
+      font-size: 21px;
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
     }
+  }
 }
 
 .highcharts-figure {
-    width: 100%;
+  width: 100%;
 }
 
 .highcharts-html-tooltip {
-    border: 1px solid #000;
-    background: #fff;
-    display: block;
-    padding: 55px !important;
-    width: 60px;
-    white-space: normal !important;
+  border: 1px solid #000;
+  background: #fff;
+  display: block;
+  padding: 55px !important;
+  width: 60px;
+  white-space: normal !important;
 }
 
 .new-measurement-button {
-    width: 100%;
-    display:flex;
-    justify-content: center;
-    margin-bottom:0.5rem;
-    button {
-        color:white;
-    }
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  button {
+    color: white;
+  }
 }
 .chart {
-    width: 100%;
-    margin-bottom:$row-bottom-margin;
+  width: 100%;
+  margin-bottom: $row-bottom-margin;
 }
 
 .body-part-selection {
-    width: 25%;
-    margin-left:auto;
+  width: 25%;
+  margin-left: auto;
 }
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 
 .measurements-container {
-    width: 100%;
+  width: 100%;
 }
 
 .custom-card {
-    padding:0;
+  padding: 0;
 }
 
 .measurement {
-    padding: 0rem 1rem;
-    &__date {
-        width:90%;
-        height:3rem;
-        display:flex;
-        flex-flow: column;
-        justify-content: center;
-    }
-    &:hover {
-        background: $blue-100;
-        cursor: pointer;
-    }
+  padding: 0rem 1rem;
+  &__date {
+    width: 90%;
+    height: 3rem;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+  }
+  &:hover {
+    background: $blue-100;
+    cursor: pointer;
+  }
 }

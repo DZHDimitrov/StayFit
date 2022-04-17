@@ -26,7 +26,7 @@ namespace StayFit.WebAPI.Controllers.Api.Diaries
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var response = await this.diaryService.CreateDiary(userId);
+            var response = await diaryService.CreateDiary(userId);
 
             return response.ToApiResponse();
         }
@@ -37,7 +37,7 @@ namespace StayFit.WebAPI.Controllers.Api.Diaries
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var response = await this.diaryService.IsDiaryOwner(userId);
+            var response = await diaryService.IsDiaryOwner(userId);
 
             return response.ToApiResponse();
         }

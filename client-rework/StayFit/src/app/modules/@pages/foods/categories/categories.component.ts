@@ -1,12 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { Store } from '@ngrx/store';
+
 import { Observable, of, Subject } from 'rxjs';
+
 import { map, shareReplay, switchMap, takeUntil } from 'rxjs/operators';
-import { IFoodCategoryNavigate } from 'src/app/modules/@core/interfaces/foods/foods-category.interface';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { getRouterState } from 'src/app/state/router/router.selector';
+
+import { IFoodCategoryNavigate } from '../models/foods-category.model';
+
 import { loadFoodsCategories, loadSearchedFood } from '../store/foods.actions';
-import {  getFoodsCategoriesWithNavigation, getSearchedFood } from '../store/foods.selector';
+
+import {
+  getFoodsCategoriesWithNavigation,
+  getSearchedFood,
+} from '../store/foods.selector';
 
 @Component({
   selector: 'app-categories',
@@ -15,7 +26,7 @@ import {  getFoodsCategoriesWithNavigation, getSearchedFood } from '../store/foo
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>) {}
-  
+
   unsubscribe$: Subject<void> = new Subject();
   foodCategories$!: Observable<IFoodCategoryNavigate[]>;
   searchedFood$!: Observable<any[]>;
@@ -24,10 +35,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(loadFoodsCategories());
+
     this.foodCategories$ = this.store.select(getFoodsCategoriesWithNavigation);
+    
     this.searchedFood$ = this.store.select(getRouterState).pipe(
       takeUntil(this.unsubscribe$),
-      shareReplay(1),
       switchMap((route) => {
         if (route.state.queryParams['search']) {
           this.store.dispatch(
@@ -45,7 +57,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
           );
         }
         return of([]);
-      })
+      }),
+      shareReplay()
     );
   }
 

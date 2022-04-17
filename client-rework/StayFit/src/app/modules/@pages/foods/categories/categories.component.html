@@ -1,27 +1,16 @@
 <div class="foods-categories-container">
   <app-foods-intro></app-foods-intro>
   <section *ngIf="(searchedFood$ | async)?.length == 0 && !searchErrorMsg" class="content">
-    <app-reading-block
-      [routerLink]="[category.searchName]"
-      *ngFor="let category of foodCategories$ | async"
-      [title]="category.name"
-      [imageUrl]="category.imageUrl!"
-      [width]="200"
-      [height]="228"
-    ></app-reading-block>
+    <app-reading-block [routerLink]="[category.searchName]" *ngFor="let category of foodCategories$ | async"
+      [title]="category.name" [imageUrl]="category.imageUrl!" [width]="200" [height]="228" [pictureWidth]="120" [pictureHeight]="120"></app-reading-block>
   </section>
   <p class="mat-display-1 error-message" *ngIf="searchErrorMsg">
     {{ searchErrorMsg }}
   </p>
   <section *ngIf="!searchErrorMsg" class="content">
-    <app-reading-block
-      *ngFor="let searchedFood of searchedFood$ | async"
-      [routerLink]="['/', 'pages', 'foods', 'id', searchedFood.id]"
-      [title]="searchedFood.name"
-      [imageUrl]="searchedFood.imageUrl"
-      [width]="200"
-      [height]="228"
-      [description]="searchedFood.description"
-    ></app-reading-block>
+    <app-reading-block *ngFor="let searchedFood of searchedFood$ | async"
+      [routerLink]="['/', 'pages', 'foods', 'id', searchedFood.id]" [title]="searchedFood.name"
+      [imageUrl]="searchedFood.imageUrl" [width]="200" [height]="228" [description]="searchedFood.description">
+    </app-reading-block>
   </section>
 </div>

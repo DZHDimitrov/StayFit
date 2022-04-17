@@ -8,13 +8,13 @@ import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 import { setFoodsIntroTitle } from 'src/app/modules/@components/state/components.actions';
 
-import { IFoodPreview } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
-
 import { latinToCyrillic } from 'src/app/modules/@core/utility/text-transilerator';
 
 import { IAppState } from 'src/app/state/app.state';
 
 import { getRouterState } from 'src/app/state/router/router.selector';
+
+import { IFoodPreview } from '../models/foods-food.model';
 
 import {loadFoodsByCategory } from '../store/foods.actions';
 
@@ -49,6 +49,7 @@ export class CatalogueComponent implements OnInit, OnDestroy {
         return this.store.select(getFoodsByCategory);
       })
     );
+    this.foods$.subscribe(console.log)
   }
 
   ngOnDestroy(): void {

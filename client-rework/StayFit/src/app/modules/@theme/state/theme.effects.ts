@@ -12,9 +12,6 @@ import { autoLogout, loginSuccess } from '../../@auth/state/auth.actions';
 
 import { getDiaryOwnerState } from '../../@auth/state/auth.selector';
 
-import { AccountService } from '../../@core/backend/services/account.service';
-
-import { DiaryService } from '../../@core/backend/services/diary.service';
 import {
   GUEST_NAV_ITEMS,
   USER_NAV_ITEMS_DIARY,
@@ -27,12 +24,7 @@ import { setNavMenu, setUserMenu } from './theme.actions';
 
 @Injectable()
 export class ThemeEffects {
-  constructor(
-    private actions$: Actions,
-    private diaryService:DiaryService,
-    private accountService:AccountService,
-    private store: Store<IAppState>,
-  ) {}
+  constructor(private actions$: Actions, private store: Store<IAppState>) {}
 
   setUserMenu$ = createEffect(
     () => {
@@ -41,28 +33,31 @@ export class ThemeEffects {
         switchMap((x) => {
           return this.store.select(getDiaryOwnerState);
         }),
-        tap(userHasDiary => {
+        tap((userHasDiary) => {
           this.store.dispatch(setUserMenu({ menuItems: USER_ITEMS }));
           if (!userHasDiary) {
-            this.store.dispatch(setNavMenu({ navItems: USER_NAV_ITEMS_NO_DIARY }));
+            this.store.dispatch(
+              setNavMenu({ navItems: USER_NAV_ITEMS_NO_DIARY })
+            );
           } else {
-            this.store.dispatch(setNavMenu({navItems:USER_NAV_ITEMS_DIARY}));
+            this.store.dispatch(setNavMenu({ navItems: USER_NAV_ITEMS_DIARY }));
           }
         })
       );
     },
     { dispatch: false }
   );
-  setGuestMenu$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(autoLogout),
-        tap((x) => {
-          this.store.dispatch(setUserMenu({ menuItems: GUEST_ITEMS }));
-          this.store.dispatch(setNavMenu({ navItems: GUEST_NAV_ITEMS }));
-        })
-      );
-    },
-    { dispatch: false }
-  );
+
+  // setGuestMenu$ = createEffect(
+  //   () => {
+  //     return this.actions$.pipe(
+  //       ofType(autoLogout),
+  //       tap((x) => {
+  //         this.store.dispatch(setUserMenu({ menuItems: GUEST_ITEMS }));
+  //         this.store.dispatch(setNavMenu({ navItems: GUEST_NAV_ITEMS }));
+  //       })
+  //     );
+  //   },
+  //   { dispatch: false }
+  // );
 }

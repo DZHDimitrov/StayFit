@@ -1,14 +1,8 @@
 <div class="foods-container">
   <app-foods-intro></app-foods-intro>
   <section class="content">
-    <app-reading-block
-      [routerLink]="['/', 'pages', 'foods', 'id', food.id]"
-      [description]="food.description"
-      [title]="food.name"
-      [width]="180"
-      [height]="253"
-      *ngFor="let food of foods$ | async"
-      >{{ food.name }}</app-reading-block
-    >
+    <app-reading-block [routerLink]="['/', 'pages', 'foods', 'id', food.id]" [description]="food.description"
+      [title]="food.name" [width]="180" [imageUrl]="food.imageUrl!" [height]="253" *ngFor="let food of foods$ | async">{{ food.name }}
+    </app-reading-block>
   </section>
 </div>

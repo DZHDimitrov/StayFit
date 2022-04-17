@@ -11,6 +11,8 @@ export class ReadingBlockComponent implements OnInit {
   @Input() width: number = 250;
   @Input() height: number = 215;
   @Input() description: string = '';
+  @Input() pictureWidth!:number;
+  @Input() pictureHeight!:number;
 
   constructor() {}
 

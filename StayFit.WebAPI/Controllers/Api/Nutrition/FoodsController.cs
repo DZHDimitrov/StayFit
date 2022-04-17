@@ -7,13 +7,13 @@
     using StayFit.Services.StayFit.Services.Data.Interfaces;
 
     using StayFit.Shared;
+    using StayFit.Shared.Nutritions;
+    using StayFit.Shared.Nutritions.Food;
     using StayFit.Shared.Nutritions.Food.Requests;
-    using StayFit.Shared.Nutritions.Food.Responses;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     [Route("api/[controller]")]
-    //[AllowAnonymous]
     [ApiController]
     public class FoodsController : BaseController
     {
@@ -24,25 +24,50 @@
             this.foodService = foodService;
         }
 
+        //checked
         [HttpGet]
         [Route("categories")]
         public async Task<ApiResponse<IEnumerable<FoodCategoryModel>>> LoadCategories()
         {
-            var response =  await this.foodService.LoadFoodCategories();
+            var response =  await foodService.LoadFoodCategories();
 
             return response.ToApiResponse();
         }
 
-        [HttpGet]
-        [Route("{category}")]
-        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> LoadFoodPreviewsByCategory(string category)
+        //checked
+        [HttpPost]
+        [Authorize(Roles = UserConstants.Roles.Administrator)]
+        public async Task<ApiResponse<string>> CreateFood([FromForm] CreateFoodModel model)
         {
-            var response = await this.foodService.LoadFoodPreviewsByCategory(category);
+            var response = await foodService.CreateFood(model);
 
             return response.ToApiResponse();
         }
 
+        //checked
+        [HttpPut]
+        [Authorize(Roles = UserConstants.Roles.Administrator + "," + UserConstants.Roles.Moderator)]
+        [Route("{foodId}")]
+        public async Task<ApiResponse<FoodEditedModel>> EditFoodById(int foodId, EditFoodModel model)
+        {
+            var response = await foodService.EditFoodById(foodId, model);
+
+            return response.ToApiResponse();
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = UserConstants.Roles.Administrator)]
+        [Route("{foodId}")]
+        public async Task<ApiResponse<string>> DeleteFoodById(int foodId)
+        {
+            var response = await foodService.DeleteFoodById(foodId);
+
+            return response.ToApiResponse();
+        }
+
+        //checked
         [HttpGet]
+        [Authorize(Roles = UserConstants.Roles.Administrator)]
         [Route("{categoryId}/types")]
         public async Task<ApiResponse<IEnumerable<FoodTypeModel>>> LoadFoodTypesByCategoryId(string categoryId)
         {
@@ -51,18 +76,19 @@
             return response.ToApiResponse();
         }
 
-
-        [HttpPost]
-        public async Task<ApiResponse<FoodCreatedModel>> CreateFood([FromForm] CreateFoodModel model)
+        //checked
+        [HttpGet]
+        [Route("{category}/previews")]
+        public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> LoadFoodPreviewsByCategory(string category)
         {
-            var response = await this.foodService.CreateFood(model);
+            var response = await this.foodService.LoadFoodPreviewsByCategory(category);
 
             return response.ToApiResponse();
         }
 
-
+        //checked
         [HttpGet]
-        [Route("id/{foodId}")]
+        [Route("{foodId}")]
         public async Task<ApiResponse<FoodModel>> LoadFoodById(int foodId)
         {
             var response = await this.foodService.LoadFoodById(foodId);
@@ -70,25 +96,7 @@
             return response.ToApiResponse();
         }
 
-        [HttpPut]
-        [Authorize(Roles = UserConstants.Roles.Administrator + "," + UserConstants.Roles.Moderator)]
-        [Route("id/{foodId}")]
-        public async Task<ApiResponse<FoodEditedModel>> EditFoodById(int foodId,EditFoodModel model)
-        {
-            var response = await this.foodService.EditFoodById(foodId, model);
-
-            return response.ToApiResponse();
-        }
-
-        [HttpGet]
-        [Route("search/keywords")]
-        public async Task<ApiResponse<IEnumerable<FoodKeywordModel>>> LoadSearchKeywords([FromQuery] string food)
-        {
-            var response = await this.foodService.LoadSearchKeywords(food);
-
-            return response.ToApiResponse();
-        }
-
+        //checked
         [HttpGet]
         [Route("search")]
         public async Task<ApiResponse<IEnumerable<FoodPreviewModel>>> FoodSearch([FromQuery] string text)

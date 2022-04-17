@@ -35,14 +35,13 @@ export const getKnowledge = createSelector(getReadingsState, (state) => {
 export const getMainCategoryWithPreviews = createSelector(
   getReadingsState,
   (state) => {
-    let currentMainCategory:any = null;
-    
-    if (state.mainCategoryWithPreviews){
+    let currentMainCategory: any = null;
+
+    if (state.mainCategoryWithPreviews) {
       currentMainCategory = JSON.parse(
         JSON.stringify(state.mainCategoryWithPreviews)
       );
     }
-
 
     const previews = currentMainCategory?.previews?.map((p) => {
       return {
@@ -52,7 +51,7 @@ export const getMainCategoryWithPreviews = createSelector(
     });
 
     return {
-      ...currentMainCategory ?? [],
+      ...(currentMainCategory ?? []),
       previews,
     };
   }

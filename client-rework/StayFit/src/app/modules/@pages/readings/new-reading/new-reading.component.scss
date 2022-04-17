@@ -1,7 +1,7 @@
 .page-container {
   width: 80%;
   margin: 0 auto;
-  margin-top:2rem;  
+  margin-top: 2rem;
 
   mat-card-header {
     justify-content: center;
@@ -15,10 +15,11 @@
     display: flex;
     flex-flow: column;
 
-    & > *:first-child {
+    &>*:first-child {
       margin-bottom: 0.5rem;
     }
   }
+
   mat-card-actions {
     margin: 0;
     display: flex;

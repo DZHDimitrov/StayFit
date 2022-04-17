@@ -6,11 +6,9 @@ import { IReadingCategory } from 'src/app/modules/@pages/readings/models/reading
 
 import { IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from 'src/app/modules/@pages/readings/models/readings-previews.model';
 
-import { ICreateReadingRes, IDeleteReading, IReading } from 'src/app/modules/@pages/readings/models/readings-reading.model';
+import { ICreateReadingRequest, ICreateReadingResponse, IDeleteReadingResponse, IEditReadingRequest, IReading, IReadingForEdit } from 'src/app/modules/@pages/readings/models/readings-reading.model';
 
 import { IApiResponse } from '../../interfaces/api.response';
-
-import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 
 import { ReadingsApi } from '../api/readings.api';
 
@@ -45,15 +43,19 @@ export class ReadingsService {
     return this.api.loadReading(id);
   }
 
-  add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingRes>> {
+  loadReadingForEdit(id:string):Observable<IApiResponse<IReadingForEdit>> {
+    return this.api.loadReadingForEdit(id);
+  }
+
+  add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingResponse>> {
     return this.api.add(data);
   }
 
-  update(data: any): Observable<any> {
-    return this.api.update(data);
+  edit(readingId:number,data: IEditReadingRequest): Observable<IApiResponse<IReading>> {
+    return this.api.edit(readingId,data);
   }
 
-  delete(id: number): Observable<IApiResponse<IDeleteReading>> {
+  delete(id: number): Observable<IApiResponse<IDeleteReadingResponse>> {
     return this.api.delete(id);
   }
 }

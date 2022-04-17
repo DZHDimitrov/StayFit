@@ -1,25 +1,29 @@
 import {
   AfterContentInit,
-  AfterViewInit,
   Component,
   OnDestroy,
   OnInit,
 } from '@angular/core';
+
 import { Router } from '@angular/router';
+
 import { Store } from '@ngrx/store';
-import { Observable, pipe, Subject, Subscription } from 'rxjs';
+
+import { Subject, Subscription } from 'rxjs';
+
 import {
-  delay,
   filter,
-  shareReplay,
-  take,
   takeUntil,
-  tap,
 } from 'rxjs/operators';
-import { INote } from 'src/app/modules/@core/interfaces/diary/diary.interface';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { getCurrentRoute } from 'src/app/state/router/router.selector';
-import { loadNoteById, loadNoteByIdSuccess } from '../store/diary.actions';
+
+import { INote } from '../models/diary.model';
+
+import { loadNoteById } from '../store/diary.actions';
+
 import { getNoteById } from '../store/diary.selectors';
 
 @Component({

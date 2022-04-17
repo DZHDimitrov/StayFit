@@ -3,16 +3,16 @@ using AutoMapper.QueryableExtensions;
 using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 
-using StayFit.Common;
-
 using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models.ReadingModels;
+using StayFit.Infrastructure;
 using StayFit.Services.Common;
 using StayFit.Services.StayFit.Services.Data.Interfaces;
 
-using StayFit.Shared;
 using StayFit.Shared.Readings;
+using StayFit.Shared.Readings.Requests;
 using StayFit.Shared.Readings.Responses;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,25 +24,180 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private readonly IRepository<ReadingMainCategory> mainCategories;
         private readonly IRepository<ReadingSubCategory> subCategories;
-        private readonly IRepository<Reading> readings;
-
+        private readonly IDeletableEntityRepository<Reading> readings;
+        private readonly IFormatService formatService;
         private readonly IMapper mapper;
         private readonly Cloudinary cloudinary;
 
         public ReadingService(
             IRepository<ReadingMainCategory> mainCategories,
             IRepository<ReadingSubCategory> subCategories,
-            IRepository<Reading> readings,
-            IMapper mapper, 
+            IDeletableEntityRepository<Reading> readings,
+            IFormatService _formatService,
+            IMapper mapper,
             Cloudinary cloudinary)
         {
             this.mainCategories = mainCategories;
             this.subCategories = subCategories;
             this.readings = readings;
+            formatService = _formatService;
             this.mapper = mapper;
             this.cloudinary = cloudinary;
         }
 
+        //Checked
+        public async Task<IEnumerable<ReadingCategoryModel>> LoadCategories(int? mainId)
+        {
+            if (mainId == null)
+            {
+                return await this.mainCategories
+                    .All()
+                    .Select(mc => new ReadingCategoryModel
+                    {
+                        Id = mc.Id,
+                        Name = mc.Name,
+                    })
+                    .ToListAsync();
+            }
+
+            return await this.subCategories
+                .All()
+                .Where(sc => sc.ReadingMainCategoryId == (int)mainId && !sc.Name.Contains("Хранителен"))
+                .Select(sc => new ReadingCategoryModel
+                {
+                    Id = sc.Id,
+                    Name = sc.Name
+                })
+                .ToListAsync();
+        }
+
+        //Checked
+        public async Task<AddReadingResponse> CreateReading(AddReadingRequest model)
+        {
+            var mainCategory = await this.mainCategories
+                .All()
+                .Where(mc => mc.Id == model.ReadingMainCategoryId)
+                .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(mainCategory, "Категорията");
+
+            var subCategory = await this.subCategories
+                .All()
+                .Where(sc => sc.ReadingMainCategoryId == model.ReadingMainCategoryId)
+                .FirstOrDefaultAsync();
+
+            var imageUrl = await ApplicationCloudinary.UploadImage(this.cloudinary, model.Image, model.Title);
+
+            var reading = new Reading
+            {
+                ReadingMainCategoryId = model.ReadingMainCategoryId,
+                ReadingSubCategoryId = model.ReadingSubCategoryId ?? null,
+                CreatedOn = DateTime.UtcNow,
+                Name = model.Title,
+                Content = model.Content,
+                ImageUrl = imageUrl
+            };
+
+            await this.readings.AddAsync(reading);
+            await this.readings.SaveChangesAsync();
+
+            return new AddReadingResponse
+            {
+                Id = reading.Id,
+                Title = reading.Name,
+            };
+        }
+
+        //Checked
+        public async Task<EditReadingModel> LoadReadingForEdit(int readingId)
+        {
+            var reading = await readings
+                .All()
+                .Where(r => r.Id == readingId)
+                .Select(r => new EditReadingModel
+                {
+                    Id = r.Id,
+                    Content = r.Content,
+                    ImageUrl = r.ImageUrl,
+                    Title = r.Name,
+                    MainCategoryId = r.ReadingMainCategoryId,
+                    SubCategoryId = r.ReadingSubCategoryId
+                })
+                .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(reading, "Четивото");
+
+            return reading;
+        }
+
+        public async Task<EditReadingResponse> EditReading(int readingId, EditReadingRequest model)
+        {
+            var reading = await readings
+                .All()
+                .Where(r => r.Id == readingId)
+                .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(reading, "Четивото");
+
+            var mainCategory = await mainCategories
+                .All()
+                .Where(mc => mc.Id == model.ReadingMainCategoryId)
+                .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(reading, "Категорията");
+
+            var subCategory = await subCategories
+               .All()
+               .Where(sc => sc.Id == model.ReadingSubCategoryId)
+               .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(reading, "Категорията");
+
+            if (model.Image != null)
+            {
+                var imageUrl = await ApplicationCloudinary.UploadImage(this.cloudinary, model.Image, model.Title);
+                reading.ImageUrl = imageUrl;
+            }
+
+            reading.ReadingMainCategory = mainCategory;
+            reading.ReadingSubCategory = subCategory;
+            reading.ReadingSubCategory = subCategory;
+            reading.Name = model.Title;
+            reading.Content = model.Content;
+
+            readings.Update(reading);
+            await readings.SaveChangesAsync();
+
+            return new EditReadingResponse
+            {
+                Id = reading.Id,
+                Title = reading.Name,
+                Content = reading.Content,
+                ImageUrl = reading.ImageUrl,
+            };
+        }
+
+        //checked
+        public async Task<ReadingDeleteResponse> DeleteReading(int id)
+        {
+            var reading = await this.readings
+                .All()
+                .Where(r => r.Id == id)
+                .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(reading, "Четивото");
+
+            readings.Delete(reading);
+            await readings.SaveChangesAsync();
+
+            return new ReadingDeleteResponse
+            {
+                Id = reading.Id,
+                Title = reading.Name
+            };
+        }
+
+        //Checked
         public async Task<KnowledgeModel> LoadKnowledge()
         {
             var knowledgeModel = new KnowledgeModel();
@@ -72,6 +227,7 @@ namespace StayFit.Services.StayFit.Services.Data
                                  .ToList() :
                                mc.Readings
                                  .OrderByDescending(r => r.CreatedOn)
+                                 .Where(r => !r.IsDeleted)
                                  .Select(r => new ReadingPreviewModel
                                  {
                                      Id = r.Id,
@@ -86,24 +242,19 @@ namespace StayFit.Services.StayFit.Services.Data
             return knowledgeModel;
         }
 
-
+        //Checked
         public async Task<MainCategoryWithPreviewsModel> LoadMainCategoryWithPreviews(string mainCategory)
         {
-            mainCategory = string.Join(" ", mainCategory?.Split("_", StringSplitOptions.RemoveEmptyEntries)).ToLower();
-
-            var existingCategory = await this.mainCategories.All().Where(mc => mc.Name.ToLower() == mainCategory).FirstOrDefaultAsync();
-
-            if (existingCategory == null)
-            {
-                throw new ArgumentException(string.Format(GlobalConstants.ITEM_NOT_FOUND, "group"));
-            }
+            mainCategory = formatService.ReplaceDelimiter("_", " ", mainCategory);
 
             var currentMainCategory = await this.mainCategories
                 .All()
+                .Where(mc => mc.Name.ToLower() == mainCategory)
                 .Include(mc => mc.ReadingSubCategories)
                 .Include(mc => mc.Readings)
-                .Where(mc => mc.Name.ToLower() == mainCategory)
                 .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(currentMainCategory, "Категорията");
 
             var mainCategoryWithPreviewsModel = new MainCategoryWithPreviewsModel();
 
@@ -118,6 +269,7 @@ namespace StayFit.Services.StayFit.Services.Data
 
                 mainCategoryWithPreviewsModel.Previews = currentMainCategory.Readings
                     .AsQueryable()
+                    .Where(r => !r.IsDeleted)
                     .ProjectTo<ReadingPreviewModel>(this.mapper.ConfigurationProvider)
                     .ToList();
 
@@ -125,7 +277,9 @@ namespace StayFit.Services.StayFit.Services.Data
             }
             else
             {
-                mainCategoryWithPreviewsModel.CategoryNames = currentMainCategory.ReadingSubCategories.Select(rsb => rsb.Name).ToList();
+                mainCategoryWithPreviewsModel.CategoryNames = currentMainCategory.ReadingSubCategories
+                    .Select(rsb => rsb.Name)
+                    .ToList();
 
                 mainCategoryWithPreviewsModel.Previews = currentMainCategory.ReadingSubCategories
                     .AsQueryable()
@@ -138,21 +292,26 @@ namespace StayFit.Services.StayFit.Services.Data
             return mainCategoryWithPreviewsModel;
         }
 
+        //Checked
         public async Task<SubCategoryWithPreviewsModel> LoadSubCategoryWithPreviews(string mainCategory, string subCategory)
         {
-            mainCategory = string.Join(" ", mainCategory?.Split("_")).ToLower();
-            subCategory = string.Join(" ", subCategory?.Split("_")).ToLower();
+            mainCategory = formatService.ReplaceDelimiter("_", " ", mainCategory);
+            subCategory = formatService.ReplaceDelimiter("_", " ", subCategory);
 
             var currentMainCategory = await this.mainCategories
                 .All()
+                .Where(mc => mc.Name == mainCategory)
                 .Include(mc => mc.ReadingSubCategories)
                 .ThenInclude(rsb => rsb.Readings)
-                .Where(mc => mc.Name == mainCategory)
                 .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(currentMainCategory, "Категорията");
 
             var currentSubCategory = currentMainCategory.ReadingSubCategories
                 .Where(sc => sc.Name.ToLower() == subCategory || sc.Name.ToLower().Contains(subCategory))
                 .FirstOrDefault();
+
+            Guards.AgainstNull(currentSubCategory, "Категорията");
 
             var subCategoryWithPreviewsModel = new SubCategoryWithPreviewsModel
             {
@@ -162,6 +321,7 @@ namespace StayFit.Services.StayFit.Services.Data
                                                    .ToList(),
                 Previews = currentSubCategory?.Readings.Count > 0 ?
                 currentSubCategory.Readings
+                .Where(r => !r.IsDeleted)
                 .Select(r => new ReadingPreviewModel
                 {
                     Id = r.Id,
@@ -174,89 +334,10 @@ namespace StayFit.Services.StayFit.Services.Data
             return subCategoryWithPreviewsModel;
         }
 
-        public async Task<AddReadingResponse> CreateReading(AddReadingRequest model)
-        {
-            var mainCategory = await this.mainCategories
-                .All()
-                .Where(mc => mc.Id == model.ReadingMainCategoryId)
-                .FirstOrDefaultAsync();
-
-            var subCategory = await this.subCategories
-                .All()
-                .Where(sc => sc.ReadingMainCategoryId == model.ReadingMainCategoryId)
-                .FirstOrDefaultAsync();
-
-            var imageUrl = await ApplicationCloudinary.UploadImage(this.cloudinary, model.Image, model.Title);
-
-            var reading = new Reading
-            {
-                ReadingMainCategoryId = model.ReadingMainCategoryId,
-                ReadingSubCategoryId = model.ReadingSubCategoryId ?? null,
-                CreatedOn = DateTime.UtcNow,
-                Name = model.Title,
-                Content = model.Content,
-                ImageUrl = imageUrl
-            };
-
-            await this.readings.AddAsync(reading);
-            await this.readings.SaveChangesAsync();
-
-            return new AddReadingResponse
-            {
-                Id = reading.Id,
-                Title = reading.Name,
-            };
-        }
-
-        public async Task<ReadingDeleteResponse> DeleteReading(int id)
-        {
-            var article = await this.readings
-                .All()
-                .Where(r => r.Id == id)
-                .FirstOrDefaultAsync();
-
-            //this.dbContext.Readings.Remove(article);
-            //this.dbContext.SaveChanges();
-
-            return new ReadingDeleteResponse
-            {
-                Id = article.Id,
-                Title = article.Name
-            };
-        }
-
-        public void EditArticle()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<ReadingCategoryModel>> LoadCategories(int? mainId)
-        {
-            if (mainId == null)
-            {
-                return await this.mainCategories.All()
-                    .Select(mc => new ReadingCategoryModel
-                    {
-                        Id = mc.Id,
-                        Name = mc.Name,
-                    })
-                    .ToListAsync();
-            }
-
-            return await this.subCategories
-                .All()
-                .Where(sc => sc.ReadingMainCategoryId == (int)mainId && !sc.Name.Contains("Хранителен"))
-                .Select(sc => new ReadingCategoryModel
-                {
-                    Id = sc.Id,
-                    Name = sc.Name
-                })
-                .ToListAsync();
-        }
-
+        //Checked
         public async Task<ReadingModel> LoadReading(int readingId)
         {
-            return await this.readings
+            var reading = await this.readings
                 .All()
                 .Where(r => r.Id == readingId)
                 .Select(r => new ReadingModel
@@ -267,6 +348,10 @@ namespace StayFit.Services.StayFit.Services.Data
                     Title = r.Name
                 })
                 .FirstOrDefaultAsync();
+
+            Guards.AgainstNull(reading, "Четивото");
+
+            return reading;
         }
     }
 }

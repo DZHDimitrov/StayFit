@@ -1,13 +1,13 @@
 export interface IComponentState {
-  innerNavBar:{title:string,navItems:string[]} | null,
-  foodsIntro:{
+  innerNavBar: { title: string; navItems: string[] } | null;
+  foodsIntro: {
     title: string;
-  }
+  };
 }
 
 export const initialState: IComponentState = {
-  innerNavBar:null,
+  innerNavBar: null,
   foodsIntro: {
-    title: 'храни и продукти'
+    title: 'храни и продукти',
   },
 };

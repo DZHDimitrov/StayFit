@@ -27,13 +27,15 @@ namespace StayFit.WebAPI
 
         public static void AddAppServices(this IServiceCollection @this)
         {
-            @this.AddTransient<IPostService, PostService>();
+            //@this.AddTransient<IPostService, PostService>();
 
-            @this.AddTransient<ICommentService, CommentService>();
+            //@this.AddTransient<ICommentService, CommentService>();
 
             @this.AddTransient<IFoodService, FoodService>();
 
-            @this.AddTransient<IConversationService, ConversationService>();
+            //@this.AddTransient<IConversationService, ConversationService>();
+
+            @this.AddTransient<IFormatService, FormatService>();
 
             @this.AddTransient<IDiaryService, DiaryService>();
 

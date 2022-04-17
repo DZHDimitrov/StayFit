@@ -1,7 +1,4 @@
-import {
-  ITask,
-  ITaskDisplay,
-} from '../interfaces/dashboard/dashboard-task.interface';
+import { ITask, ITaskDisplay } from "../../@pages/dashboard/models/dashboard-task.model";
 
 export const decorateTask = (task: ITask): ITaskDisplay => {
   let buttonText = '';

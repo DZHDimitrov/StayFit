@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
+
 import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
+
 import { filter, take } from 'rxjs/operators';
+
 import { FormMode } from 'src/app/modules/@core/enums/form-mode.enum';
 
 import { IAppState } from 'src/app/state/app.state';
+
 import { getRouterState } from 'src/app/state/router/router.selector';
 
 import {
@@ -15,6 +19,7 @@ import {
   editMeasurementById,
   loadMeasurementById,
 } from '../store/progress.actions';
+
 import { getMeasurement } from '../store/progress.selectors';
 
 @Component({
@@ -31,6 +36,12 @@ export class AddMeasurementComponent implements OnInit {
     this.initForm();
   }
 
+  measurementForm!: FormGroup;
+  
+  FormMode = FormMode;
+  mode!: FormMode;
+  measurementId!: string;
+
   ngOnInit(): void {
     this.store.select(getRouterState).subscribe((route) => {
       const { measurementId } = route.state.params;
@@ -46,7 +57,8 @@ export class AddMeasurementComponent implements OnInit {
       }
     });
 
-    this.store
+    if(this.mode === FormMode.EDIT) {
+      this.store
       .select(getMeasurement)
       .pipe(filter((m) => m !== null))
       .subscribe((m: any) => {
@@ -59,12 +71,9 @@ export class AddMeasurementComponent implements OnInit {
           }
         });
       });
-  }
+    }
 
-  measurementForm!: FormGroup;
-  FormMode = FormMode;
-  mode!: FormMode;
-  measurementId!: string;
+  }
 
   save() {
     const data = { ...this.measurementForm.value };

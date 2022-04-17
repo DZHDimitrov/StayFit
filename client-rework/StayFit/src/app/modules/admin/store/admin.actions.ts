@@ -6,7 +6,7 @@ import { IRole } from "../models/roles.model";
 import { IUserInRole } from "../models/usersInRole.model";
 
 export const [loadRoles,loadRolesSuccess,loadRolesFailure] =
-createHTTPActions<{},{roles:IRole[]},{}>('[admin] load roles');
+createHTTPActions<{},{roles:IRole[]},{error?:string}>('[admin] load roles');
 
 export const [loadUsersInRole,loadUsersInRoleSuccess,loadUsersInRoleFailure] =
 createHTTPActions<{roleId:string},{usersInRole:IUserInRole[]},{}>('[admin] load usersInRole');

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { ITask } from 'src/app/modules/@pages/dashboard/models/dashboard-task.model';
 
 import { IApiResponse } from '../../interfaces/api.response';
-
-import { ITask } from '../../interfaces/dashboard/dashboard-task.interface';
 
 import { DashboardApi } from '../api/dashboard.api';
 

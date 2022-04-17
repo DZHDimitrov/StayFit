@@ -7,7 +7,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class ReadingSubCategory : BaseDeletableModel<int>
+    public class ReadingSubCategory : BaseModel<int>
     {
         public ReadingSubCategory()
         {

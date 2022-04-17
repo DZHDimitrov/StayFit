@@ -1,8 +1,9 @@
 import { createHTTPActions } from "src/app/modules/@core/utility/store-actions.helper";
+
 import { Measurement } from "../models/measurement.model";
 
 export const [createMeasurement,createMeasurementSuccess,createMeasurementFailure] =
-createHTTPActions<{data:any},{addedCount:number}>('[progress] add measurement');
+createHTTPActions<{data:any},{addedCount:number},{error?:string}>('[progress] add measurement');
 
 export const [editMeasurementById,editMeasurementByIdSuccess,editMeasurementByIdFailure] =
 createHTTPActions<{measurementId:string,data:any},{id:string}>('[progress] edit measurement by id');

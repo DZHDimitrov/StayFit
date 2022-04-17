@@ -1,8 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using StayFit.Data.Common.Repositories;
 using StayFit.Data.Models.DiaryModels;
+
 using StayFit.Services.StayFit.Services.Data.Interfaces;
+
 using StayFit.Shared.Dashboard;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +18,9 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private readonly IRepository<Diary> diaryRepo;
 
-        public DashboardService(IRepository<Diary> diaryRepo)
+        public DashboardService(IRepository<Diary> _diaryRepo)
         {
-            this.diaryRepo = diaryRepo;
+           diaryRepo = _diaryRepo;
         }
 
         public async Task<IEnumerable<TaskModel>> LoadDashboardTasks(string userId)
@@ -31,7 +35,8 @@ namespace StayFit.Services.StayFit.Services.Data
                                .Where(n=>n.CreatedOn.Year == DateTime.Now.Year)
                                .Where(n=> n.CreatedOn.Month == DateTime.Now.Month)
                                .Where(n => n.CreatedOn.Day == DateTime.Now.Day))
-                .Where(d => d.ApplicationUserId == userId).FirstOrDefaultAsync();
+                .Where(d => d.ApplicationUserId == userId)
+                .FirstOrDefaultAsync();
 
             if (diary == null)
             {

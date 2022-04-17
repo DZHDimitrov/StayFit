@@ -1,14 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { FormBuilder, FormGroup } from '@angular/forms';
+
 import { Store } from '@ngrx/store';
-import { FoodDetailsMode } from 'src/app/modules/@core/interfaces/foods/foods-food.interface';
-import { INutrient } from 'src/app/modules/@core/interfaces/foods/foods-nutrients.interface';
+
 import { IAppState } from 'src/app/state/app.state';
+
 import { getRouterState } from 'src/app/state/router/router.selector';
-import {
-  editFoodById,
-  setFoodDetailsMode,
-} from '../store/foods.actions';
+
+import { FoodDetailsMode } from '../models/foods-food.model';
+
+import { INutrient } from '../models/foods-nutrients.model';
+
+import { editFoodById, setFoodDetailsMode } from '../store/foods.actions';
 
 @Component({
   selector: 'app-edit-food',
@@ -26,7 +30,7 @@ export class EditFoodComponent implements OnInit {
 
   editDetails!: any;
   foodId!: number;
-  
+
   ngOnInit(): void {
     this.store.select(getRouterState).subscribe((route) => {
       const foodId = route.state.params['id'];
@@ -39,7 +43,7 @@ export class EditFoodComponent implements OnInit {
 
   save() {
     if (this.editFoodForm.pristine) {
-      this.store.dispatch(setFoodDetailsMode({mode:FoodDetailsMode.VIEW}));
+      this.store.dispatch(setFoodDetailsMode({ mode: FoodDetailsMode.VIEW }));
       return;
     }
 

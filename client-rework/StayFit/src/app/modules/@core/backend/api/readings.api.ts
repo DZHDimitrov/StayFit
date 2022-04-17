@@ -6,11 +6,9 @@ import { IReadingCategory } from 'src/app/modules/@pages/readings/models/reading
 
 import { IKnowledge, IMainCategoryWithPreviews, ISubCategoryWithPreviews } from 'src/app/modules/@pages/readings/models/readings-previews.model';
 
-import { ICreateReadingRes, IDeleteReading, IReading } from 'src/app/modules/@pages/readings/models/readings-reading.model';
+import { ICreateReadingRequest, ICreateReadingResponse, IDeleteReadingResponse, IEditReadingRequest, IReading, IReadingForEdit } from 'src/app/modules/@pages/readings/models/readings-reading.model';
 
 import { IApiResponse } from '../../interfaces/api.response';
-
-import { ICreateReadingRequest } from '../../interfaces/requests/reading.req';
 
 import { HttpService } from './http.service';
 
@@ -33,26 +31,30 @@ export class ReadingsApi {
   }
 
   loadMainCategoryWithPreviews(category: string): Observable<IApiResponse<IMainCategoryWithPreviews>> {
-    return this.api.get(`${this.apiController}/${category}`);
+    return this.api.get(`${this.apiController}/categories/${category}`);
   }
 
   loadSubCategoryWithPreviews(category: string, subcategory: string): Observable<IApiResponse<ISubCategoryWithPreviews>> {
-    return this.api.get(`${this.apiController}/${category}/${subcategory}`);
+    return this.api.get(`${this.apiController}/categories/${category}/${subcategory}`);
   }
 
   loadReading(id:string):Observable<IApiResponse<IReading>> {
-    return this.api.get(`${this.apiController}/reading?id=${id}`);
+    return this.api.get(`${this.apiController}/${id}`);
   }
 
-  add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingRes>> {
+  loadReadingForEdit(id:string):Observable<IApiResponse<IReadingForEdit>> {
+    return this.api.get(`${this.apiController}/${id}/edit`)
+  }
+
+  add(data: ICreateReadingRequest): Observable<IApiResponse<ICreateReadingResponse>> {
     return this.api.post(this.apiController, data);
   }
 
-  update(data: any): Observable<any> {
-    return this.api.put(this.apiController, data);
+  edit(readingId:number,data: IEditReadingRequest): Observable<IApiResponse<IReading>> {
+    return this.api.put(`${this.apiController}/${readingId}/edit`, data);
   }
 
-  delete(id: number): Observable<IApiResponse<IDeleteReading>> {
+  delete(id: number): Observable<IApiResponse<IDeleteReadingResponse>> {
     return this.api.delete(`${this.apiController}/${id}`);
   }
 }

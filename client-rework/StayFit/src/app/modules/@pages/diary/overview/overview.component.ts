@@ -1,4 +1,5 @@
 import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { Router } from '@angular/router';
 
@@ -10,11 +11,11 @@ import { shareReplay, takeUntil } from 'rxjs/operators';
 
 import { NavigationType } from 'src/app/modules/@core/enums/navigation.enum';
 
-import { INote } from 'src/app/modules/@core/interfaces/diary/diary.interface';
-
 import { IAppState } from 'src/app/state/app.state';
 
 import { getCurrentRoute } from 'src/app/state/router/router.selector';
+
+import { INote } from '../models/diary.model';
 
 import { DiaryService } from '../services/diary.service';
 
@@ -32,7 +33,10 @@ export class OverviewComponent implements OnInit, AfterContentInit, OnDestroy {
     private state: Store<IAppState>,
     private router: Router,
     private service: DiaryService,
-  ) {}
+    private titleService:Title,
+  ) {
+    this.titleService.setTitle('Дневник')
+  }
 
   unsubscribe$:Subject<void> = new Subject(); 
   notes$!: Observable<INote[]>;

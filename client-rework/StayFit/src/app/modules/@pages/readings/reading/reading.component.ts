@@ -1,12 +1,14 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { shareReplay, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 
-import { latinToCyrillic } from 'src/app/modules/@core/utility/text-transilerator';
+import { getUser } from 'src/app/modules/@auth/state/auth.selector';
+
+import { Roles } from 'src/app/modules/@core/enums/roles';
 
 import { IAppState } from 'src/app/state/app.state';
 
@@ -14,7 +16,7 @@ import { getRouterState } from 'src/app/state/router/router.selector';
 
 import { IReading } from '../models/readings-reading.model';
 
-import { loadReading } from '../store/readings.actions';
+import { deleteReading, loadReading } from '../store/readings.actions';
 
 import { getReadingById } from '../store/readings.selector';
 
@@ -26,24 +28,45 @@ import { getReadingById } from '../store/readings.selector';
 export class ReadingComponent implements OnInit, OnDestroy {
   constructor(private store: Store<IAppState>) {}
 
-  currentReading$!: Observable<IReading | null>;
   unsubscribe$: Subject<void> = new Subject();
+  hasPrivilegeToEdit?: boolean;
+  hasPrivilegeToDelete?: boolean;
+
+  currentReading!: IReading | null;
 
   ngOnInit(): void {
     this.store
       .select(getRouterState)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(take(1))
       .subscribe((route) => {
-        const [mainCategory, subCategory, id] = this.findParts(route.state.url);
+        const params = route.state.params;
 
-        if (id) {
-          this.store.dispatch(loadReading({ id }));
+        if (params.id) {
+          this.store.dispatch(loadReading({ id: params.id }));
         }
-
-        this.currentReading$ = this.store
-          .select(getReadingById)
-          .pipe(shareReplay());
       });
+
+    this.store
+      .select(getUser)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        map((user) => {
+          this.hasPrivilegeToEdit =
+            user?.hasRole(Roles.ADMINISTRATOR) ||
+            user?.hasRole(Roles.MODERATOR);
+          this.hasPrivilegeToDelete = user?.hasRole(Roles.ADMINISTRATOR);
+        })
+      )
+      .subscribe();
+
+    setTimeout(() => {
+      this.store
+        .select(getReadingById)
+        .pipe(take(1))
+        .subscribe((reading) => {
+          this.currentReading = reading;
+        });
+    }, 50);
   }
 
   ngOnDestroy(): void {
@@ -51,23 +74,13 @@ export class ReadingComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  findParts(url: string): string[] {
-    const urlParts = url
-      .split('/')
-      .filter((r) => r !== undefined && r !== '')
-      .slice(2);
-
-    let mainCategory: string = latinToCyrillic(urlParts[0]);
-    let subCategory: string = '';
-    let id: string = '';
-
-    if (urlParts.length == 2) {
-      id = urlParts[1];
-    } else if (urlParts.length == 3) {
-      subCategory = urlParts[1];
-      id = urlParts[2];
+  deleteReading(readingId?: number) {
+    if (!window.confirm('Сигурни ли сте, че искате да изтриете тази статия?')) {
+      return;
     }
 
-    return [mainCategory, subCategory, id];
+    if (readingId) {
+      this.store.dispatch(deleteReading({ readingId }));
+    }
   }
 }

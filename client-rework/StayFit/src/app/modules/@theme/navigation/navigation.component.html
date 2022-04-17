@@ -7,7 +7,7 @@
     <mat-icon *ngIf="!(isLoggedIn$ | async)" [mat-menu-trigger-for]="menu">input</mat-icon>
     <mat-icon class="user-menu-icon" *ngIf="isLoggedIn$ | async" [mat-menu-trigger-for]="menu">menu_open</mat-icon>
     <mat-menu #menu="matMenu">
-      <button *ngIf="isAdmin$ | async" [routerLink]="['/','admin']" mat-menu-item>
+      <button *ngIf="hasPrivilege$ | async" [routerLink]="['/','administration']" mat-menu-item>
         Администрация
       </button>
       <button (click)="logout(item)" [routerLink]="item.link" mat-menu-item
