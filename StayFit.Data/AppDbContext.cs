@@ -4,7 +4,6 @@
     using Microsoft.EntityFrameworkCore;
     using StayFit.Common;
     using StayFit.Data.Models;
-    using StayFit.Data.Models.ConversationModels;
     using StayFit.Data.Models.DiaryModels;
     using StayFit.Data.Models.FoodModels;
     using StayFit.Data.Models.FoodModels.Nutrients;
@@ -55,8 +54,6 @@
 
         public DbSet<UsersChosenComments> UserChosenComments { get; set; }
 
-        public DbSet<Message> Messages { get; set; }
-
         public DbSet<CategoryFoodType> CategoryFoodTypes { get; set; }
 
         public DbSet<Diary> Diaries { get; set; }
@@ -64,12 +61,6 @@
         public DbSet<Note> Notes { get; set; }
 
         public DbSet<Measurement> Measurements { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=StayFit;Trusted_Connection=True;MultipleActiveResultSets=true");
-            base.OnConfiguring(optionsBuilder);
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -81,14 +72,9 @@
 
             builder.Entity<UsersChosenComments>().HasKey(c => new { c.ApplicationUserId, c.CommentId });
 
-            builder.Entity<Message>().HasOne(c => c.Sender).WithMany(c => c.Messages).HasForeignKey(c => c.SenderId);
-
-            builder.Entity<Message>().HasOne(c => c.Receiver).WithMany(c => c.RecievedMessages).HasForeignKey(c => c.ReceieverId);
-
             builder.Entity<CategoryFoodType>(c => c.HasKey(x => new { x.FoodTypeId,x.FoodCategoryId }));
 
             base.OnModelCreating(builder);
         }
     }
-    
 }

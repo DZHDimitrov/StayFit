@@ -106,11 +106,11 @@ export class DiaryEffects {
             this.store.dispatch(setLoadingSpinner({ status: false }));
           }),
           map((res) => {
-            if (!res.isOk) {
-              throw new Error(res.Errors[0].Error);
+            if (res.isOk) {
+              const [month, day, year] = payload.date.split('-');
+              return createNoteSuccess({ noteId: res.data, month, year });
             }
-            const [month, day, year] = payload.date.split('-');
-            return createNoteSuccess({ noteId: res.data, month, year });
+            return createNoteFailure({error:res.Errors[0].Error});
           }),
           catchError((error) => {
             return of(createNoteFailure());
@@ -119,6 +119,16 @@ export class DiaryEffects {
       })
     );
   });
+
+  createNoteFailure$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(createNoteFailure),
+      tap(({payload}) => {
+        this.toastr.error(payload.error ?? 'Възникна грешка','Error');
+        this.router.navigate(['/']);
+      })
+    )
+  },{dispatch:false})
 
   createNoteRedirect$ = createEffect(
     () => {

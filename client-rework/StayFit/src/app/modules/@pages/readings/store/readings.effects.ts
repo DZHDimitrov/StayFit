@@ -259,6 +259,7 @@ export class PagesEffects {
         ofType(addReadingSuccess),
         tap((action) => {
           this.toastr.success('Успешно добавяне на четиво', 'Success');
+          this.router.navigate(['/','pages','readings']);
         })
       );
     },

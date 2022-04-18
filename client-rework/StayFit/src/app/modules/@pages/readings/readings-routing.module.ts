@@ -11,9 +11,8 @@ import { MainCategoriesComponent } from './main-categories/main-categories.compo
 import { KnowledgeComponent } from './knowledge/knowledge.component';
 
 import { SubCategoriesComponent } from './sub-categories/sub-categories.component';
-import { PageNotFoundComponent } from '../../@components/page-not-found/page-not-found.component';
+
 import { EditReadingComponent } from './edit-reading/edit-reading.component';
-import { EditFoodComponent } from '../foods/edit-food/edit-food.component';
 
 const routes: Routes = [
   {
@@ -26,8 +25,16 @@ const routes: Routes = [
         component: ReadingComponent,
       },
       {
-        path:'statii/:id/edit',
-        component:EditReadingComponent,
+        path: 'statii/:id/edit',
+        component: EditReadingComponent,
+      },
+      {
+        path: "r'ukovodstvo/:id",
+        component: ReadingComponent,
+      },
+      {
+        path: "r'ukovodstvo/:id/edit",
+        component: EditReadingComponent,
       },
       {
         path: ':mainCategory',

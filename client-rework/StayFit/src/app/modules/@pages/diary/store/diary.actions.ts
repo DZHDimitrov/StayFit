@@ -8,7 +8,7 @@ export const [loadNotes,loadNotesSuccess] =
  createHTTPActions<{year:string,month:string},{notes:INote[]}>('[diary] load notes');
 
 export const [createNote,createNoteSuccess,createNoteFailure] =
- createHTTPActions<{date:string,data:INoteRequest},{noteId:string,year:string,month:string}>('[diary] add note');
+ createHTTPActions<{date:string,data:INoteRequest},{noteId:string,year:string,month:string},{error?:string}>('[diary] add note');
 
 export const [loadNoteById,loadNoteByIdSuccess] =
  createHTTPActions<{noteId:number,withRedirection:boolean,take?:string},{note:INote,withRedirection:boolean}>('[diary] load note by id');

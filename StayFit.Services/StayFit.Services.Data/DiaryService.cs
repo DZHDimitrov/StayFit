@@ -24,16 +24,13 @@ namespace StayFit.Services.StayFit.Services.Data
     {
         private readonly IRepository<Diary> diaryRepo;
         private readonly IRepository<Note> noteRepo;
-        private readonly AppDbContext db;
 
         public DiaryService(
             IRepository<Diary> _diaryRepo,
-            IRepository<Note> _noteRepo,
-            AppDbContext db)
+            IRepository<Note> _noteRepo)
         {
             diaryRepo = _diaryRepo;
             noteRepo = _noteRepo;
-            this.db = db;
         }
 
         public async Task<string> CreateDiary(string userId)

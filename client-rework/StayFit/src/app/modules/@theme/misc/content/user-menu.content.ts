@@ -16,25 +16,25 @@ export const GUEST_ITEMS: IMenuItem[] = [
 ];
 
 export const USER_ITEMS: IMenuItem[] = [
-  {
-    title: 'За четене',
-    link: '',
-  },
-  {
-    title: 'Профил',
-    link: 'account/profile',
-  },
-  {
-    title: 'Настройки',
-    link: '',
-  },
-  {
-    title: 'Помощ',
-    link: '',
-  },
-  {
-    title: 'Съобщения',
-  },
+  // {
+  //   title: 'За четене',
+  //   link: '',
+  // },
+  // {
+  //   title: 'Профил',
+  //   link: 'account/profile',
+  // },
+  // {
+  //   title: 'Настройки',
+  //   link: '',
+  // },
+  // {
+  //   title: 'Помощ',
+  //   link: '',
+  // },
+  // {
+  //   title: 'Съобщения',
+  // },
   {
     title: 'Изход',
     link: '/',

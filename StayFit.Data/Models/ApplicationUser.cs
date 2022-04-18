@@ -2,9 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity;
     using StayFit.Common;
-    using StayFit.Data.Common;
     using StayFit.Data.Common.Models;
-    using StayFit.Data.Models.ConversationModels;
     using StayFit.Data.Models.DiaryModels;
     using StayFit.Data.Models.Forum;
     using StayFit.Data.Models.ProgerssModels;
@@ -13,7 +11,6 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -61,12 +58,6 @@
         public ICollection<Vote> Votes { get; set; } = new HashSet<Vote>();
 
         public ICollection<UsersChosenComments> ChosedComments { get; set; } = new HashSet<UsersChosenComments>();
-
-        [InverseProperty("Sender")]
-        public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
-
-        [InverseProperty("Receiver")]
-        public ICollection<Message> RecievedMessages { get; set; } = new HashSet<Message>();
 
         public ICollection<Reading> Readings { get; set; } = new HashSet<Reading>();
 

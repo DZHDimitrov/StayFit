@@ -7,7 +7,7 @@
             <span [routerLink]="[category.path]" class="mat-title title">{{ category.name }}</span>
             <div class="category__row">
                 <app-reading-block
-                    [routerLink]="preview.name.includes('състав') ? ['/','pages','foods'] : category.name == 'Статии' ? [category.path,preview.id] : [category.path,preview.path]"
+                    [routerLink]="preview.name.includes('състав') ? ['/','pages','foods'] : category.name == 'Статии' ? [category.path,preview.id] : category.name == 'Ръководство' ? [category.path,preview.id] : [category.path,preview.path]"
                     [title]="preview.name" [imageUrl]="preview.imageUrl" *ngFor="let preview of category.previews">
                 </app-reading-block>
             </div>

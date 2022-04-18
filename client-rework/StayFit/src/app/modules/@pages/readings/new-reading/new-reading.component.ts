@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -23,9 +23,12 @@ import { getMainCategories, getSubCategories } from '../store/readings.selector'
   templateUrl: './new-reading.component.html',
   styleUrls: ['./new-reading.component.scss'],
 })
-export class NewReadingComponent implements OnInit {
+export class NewReadingComponent implements OnInit,OnDestroy {
   constructor(private store: Store<IAppState>, private fb: FormBuilder) {
     this.initForm();
+  }
+  ngOnDestroy(): void {
+    this.store.dispatch(resetReadingSubCategories());
   }
 
   mainCategories$!: Observable<IReadingCategory[]>;

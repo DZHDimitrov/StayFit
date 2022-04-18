@@ -10,7 +10,7 @@ using StayFit.Data;
 namespace StayFit.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220416235426_init")]
+    [Migration("20220417084528_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -275,41 +275,6 @@ namespace StayFit.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("StayFit.Data.Models.ConversationModels.Message", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReceieverId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReceieverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("StayFit.Data.Models.DiaryModels.Diary", b =>
@@ -1005,21 +970,6 @@ namespace StayFit.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StayFit.Data.Models.ConversationModels.Message", b =>
-                {
-                    b.HasOne("StayFit.Data.Models.ApplicationUser", "Receiver")
-                        .WithMany("RecievedMessages")
-                        .HasForeignKey("ReceieverId");
-
-                    b.HasOne("StayFit.Data.Models.ApplicationUser", "Sender")
-                        .WithMany("Messages")
-                        .HasForeignKey("SenderId");
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-                });
-
             modelBuilder.Entity("StayFit.Data.Models.DiaryModels.Diary", b =>
                 {
                     b.HasOne("StayFit.Data.Models.ApplicationUser", "ApplicationUser")
@@ -1284,13 +1234,9 @@ namespace StayFit.Data.Migrations
 
                     b.Navigation("Measurements");
 
-                    b.Navigation("Messages");
-
                     b.Navigation("Posts");
 
                     b.Navigation("Readings");
-
-                    b.Navigation("RecievedMessages");
 
                     b.Navigation("Roles");
 
